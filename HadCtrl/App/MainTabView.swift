@@ -39,7 +39,7 @@ struct MainTabView: View {
                 ExecutionView(context: context, dependencies: dependencies, present: { sheet = $0 })
             }
             tab(.reports, title: String(localized: "التقارير"), symbol: "doc.text") {
-                ReportsView(dependencies: dependencies)
+                ReportsView(context: context, dependencies: dependencies)
             }
         }
         .environment(periodSelection)
@@ -110,12 +110,16 @@ struct RouteDestination: View {
         case .department(let id):
             DepartmentDetailView(departmentID: id, context: context, dependencies: dependencies)
         case .reportList:
-            ReportsView(dependencies: dependencies)
+            ReportsView(context: context, dependencies: dependencies)
         case .indicatorList:
             PerformanceView(dependencies: dependencies)
-        case .goal, .indicator, .report, .achievement:
+        case .report(let id):
+            ReportDetailView(reportID: id, context: context, dependencies: dependencies)
+        case .indicator(let id, let periodID):
+            IndicatorDetailView(definitionID: id, periodID: periodID, context: context, dependencies: dependencies)
+        case .goal, .achievement:
             StateView(kind: .empty, title: String(localized: "هذه الشاشة قيد التنفيذ"),
-                      message: String(localized: "ستُفعّل مع شريحة التقارير والمؤشرات."))
+                      message: String(localized: "ستُفعّل في شريحة الأهداف والمنجزات."))
         }
     }
 }

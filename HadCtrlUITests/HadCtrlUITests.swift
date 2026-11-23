@@ -104,6 +104,37 @@ final class HadCtrlUITests: XCTestCase {
         app.scrollToHittable(app.anyElement(containing: "موظف جديد"))
     }
 
+    /// Department head fills the monthly report and submits it (spec §14); required fields are checked first.
+    func testHeadSubmitsMonthlyReport() {
+        let app = launch(user: "head")
+        app.tabBars.firstMatch.buttons["التقارير"].tap()
+        app.scrollToHittable(app.anyElement(containing: "التقرير الشهري — المختبر")).tap()
+        app.expectBadge("reportStatusBadge", "لم يُسلّم")
+        app.textInput("reportField.f1").tap()
+        app.textInput("reportField.f1").typeText("اكتمل توثيق العينات")
+        app.scrollToHittable(app.textInput("reportField.f3")).tap()
+        app.textInput("reportField.f3").typeText("مراجعة إجراءات الاستلام")
+        app.swipeDown()   // the list dismisses the keyboard on scroll
+        app.scrollToHittable(app.buttons["report.submit"]).tap()
+        app.expectBadge("reportStatusBadge", "مُسلّم")
+        XCTAssertFalse(app.buttons["report.submit"].exists, "a submitted report is frozen")
+    }
+
+    /// Director approves a submitted report, then a pending indicator reading (no self-approval path involved).
+    func testDirectorApprovesReportAndReading() {
+        let app = launch()
+        app.tabBars.firstMatch.buttons["التقارير"].tap()
+        app.scrollToHittable(app.anyElement(containing: "التقرير الشهري — التدريب")).tap()
+        app.scrollToHittable(app.buttons["report.approve"]).tap()
+        app.expectBadge("reportStatusBadge", "معتمد")
+
+        app.tabBars.firstMatch.buttons["الأداء"].tap()
+        app.scrollToHittable(app.anyElement(containing: "اكتمال توثيق العينات")).tap()
+        app.scrollToHittable(app.buttons["indicator.approve"]).tap()
+        XCTAssertTrue(app.descendants(matching: .any)["indicator.confirmation"].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.buttons["indicator.approve"].exists)
+    }
+
     func testLargeTextDoesNotHideDecisions() {
         let app = launch(extraArgs: ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXL"])
         XCTAssertTrue(app.staticTexts["تحتاج قرارك"].waitForExistence(timeout: 10))
@@ -152,6 +183,24 @@ private extension XCUIApplication {
 
     func anyElement(containing text: String) -> XCUIElement {
         descendants(matching: .any).matching(NSPredicate(format: "label CONTAINS %@", text)).firstMatch
+    }
+
+    /// Multi-line text fields are text views; single-line ones are text fields.
+    func textInput(_ id: String) -> XCUIElement {
+        let view = textViews[id]
+        return view.exists ? view : textFields[id]
+    }
+
+    /// Asserts a status badge (by identifier) shows exactly `title`, scrolling back up to it if needed.
+    func expectBadge(_ id: String, _ title: String, timeout: TimeInterval = 10,
+                     file: StaticString = #filePath, line: UInt = #line) {
+        let badge = descendants(matching: .any)[id]
+        let deadline = Date().addingTimeInterval(timeout)
+        while Date() < deadline {
+            if badge.exists && badge.label == title { return }
+            if badge.exists { Thread.sleep(forTimeInterval: 0.3) } else { swipeDown() }
+        }
+        XCTFail("\(id) is '\(badge.exists ? badge.label : "<missing>")', expected '\(title)'", file: file, line: line)
     }
 
     /// Asserts the task detail status badge shows exactly `title`. The badge is

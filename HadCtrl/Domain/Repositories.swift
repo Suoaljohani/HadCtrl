@@ -40,10 +40,30 @@ protocol TasksRepository: Sendable {
 
 protocol ReportsRepository: Sendable {
     func reports(periodID: UUID) async throws -> [ReportItem]
+    func report(id: UUID) async throws -> ReportDetail
+    /// API-07: creates or updates the open draft (expectedRevisionVersion nil = new draft).
+    func saveDraft(reportID: UUID, content: [String: String], expectedRevisionVersion: Int?, requestID: UUID) async throws -> SavedDraft
+    /// API-08: freezes the draft as a submission; the first submission time never changes.
+    func submit(reportID: UUID, draftRevisionID: UUID, expectedVersion: Int, requestID: UUID) async throws
+    /// API-09: approve or return (note required) the latest submitted revision.
+    func decide(reportID: UUID, revisionID: UUID, decision: ReportDecision, expectedVersion: Int, note: String?, requestID: UUID) async throws
+    func waive(reportID: UUID, reason: String, expectedVersion: Int, requestID: UUID) async throws
+    // Director definitions (D-29)
+    func createTemplate(_ draft: NewReportTemplateDraft, requestID: UUID) async throws -> UUID
+    func schedule(templateID: UUID, departmentIDs: [UUID], dueDay: Int, requestID: UUID) async throws -> Int
+    func ensureCurrentPeriod() async throws -> UUID
+    func generateReports(periodID: UUID) async throws -> Int
 }
 
 protocol IndicatorsRepository: Sendable {
     func indicators(periodID: UUID) async throws -> [IndicatorSummary]
+    func indicator(definitionID: UUID, periodID: UUID) async throws -> IndicatorDetail
+    /// API-06: a new submitted revision; replacing an approved one needs a correction reason.
+    func submitMeasurement(definitionVersionID: UUID, periodID: UUID, reading: Reading, sourceNote: String?,
+                           correctionReason: String?, requestID: UUID) async throws
+    func decideMeasurement(measurementID: UUID, approve: Bool, expectedVersion: Int, note: String?, requestID: UUID) async throws
+    /// Director only (D-29): definition + approved version 1.
+    func createIndicator(_ draft: NewIndicatorDraft, requestID: UUID) async throws -> UUID
 }
 
 protocol AchievementsRepository: Sendable {

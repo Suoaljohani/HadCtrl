@@ -20,6 +20,8 @@ actor MockStore {
     }
 
     let clock: HCClock
+    /// Reports and indicators (G4–G5), kept in their own actor.
+    let performance: MockPerformanceStore
     private(set) var tasks: [UUID: TaskItem] = [:]
     private var idempotency: [UUID: (hash: Int, taskID: UUID)] = [:]
     private var actor: UUID = Fixture.director
@@ -34,6 +36,7 @@ actor MockStore {
 
     init(clock: HCClock) {
         self.clock = clock
+        self.performance = MockPerformanceStore(clock: clock)
         let now = clock.now()
         let day: TimeInterval = 86_400
         func t(_ n: Int, _ title: String, _ dept: UUID, _ deptName: String, _ status: TaskStatus, _ assignee: UUID, _ name: String, due: TimeInterval, priority: Priority = .normal) -> TaskItem {

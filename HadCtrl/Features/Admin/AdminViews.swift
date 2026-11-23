@@ -8,7 +8,7 @@ struct AdminHubView: View {
     @State private var model: AdminHubViewModel
     @State private var sheet: Sheet?
 
-    enum Sheet: Identifiable { case department, employee
+    enum Sheet: Identifiable { case department, employee, reportTemplate, indicator
         var id: Self { self } }
 
     init(context: UserContext, dependencies: DependencyContainer) {
@@ -54,6 +54,20 @@ struct AdminHubView: View {
                     ForEach(items) { p in PersonRow(person: p) }
                 }
             } header: { Text(String(localized: "الموظفون")) }
+
+            // Obligations and measures are defined by the director only (D-29).
+            if context.isDirector {
+                Section {
+                    Button { sheet = .reportTemplate } label: { Label(String(localized: "قالب تقرير دوري جديد"), systemImage: "doc.badge.plus") }
+                        .accessibilityIdentifier("admin.addTemplate")
+                    Button { sheet = .indicator } label: { Label(String(localized: "مؤشر أداء جديد"), systemImage: "chart.line.uptrend.xyaxis") }
+                        .accessibilityIdentifier("admin.addIndicator")
+                } header: {
+                    Text(String(localized: "التقارير والمؤشرات"))
+                } footer: {
+                    Text(String(localized: "يُعتمد التعريف عند حفظه، ويسري من بداية الشهر الحالي."))
+                }
+            }
         }
         .navigationTitle(String(localized: "الأقسام والموظفون"))
         .navigationBarTitleDisplayMode(.inline)
@@ -65,6 +79,10 @@ struct AdminHubView: View {
             case .employee:
                 NewEmployeeSheet(context: context, admin: dependencies.admin,
                                  departments: model.departments.value ?? [])
+            case .reportTemplate:
+                NewReportTemplateSheet(reports: dependencies.reports, departments: model.departments.value ?? [])
+            case .indicator:
+                NewIndicatorSheet(indicators: dependencies.indicators, departments: model.departments.value ?? [])
             }
         }
     }

@@ -265,14 +265,10 @@ struct SupabaseTasksRepository: TasksRepository {
     }
 }
 
-/// Report/indicator/achievement screens are wired in the G4–G5 client slices.
-/// Until then production shows an explicit "not available yet" error rather
-/// than demo data (AC-031).
-struct PendingSliceRepository: ReportsRepository, IndicatorsRepository, AchievementsRepository {
-    private var error: AppError { .notYetAvailable }
-    func reports(periodID: UUID) async throws -> [ReportItem] { throw error }
-    func indicators(periodID: UUID) async throws -> [IndicatorSummary] { throw error }
-    func achievements(periodID: UUID) async throws -> [AchievementItem] { throw error }
+/// Achievements are wired in a later client slice. Until then production shows
+/// an explicit "not available yet" error rather than demo data (AC-031).
+struct PendingSliceRepository: AchievementsRepository {
+    func achievements(periodID: UUID) async throws -> [AchievementItem] { throw AppError.notYetAvailable }
 }
 
 // MARK: - Administration (D-25)

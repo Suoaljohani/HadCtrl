@@ -12,8 +12,8 @@ struct MockRepositories: Sendable {
     var departments: MockDepartmentsRepository { MockDepartmentsRepository(store: store) }
     var admin: MockAdminRepository { MockAdminRepository(store: store, user: demoUser) }
     var tasks: MockTasksRepository { MockTasksRepository(store: store, user: demoUser) }
-    var reports: MockReportsRepository { MockReportsRepository(clock: clock) }
-    var indicators: MockIndicatorsRepository { MockIndicatorsRepository() }
+    var reports: MockReportsRepository { MockReportsRepository(store: store, user: demoUser) }
+    var indicators: MockIndicatorsRepository { MockIndicatorsRepository(store: store, user: demoUser, periods: dashboard) }
     var achievements: MockAchievementsRepository { MockAchievementsRepository() }
 }
 
@@ -201,45 +201,6 @@ struct MockTasksRepository: TasksRepository {
     func transition(taskID: UUID, expectedVersion: Int, transition: TaskTransition, note: String?, requestID: UUID) async throws -> TaskItem {
         try await store.transition(taskID: taskID, expectedVersion: expectedVersion, transition: transition, note: note,
                                    requestID: requestID, context: MockDirectory.context(for: user))
-    }
-}
-
-struct MockReportsRepository: ReportsRepository {
-    let clock: HCClock
-    func reports(periodID: UUID) async throws -> [ReportItem] {
-        let now = clock.now()
-        let day: TimeInterval = 86_400
-        func id(_ n: Int) -> UUID { UUID(uuidString: String(format: "00000000-0000-0000-0000-0000000002%02d", n))! }
-        return [
-            ReportItem(id: id(1), departmentName: "المختبر", templateName: "التقرير الشهري", periodTitle: "نوفمبر",
-                       dueAt: now.addingTimeInterval(-2 * day), firstSubmittedAt: now.addingTimeInterval(-3 * day), status: .underReview, waiverReason: nil),
-            ReportItem(id: id(2), departmentName: "التدريب", templateName: "التقرير الشهري", periodTitle: "نوفمبر",
-                       dueAt: now.addingTimeInterval(-1 * day), firstSubmittedAt: nil, status: .notSubmitted, waiverReason: nil),
-            ReportItem(id: id(3), departmentName: "الجودة", templateName: "التقرير الشهري", periodTitle: "نوفمبر",
-                       dueAt: now.addingTimeInterval(4 * day), firstSubmittedAt: now.addingTimeInterval(-1 * day), status: .returned, waiverReason: nil),
-        ]
-    }
-}
-
-struct MockIndicatorsRepository: IndicatorsRepository {
-    func indicators(periodID: UUID) async throws -> [IndicatorSummary] {
-        func id(_ n: Int) -> UUID { UUID(uuidString: String(format: "00000000-0000-0000-0000-0000000003%02d", n))! }
-        let documentation = IndicatorRule(direction: .higherIsBetter, target: 95)
-        let tat = IndicatorRule(direction: .lowerIsBetter, target: 10)
-        return [
-            IndicatorSummary(id: id(1), code: "LAB.DOC", title: "اكتمال توثيق العينات", departmentName: "المختبر", unit: "٪",
-                             direction: .higherIsBetter, target: 95, actual: 90,
-                             outcome: ScoreOutcomeBox(outcome: IndicatorScoring.score(actual: 90, rule: documentation)), weight: 1,
-                             howMeasured: "البسط: العينات الموثقة كاملة. المقام: كل العينات المستلمة في الفترة."),
-            IndicatorSummary(id: id(2), code: "LAB.TAT", title: "زمن إصدار النتائج", departmentName: "المختبر", unit: "ساعة",
-                             direction: .lowerIsBetter, target: 10, actual: 12,
-                             outcome: ScoreOutcomeBox(outcome: IndicatorScoring.score(actual: 12, rule: tat)), weight: 1,
-                             howMeasured: "من استلام العينة إلى اعتماد النتيجة، متوسط الفترة."),
-            IndicatorSummary(id: id(3), code: "TRN.PROG", title: "البرامج التدريبية المنفذة", departmentName: "التدريب", unit: "برنامج",
-                             direction: .higherIsBetter, target: 11, actual: nil,
-                             outcome: ScoreOutcomeBox(outcome: .notUpdated), weight: 1,
-                             howMeasured: "عداد تراكمي منذ بداية العام؛ يُجمع بآخر قراءة."),
-        ]
     }
 }
 

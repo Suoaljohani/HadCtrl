@@ -83,13 +83,14 @@ struct DependencyContainer: Sendable {
             case .success(let config):
                 let backend = SupabaseBackend(client: SupabaseClientFactory.make(config), cache: SessionCache(),
                                               calendar: .riyadh)
-                let pending = PendingSliceRepository()
                 return DependencyContainer(environment: environment, clock: clock,
                                            session: SupabaseSessionRepository(backend: backend),
                                            dashboard: SupabaseDashboardRepository(backend: backend),
                                            departments: SupabaseDepartmentsRepository(backend: backend),
                                            tasks: SupabaseTasksRepository(backend: backend, clock: clock),
-                                           reports: pending, indicators: pending, achievements: pending,
+                                           reports: SupabaseReportsRepository(backend: backend),
+                                           indicators: SupabaseIndicatorsRepository(backend: backend),
+                                           achievements: PendingSliceRepository(),
                                            admin: SupabaseAdminRepository(backend: backend), mockStore: nil)
             }
         }
@@ -117,6 +118,20 @@ struct UnavailableBackend: SessionRepository, DashboardRepository, DepartmentsRe
     func createTask(_ draft: NewTaskDraft, requestID: UUID) async throws -> TaskItem { throw error }
     func transition(taskID: UUID, expectedVersion: Int, transition: TaskTransition, note: String?, requestID: UUID) async throws -> TaskItem { throw error }
     func reports(periodID: UUID) async throws -> [ReportItem] { throw error }
+    func report(id: UUID) async throws -> ReportDetail { throw error }
+    func saveDraft(reportID: UUID, content: [String: String], expectedRevisionVersion: Int?, requestID: UUID) async throws -> SavedDraft { throw error }
+    func submit(reportID: UUID, draftRevisionID: UUID, expectedVersion: Int, requestID: UUID) async throws { throw error }
+    func decide(reportID: UUID, revisionID: UUID, decision: ReportDecision, expectedVersion: Int, note: String?, requestID: UUID) async throws { throw error }
+    func waive(reportID: UUID, reason: String, expectedVersion: Int, requestID: UUID) async throws { throw error }
+    func createTemplate(_ draft: NewReportTemplateDraft, requestID: UUID) async throws -> UUID { throw error }
+    func schedule(templateID: UUID, departmentIDs: [UUID], dueDay: Int, requestID: UUID) async throws -> Int { throw error }
+    func ensureCurrentPeriod() async throws -> UUID { throw error }
+    func generateReports(periodID: UUID) async throws -> Int { throw error }
     func indicators(periodID: UUID) async throws -> [IndicatorSummary] { throw error }
+    func indicator(definitionID: UUID, periodID: UUID) async throws -> IndicatorDetail { throw error }
+    func submitMeasurement(definitionVersionID: UUID, periodID: UUID, reading: Reading, sourceNote: String?,
+                           correctionReason: String?, requestID: UUID) async throws { throw error }
+    func decideMeasurement(measurementID: UUID, approve: Bool, expectedVersion: Int, note: String?, requestID: UUID) async throws { throw error }
+    func createIndicator(_ draft: NewIndicatorDraft, requestID: UUID) async throws -> UUID { throw error }
     func achievements(periodID: UUID) async throws -> [AchievementItem] { throw error }
 }

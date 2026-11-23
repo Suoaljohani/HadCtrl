@@ -175,6 +175,9 @@ struct ReportItem: Sendable, Hashable, Identifiable {
     let firstSubmittedAt: Date?
     let status: ReportStatus
     let waiverReason: String?
+    var departmentID: UUID?
+    /// report_instances.version, sent back as expected_version.
+    var version: Int = 1
 
     /// Submission compliance uses the first valid submission, not the approval time (AC-015).
     var submittedOnTime: Bool? {
@@ -195,6 +198,12 @@ struct IndicatorSummary: Sendable, Hashable, Identifiable {
     let outcome: ScoreOutcomeBox
     let weight: Decimal
     let howMeasured: String
+    var definitionVersionID: UUID?
+    var departmentID: UUID?
+    /// Status of the newest reading this period (a pending one is not a result).
+    var latestStatus: MeasurementStatus?
+    var rangeMin: Decimal?
+    var rangeMax: Decimal?
 }
 
 /// Hashable wrapper so views can diff summaries.
