@@ -41,6 +41,8 @@ jobs:
     timeout-minutes: 45
     env:
       HC_XCODEGEN_VERSION: '2.43.0'
+      # SHA-256 of the official XcodeGen 2.43.0 release zip, recorded from CI run #6.
+      HC_XCODEGEN_SHA256: 'a4847ed77d3341a4d24049bc4424a3babca4c94ff1dcaaee923eaca2b32c678f'
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -48,7 +50,8 @@ jobs:
       - name: Select Xcode
         shell: bash
         env:
-          HC_XCODE_VERSION: ${{ vars.HC_XCODE_VERSION }}
+          # Pinned to the version that built and tested this project (D-10, runs #5/#6).
+          HC_XCODE_VERSION: ${{ vars.HC_XCODE_VERSION || '26.3' }}
         run: |
           set -euo pipefail
           echo "Installed Xcode versions:"; ls -d /Applications/Xcode*.app
@@ -69,7 +72,7 @@ jobs:
           set -euo pipefail
           curl -fsSL -o "$RUNNER_TEMP/xcodegen.zip" \
             "https://github.com/yonaskolb/XcodeGen/releases/download/${HC_XCODEGEN_VERSION}/xcodegen.zip"
-          shasum -a 256 "$RUNNER_TEMP/xcodegen.zip"
+          echo "${HC_XCODEGEN_SHA256}  $RUNNER_TEMP/xcodegen.zip" | shasum -a 256 -c -
           unzip -q "$RUNNER_TEMP/xcodegen.zip" -d "$RUNNER_TEMP/xcodegen"
           echo "$RUNNER_TEMP/xcodegen/xcodegen/bin" >> "$GITHUB_PATH"
       - name: Generate project and verify scheme (G1)

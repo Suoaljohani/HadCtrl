@@ -2,6 +2,7 @@
 # Build + test HadCtrl on the newest available iPhone simulator (unsigned).
 # Mock repositories only (HC_APP_ENV=ui-testing via the scheme). No secrets.
 set -euo pipefail
+# Note: macOS ships bash 3.2; empty arrays are expanded with ${a[@]+"${a[@]}"} under set -u.
 [[ "$(uname -s)" == Darwin ]] || { echo 'macOS with Xcode is required.' >&2; exit 2; }
 : "${RUNNER_TEMP:?RUNNER_TEMP is required}"
 test -f HadCtrl.xcodeproj/project.pbxproj
@@ -46,5 +47,5 @@ xcodebuild test -project HadCtrl.xcodeproj -scheme HadCtrl \
   -configuration Debug -destination "platform=iOS Simulator,id=$sim_id" \
   -derivedDataPath "$RUNNER_TEMP/HadCtrlDerivedData" \
   -resultBundlePath "$RUNNER_TEMP/HadCtrlTests.xcresult" \
-  "${locked_flags[@]}" \
+  ${locked_flags[@]+"${locked_flags[@]}"} \
   CODE_SIGNING_ALLOWED=NO
