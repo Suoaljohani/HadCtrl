@@ -6,6 +6,7 @@ on:
   push:
     branches: [main, 'claude/**']
   workflow_dispatch:
+  workflow_call:      # reused by build-ipa.yml so a signed build needs green tests on the same commit
 permissions:
   contents: read
 concurrency:

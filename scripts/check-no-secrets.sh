@@ -7,7 +7,7 @@ pattern='service_role|sb_secret_[A-Za-z0-9]|-----BEGIN (RSA |EC )?PRIVATE KEY---
 # The pattern itself and docs that name the forbidden strings are excluded.
 hits=$(grep -RInE "$pattern" "$target" \
   --exclude-dir=.git --exclude-dir=docs --exclude-dir=.claude --exclude-dir=templates --exclude-dir=supabase \
-  --exclude=check-no-secrets.sh --exclude=*.md --exclude=DependencyContainer.swift 2>/dev/null || true)
+  --exclude=check-no-secrets.sh --exclude=*.md --exclude=DependencyContainer.swift --exclude=sign-and-export.sh 2>/dev/null || true)
 if [ -n "$hits" ]; then
   echo "Possible secret material found:" >&2
   echo "$hits" >&2

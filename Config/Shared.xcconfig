@@ -4,6 +4,11 @@
 // never be mistaken for a real identity.
 HC_APP_BUNDLE_ID = invalid.hadctrl.app
 HC_APPLE_TEAM_ID =
+// Signing: Automatic by default (a Mac with any Apple ID can run on a device);
+// the signed-IPA workflow sets Manual + distribution identity + profile.
+HC_CODE_SIGN_STYLE = Automatic
+HC_CODE_SIGN_IDENTITY = Apple Development
+HC_PROVISIONING_PROFILE =
 // "https:/$()/" keeps the double slash from being read as an xcconfig comment.
 HC_SUPABASE_URL = https:/$()/vffusttzqmerfofqianz.supabase.co
 // Publishable (client) key only: public by design, ships in every build, and

@@ -54,7 +54,11 @@ targets:
         ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: NO
         GENERATE_INFOPLIST_FILE: NO
         INFOPLIST_FILE: HadCtrl/Resources/Info.plist
-        CODE_SIGN_STYLE: Manual
+        # Signing comes from variables so command-line overrides never touch the
+        # Swift package targets (which reject provisioning profiles).
+        CODE_SIGN_STYLE: $(HC_CODE_SIGN_STYLE)
+        CODE_SIGN_IDENTITY: $(HC_CODE_SIGN_IDENTITY)
+        PROVISIONING_PROFILE_SPECIFIER: $(HC_PROVISIONING_PROFILE)
         DEVELOPMENT_TEAM: $(HC_APPLE_TEAM_ID)
   HadCtrlTests:
     type: bundle.unit-test
