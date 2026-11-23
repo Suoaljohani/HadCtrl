@@ -143,6 +143,7 @@ xcodebuild archive -project HadCtrl.xcodeproj -scheme HadCtrl -configuration Rel
   HC_APPLE_TEAM_ID="$HC_APPLE_TEAM_ID" HC_APP_BUNDLE_ID="$HC_APP_BUNDLE_ID" \
   HC_CODE_SIGN_STYLE=Manual HC_CODE_SIGN_IDENTITY='Apple Distribution' \
   HC_PROVISIONING_PROFILE="$hc_profile_uuid" CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER" \
+  HC_CODE_SIGN_ENTITLEMENTS="$([[ "${HC_ENABLE_PUSH:-0}" == 1 ]] && echo HadCtrl/Resources/HadCtrl-Push.entitlements)" \
   HC_SUPABASE_URL="$hc_url_setting" HC_SUPABASE_PUBLISHABLE_KEY="$HC_EFFECTIVE_KEY"
 xcodebuild -exportArchive -archivePath "$hc_work/HadCtrl.xcarchive" \
   -exportPath "$hc_work/export" -exportOptionsPlist "$hc_work/ExportOptions.plist"

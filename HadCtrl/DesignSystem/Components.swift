@@ -46,7 +46,15 @@ struct IconBadge: View {
 /// The user's initials in a tinted circle (dashboard header).
 struct InitialsAvatar: View {
     let name: String
-    @ScaledMetric(relativeTo: .headline) private var size: CGFloat = 40
+    private let baseSize: CGFloat
+    @ScaledMetric(relativeTo: .headline) private var scale: CGFloat = 1
+
+    init(name: String, size: CGFloat = 40) {
+        self.name = name
+        self.baseSize = size
+    }
+
+    private var size: CGFloat { baseSize * min(scale, 1.6) }
 
     private var initials: String {
         let parts = name.split(separator: " ").prefix(2)
@@ -55,7 +63,7 @@ struct InitialsAvatar: View {
 
     var body: some View {
         Text(initials.isEmpty ? "؟" : initials)
-            .font(.hcSubheadlineBold)
+            .font(.system(size: size * 0.36, weight: .bold))
             .foregroundStyle(Color.hcPrimary)
             .frame(width: size, height: size)
             .background(Color.hcHighlight.opacity(0.55), in: Circle())

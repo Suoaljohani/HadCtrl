@@ -60,4 +60,6 @@ protocol NotificationsRepository: Sendable {
     func unreadCount() async throws -> Int
     func markRead(id: UUID) async throws
     @discardableResult func markAllRead() async throws -> Int
+    /// Binds this device's APNs token to the signed-in user (API-14, D-36).
+    func registerDevice(deviceID: UUID, token: String, environment: String) async throws
 }

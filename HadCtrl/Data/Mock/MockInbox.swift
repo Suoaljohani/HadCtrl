@@ -56,4 +56,6 @@ struct MockNotificationsRepository: NotificationsRepository {
     func unreadCount() async throws -> Int { await store.inbox.inbox(for: user).filter { !$0.isRead }.count }
     func markRead(id: UUID) async throws { try await store.inbox.markRead(id, user: user) }
     @discardableResult func markAllRead() async throws -> Int { await store.inbox.markAll(user: user) }
+    /// Demo builds never contact APNs; registration is accepted and discarded.
+    func registerDevice(deviceID: UUID, token: String, environment: String) async throws {}
 }

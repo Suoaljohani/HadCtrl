@@ -12,8 +12,11 @@ enum SheetRoute: Identifiable, Hashable {
 struct MainTabView: View {
     let context: UserContext
     let dependencies: DependencyContainer
+    let lock: AppLock
     @Environment(SessionStore.self) private var session
-    @State private var selection: AppTab = .home
+    @Environment(AppPreferences.self) private var preferences
+    @Environment(\.hcHapticsEnabled) private var haptics
+    @State private var selection: AppTab
     @State private var paths: [AppTab: NavigationPath] = Dictionary(uniqueKeysWithValues: AppTab.allCases.map { ($0, NavigationPath()) })
     @State private var sheet: SheetRoute?
     /// One per signed-in session: discarded with this view on sign-out (AC-025).
@@ -26,9 +29,11 @@ struct MainTabView: View {
     /// Routes opened without an on-screen origin (inbox, links) use the standard push.
     @State private var pushedWithoutSource: Set<AppRoute> = []
 
-    init(context: UserContext, dependencies: DependencyContainer) {
+    init(context: UserContext, dependencies: DependencyContainer, lock: AppLock, startTab: AppTab = .home) {
         self.context = context
         self.dependencies = dependencies
+        self.lock = lock
+        _selection = State(initialValue: startTab)
         _periodSelection = State(initialValue: PeriodSelection(repository: dependencies.dashboard))
         _inbox = State(initialValue: InboxModel(repository: dependencies.notifications))
     }
@@ -53,17 +58,17 @@ struct MainTabView: View {
         }
         .environment(periodSelection)
         .environment(\.hcZoomNamespace, zoom)
-        .sensoryFeedback(.selection, trigger: selection)
+        .sensoryFeedback(.selection, trigger: selection) { _, _ in haptics }
         .sheet(item: $sheet) { route in
             switch route {
             case .newTask(let dept):
-                NewTaskSheet(context: context, dependencies: dependencies, preselectedDepartment: dept) { created in
+                NewTaskSheet(context: context, dependencies: dependencies, preselectedDepartment: dept ?? preferences.defaultDepartmentID) { created in
                     sheet = nil
                     selection = .execution
                     paths[.execution, default: NavigationPath()].append(AppRoute.task(created.id))
                 }
             case .settings:
-                SettingsView(context: context, dependencies: dependencies)
+                SettingsView(context: context, dependencies: dependencies, lock: lock)
             case .inbox:
                 InboxView(model: inbox) { route in open(route) }
             }
@@ -78,6 +83,12 @@ struct MainTabView: View {
                 DeviceAlerts.scheduleRefresh()
             default: break
             }
+        }
+        .task { await PushCenter.shared.attach(repository: dependencies.notifications) }
+        .onChange(of: PushCenter.shared.pendingRoute) { _, route in
+            guard let route else { return }
+            PushCenter.shared.pendingRoute = nil
+            open(route)
         }
         .onChange(of: session.pendingRoute) { _, route in
             guard let route else { return }
@@ -117,8 +128,9 @@ struct MainTabView: View {
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
                         Button { sheet = .settings } label: {
-                            Label(String(localized: "الإعدادات"), systemImage: "person.crop.circle")
+                            InitialsAvatar(name: context.displayName, size: 30)
                         }
+                        .accessibilityLabel(String(localized: "الإعدادات"))
                         .accessibilityIdentifier("settingsButton")
                     }
                     ToolbarItem(placement: .topBarLeading) {

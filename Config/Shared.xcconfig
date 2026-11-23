@@ -9,6 +9,8 @@ HC_APPLE_TEAM_ID =
 HC_CODE_SIGN_STYLE = Automatic
 HC_CODE_SIGN_IDENTITY = Apple Development
 HC_PROVISIONING_PROFILE =
+// Empty: no push entitlement unless the signing profile includes it (D-36).
+HC_CODE_SIGN_ENTITLEMENTS =
 // "https:/$()/" keeps the double slash from being read as an xcconfig comment.
 HC_SUPABASE_URL = https:/$()/vffusttzqmerfofqianz.supabase.co
 // Publishable (client) key only: public by design, ships in every build, and

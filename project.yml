@@ -38,6 +38,7 @@ targets:
         excludes:
           - "**/*.md"
           - "Resources/Info.plist"
+          - "Resources/*.entitlements"
     dependencies:
       - package: Supabase
         product: Supabase
@@ -59,6 +60,9 @@ targets:
         CODE_SIGN_STYLE: $(HC_CODE_SIGN_STYLE)
         CODE_SIGN_IDENTITY: $(HC_CODE_SIGN_IDENTITY)
         PROVISIONING_PROFILE_SPECIFIER: $(HC_PROVISIONING_PROFILE)
+        # Push entitlement only when the signing profile includes Push Notifications
+        # (sign-and-export.sh with HC_ENABLE_PUSH=1); empty otherwise (D-36).
+        CODE_SIGN_ENTITLEMENTS: $(HC_CODE_SIGN_ENTITLEMENTS)
         DEVELOPMENT_TEAM: $(HC_APPLE_TEAM_ID)
   HadCtrlTests:
     type: bundle.unit-test

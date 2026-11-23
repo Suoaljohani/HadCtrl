@@ -69,6 +69,7 @@ final class SessionStore {
     func signOut() async {
         await repository.signOut()
         await DeviceAlerts.reset()
+        PushCenter.shared.detach()
         AttachmentPreviewCache.clear()
         pendingRoute = nil
         phase = .signedOut(message: nil)

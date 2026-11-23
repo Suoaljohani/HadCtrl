@@ -46,6 +46,8 @@
 	<array>
 		<string>hadctrl.inbox.refresh</string>
 	</array>
+	<key>NSFaceIDUsageDescription</key>
+	<string>يستخدم قيادة Face ID لقفل التطبيق وفتحه على جهازك فقط.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

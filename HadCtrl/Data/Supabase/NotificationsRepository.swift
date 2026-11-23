@@ -168,6 +168,14 @@ struct SupabaseNotificationsRepository: NotificationsRepository {
         return count
     }
 
+    func registerDevice(deviceID: UUID, token: String, environment: String) async throws {
+        struct Params: Encodable, Sendable { let p_device_id: UUID; let p_token: String; let p_environment: String }
+        _ = try await backend.call {
+            try await backend.client.rpc("register_device",
+                                         params: Params(p_device_id: deviceID, p_token: token, p_environment: environment)).execute()
+        }
+    }
+
     private func ids(_ rows: [NotificationRowDTO], _ entity: String) -> [String] {
         Array(Set(rows.filter { $0.entity_type == entity }.map(\.entity_id))).map(\.uuidString)
     }

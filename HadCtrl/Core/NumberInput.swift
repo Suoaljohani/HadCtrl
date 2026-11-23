@@ -40,7 +40,13 @@ enum NumberInput {
 /// Display formatting. Rounding happens only here (spec §10).
 struct NumberStyle: Sendable, Equatable {
     enum Digits: String, Sendable { case arabicIndic, latin }
-    var digits: Digits = .arabicIndic
+    var digits: Digits = NumberStyle.preferredDigits
+
+    /// The user's digit preference (Settings → Appearance); Arabic-Indic unless
+    /// Latin digits were chosen (D-35).
+    static var preferredDigits: Digits {
+        UserDefaults.standard.bool(forKey: "hc.pref.latinDigits") ? .latin : .arabicIndic
+    }
 
     func format(_ value: Decimal, fractionDigits: Int = 1) -> String {
         let f = NumberFormatter()

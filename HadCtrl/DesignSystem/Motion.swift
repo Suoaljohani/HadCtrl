@@ -147,8 +147,18 @@ extension View {
     /// Success when a decision or submission is confirmed by the server; error
     /// when it is refused. Nothing for ordinary taps or loads.
     func hcOutcomeFeedback(confirmation: String?, error: AppError?) -> some View {
-        self
-            .sensoryFeedback(.success, trigger: confirmation) { _, new in new != nil }
-            .sensoryFeedback(.error, trigger: error) { _, new in new != nil }
+        modifier(OutcomeFeedback(confirmation: confirmation, error: error))
+    }
+}
+
+private struct OutcomeFeedback: ViewModifier {
+    let confirmation: String?
+    let error: AppError?
+    @Environment(\.hcHapticsEnabled) private var haptics
+
+    func body(content: Content) -> some View {
+        content
+            .sensoryFeedback(.success, trigger: confirmation) { _, new in haptics && new != nil }
+            .sensoryFeedback(.error, trigger: error) { _, new in haptics && new != nil }
     }
 }
