@@ -40,3 +40,8 @@ Update this table after each run. A signed IPA (G7) needs the Apple inputs liste
 - CI run #28 on the same commit: green (database; simulator build; unit and UI tests incl. 5 achievement unit tests and 2 achievement UI tests).
 - IPA SHA-256 `7aef57dd700e442826973f1643b2abda8c6d91eb72e0e3b6c3464b400766cd45` (matches SHA256SUMS.txt). Unsigned (no `_CodeSignature`), `CFBundleVersion` 13, production backend, publishable key only.
 - Adds achievements (list, detail, director decision, add/edit). Hosted migration 001500 applied by the owner and verified.
+
+## Unsigned device build 16 (commit dbddf27), 2026-11-23
+- CI run #31 on the same commit: green (database incl. 88_goals; simulator build; unit tests incl. 7 goal tests; UI tests incl. goal activation and department card).
+- IPA SHA-256 `2548bb6d2b86b30289c8900c6173278cae1e77296c4b71a74fe48318a85e346a` (matches SHA256SUMS.txt). Unsigned, `CFBundleVersion` 16, production backend, publishable key only.
+- Adds goals (list, detail, new goal, director lifecycle, milestones) and the full department card.
