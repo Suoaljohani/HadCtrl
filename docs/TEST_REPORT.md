@@ -17,8 +17,9 @@ Environment: Ubuntu 24.04 container, PostgreSQL 16.15, with the Supabase platfor
 | 80_definitions (director-only templates, schedules, generation incl. frozen refusal, indicators with §11 rule rejection and atomicity, head submits on a new indicator) | 25 | pass |
 | 85_notifications (reading notifications, own-inbox RLS, mark all read, deadline reminders once per deadline) | 11 | pass |
 | 87_achievements (draft/submit/return/approve, roles, visibility, history immutability, notifications) | 23 | pass |
+| 88_goals (create rules, director lifecycle, completion request/refusal, milestones, visibility, cross-hospital) | 25 | pass |
 | 90_concurrency.sh (two sessions, same request_id) | 3 | pass |
-| **Total** | **278** | **pass, 0 failures** |
+| **Total** | **303** | **pass, 0 failures** |
 
 All checks run as the real `authenticated`/`anon` roles with a JWT `sub`, never as `service_role`.
 

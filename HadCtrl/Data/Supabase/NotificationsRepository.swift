@@ -44,6 +44,7 @@ struct SupabaseNotificationsRepository: NotificationsRepository {
     private struct DefinitionVersionRef: Decodable, Sendable { let id: UUID; let definition_id: UUID }
     private struct DefinitionRef: Decodable, Sendable { let id: UUID; let title: String; let department_id: UUID }
     private struct AchievementRef: Decodable, Sendable { let id: UUID; let title: String; let department_id: UUID }
+    private struct GoalRef: Decodable, Sendable { let id: UUID; let title: String; let department_id: UUID }
 
     func inbox() async throws -> [InboxItem] {
         let rows: [NotificationRowDTO] = try await backend.call {
@@ -112,6 +113,13 @@ struct SupabaseNotificationsRepository: NotificationsRepository {
                     .in("id", values: achievementIDs).execute().value
             }
             for a in refs { targets[a.id] = InboxTarget(title: a.title, context: dept(a.department_id), route: .achievement(a.id)) }
+        }
+        let goalIDs = ids(rows, "goal")
+        if !goalIDs.isEmpty {
+            let refs: [GoalRef] = try await backend.call {
+                try await backend.client.from("goals").select("id,title,department_id").in("id", values: goalIDs).execute().value
+            }
+            for g in refs { targets[g.id] = InboxTarget(title: g.title, context: dept(g.department_id), route: .goal(g.id)) }
         }
         return InboxMapper.map(rows, targets: targets)
     }

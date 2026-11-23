@@ -42,6 +42,7 @@ extension AchievementDecision {
 struct AchievementsListView: View {
     let context: UserContext
     let dependencies: DependencyContainer
+    var departmentID: UUID?
     @Environment(PeriodSelection.self) private var periods
     @State private var state: LoadState<[AchievementItem]> = .idle
     @State private var creating = false
@@ -76,7 +77,8 @@ struct AchievementsListView: View {
         .refreshable { await load() }
         .sheet(isPresented: $creating, onDismiss: { Task { await load() } }) {
             AchievementEditorSheet(context: context, dependencies: dependencies,
-                                   initial: AchievementDraft(departmentID: context.departments.first?.id,
+                                   initial: AchievementDraft(departmentID: departmentID.flatMap { d in context.departments.first { $0.id == d }?.id }
+                                                                 ?? context.departments.first?.id,
                                                              periodID: periods.selected?.id))
         }
         // Follows the period chosen on the dashboard; reloads when it changes.
@@ -92,7 +94,10 @@ struct AchievementsListView: View {
             return
         }
         state = .loading(previous: state.value)
-        do { state = .loaded(try await dependencies.achievements.achievements(periodID: periodID)) }
+        do {
+            let all = try await dependencies.achievements.achievements(periodID: periodID)
+            state = .loaded(all.filter { departmentID == nil || $0.departmentID == departmentID })
+        }
         catch { state = .failed(error as? AppError ?? .network(offline: false), previous: nil) }
     }
 }

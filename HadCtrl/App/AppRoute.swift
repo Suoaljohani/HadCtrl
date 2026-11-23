@@ -13,6 +13,7 @@ enum AppRoute: Hashable, Sendable {
     case reportList
     case indicatorList
     case achievementList
+    case goalList
 
     /// Parses hadctrl://task/<uuid> style deep links. Any role/department
     /// hints in the URL are ignored; authorization is checked on load.

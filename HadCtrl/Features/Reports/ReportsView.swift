@@ -27,23 +27,25 @@ struct ReportsView: View {
 
     let context: UserContext
     let dependencies: DependencyContainer
+    var departmentID: UUID?
     @Environment(PeriodSelection.self) private var periods
     @State private var model: ReportsListModel
     @State private var filter: Filter = .all
 
-    init(context: UserContext, dependencies: DependencyContainer) {
+    init(context: UserContext, dependencies: DependencyContainer, departmentID: UUID? = nil) {
         self.context = context
         self.dependencies = dependencies
+        self.departmentID = departmentID
         _model = State(initialValue: ReportsListModel(repository: dependencies.reports))
     }
 
     var body: some View {
         List {
-            if dependencies.environment.usesMockData { DemoDataBanner().listRowBackground(Color.clear) }
+            if dependencies.environment.usesMockData && departmentID == nil { DemoDataBanner().listRowBackground(Color.clear) }
             Section {
                 Picker(String(localized: "التصفية"), selection: $filter) {
                     ForEach(Filter.allCases) { f in
-                        Text("\(f.title) (\((model.state.value ?? []).filter(f.matches).count))").tag(f)
+                        Text("\(f.title) (\((model.state.value ?? []).filter { departmentID == nil || $0.departmentID == departmentID }.filter(f.matches).count))").tag(f)
                     }
                 }
             }
@@ -57,7 +59,8 @@ struct ReportsView: View {
             switch model.state {
             case .idle, .loading: ProgressView().frame(maxWidth: .infinity)
             case .failed(let e, _): StateView(kind: .error, title: String(localized: "تعذر تحميل التقارير"), message: e.userMessage)
-            case .loaded(let items):
+            case .loaded(let all):
+                let items = all.filter { departmentID == nil || $0.departmentID == departmentID }
                 if periods.hasLoaded && periods.periods.isEmpty {
                     StateView(kind: .empty, title: String(localized: "لا توجد فترة تقارير بعد"),
                               message: context.isDirector ? String(localized: "افتح فترة الشهر الحالي لإنشاء التقارير المجدولة.")
@@ -75,9 +78,9 @@ struct ReportsView: View {
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
         .background(Color.hcBackground)
-        .navigationTitle(String(localized: "التقارير"))
+        .modifier(OptionalNavigationTitle(title: departmentID == nil ? String(localized: "التقارير") : nil))
         .toolbar {
-            if context.isDirector {
+            if context.isDirector && departmentID == nil {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         Task { await generate() }
@@ -318,5 +321,13 @@ struct ReportDetailView: View {
                 Text(String(localized: "لم يُرسل محتوى بعد")).foregroundStyle(Color.hcSecondaryText)
             }
         }
+    }
+}
+
+/// Sets a navigation title only when given, so an embedded list keeps its host's title.
+struct OptionalNavigationTitle: ViewModifier {
+    let title: String?
+    @ViewBuilder func body(content: Content) -> some View {
+        if let title { content.navigationTitle(title) } else { content }
     }
 }

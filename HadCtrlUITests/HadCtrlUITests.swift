@@ -173,6 +173,33 @@ final class HadCtrlUITests: XCTestCase {
         app.expectBadge("achievementStatusBadge", "معتمد")
     }
 
+    /// The director activates a department's draft goal from Performance → Goals (§09).
+    func testDirectorActivatesGoal() {
+        let app = launch()
+        app.tabBars.firstMatch.buttons["الأداء"].tap()
+        app.segmentedControls.buttons["الأهداف"].tap()
+        app.scrollToHittable(app.row("goalRow.00000000-0000-0000-0000-000000000603")).tap()
+        app.expectBadge("goalStatusBadge", "مسودة بانتظار الاعتماد")
+        app.scrollToHittable(app.buttons["goal.activate"]).tap()
+        app.expectBadge("goalStatusBadge", "نشط")
+    }
+
+    /// The department card has internal sections for goals, indicators, tasks, reports and achievements (§08).
+    func testDepartmentCardSections() {
+        let app = launch(user: "head")
+        app.tabBars.firstMatch.buttons["الأقسام"].tap()
+        app.scrollToHittable(app.staticTexts["المختبر"]).tap()
+        let sections = app.segmentedControls["department.sections"]
+        XCTAssertTrue(sections.waitForExistence(timeout: 10))
+        for title in ["الأهداف", "المؤشرات", "المهام", "التقارير", "المنجزات"] {
+            XCTAssertTrue(sections.buttons[title].exists, "missing section \(title)")
+        }
+        XCTAssertTrue(app.row("goalRow.00000000-0000-0000-0000-000000000602").waitForExistence(timeout: 10),
+                      "the department's goals are listed")
+        sections.buttons["المنجزات"].tap()
+        XCTAssertTrue(app.row("achievementRow.00000000-0000-0000-0000-000000000401").waitForExistence(timeout: 10))
+    }
+
     func testLargeTextDoesNotHideDecisions() {
         let app = launch(extraArgs: ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXL"])
         XCTAssertTrue(app.staticTexts["تحتاج قرارك"].waitForExistence(timeout: 10))

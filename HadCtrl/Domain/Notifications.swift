@@ -12,6 +12,7 @@ enum NotificationKind: String, Sendable, CaseIterable {
     case achievementDecided = "achievement_decided", decisionNeeded = "decision_needed"
     case measurementSubmitted = "measurement_submitted", measurementApproved = "measurement_approved"
     case measurementReturned = "measurement_returned"
+    case goalDecided = "goal_decided"
 
     var headline: String {
         switch self {
@@ -33,6 +34,7 @@ enum NotificationKind: String, Sendable, CaseIterable {
         case .measurementSubmitted: return String(localized: "قراءة مؤشر بانتظار اعتمادك")
         case .measurementApproved: return String(localized: "اعتُمدت قراءة المؤشر")
         case .measurementReturned: return String(localized: "أُعيدت قراءة المؤشر للقسم")
+        case .goalDecided: return String(localized: "صدر قرار بشأن الهدف")
         }
     }
 }

@@ -31,7 +31,7 @@ struct InboxTests {
         let server = ["task_assigned", "task_submitted", "task_returned", "task_completed", "task_due_soon", "task_overdue",
                       "report_due_soon", "report_overdue", "report_returned", "report_approved", "report_submitted",
                       "extension_requested", "extension_decided", "achievement_decided", "decision_needed",
-                      "measurement_submitted", "measurement_approved", "measurement_returned"]
+                      "measurement_submitted", "measurement_approved", "measurement_returned", "goal_decided"]
         #expect(Set(server) == Set(NotificationKind.allCases.map(\.rawValue)), "matches notifications_event_type_check")
         #expect(NotificationKind.allCases.allSatisfy { !$0.headline.isEmpty })
     }

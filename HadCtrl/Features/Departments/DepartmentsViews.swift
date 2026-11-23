@@ -57,19 +57,58 @@ struct DepartmentsView: View {
     }
 }
 
+/// Department card (spec §08): who leads it, then internal sections for goals,
+/// indicators, tasks, reports and achievements of the selected period.
 struct DepartmentDetailView: View {
+    enum Part: String, CaseIterable, Identifiable {
+        case goals, indicators, tasks, reports, achievements
+        var id: Self { self }
+        var title: String {
+            switch self {
+            case .goals: return String(localized: "الأهداف")
+            case .indicators: return String(localized: "المؤشرات")
+            case .tasks: return String(localized: "المهام")
+            case .reports: return String(localized: "التقارير")
+            case .achievements: return String(localized: "المنجزات")
+            }
+        }
+    }
+
     let departmentID: UUID
     let context: UserContext
     let dependencies: DependencyContainer
     @State private var department: Department?
     @State private var loadError: AppError?
+    @State private var section: Part = .goals
 
     var body: some View {
         Group {
             if let department {
-                TaskListView(context: context, dependencies: dependencies,
-                             initialFilter: TaskFilter(scope: .all, departmentID: department.id))
-                    .navigationTitle(department.nameAr)
+                VStack(spacing: 0) {
+                    VStack(alignment: .leading, spacing: Spacing.xxs) {
+                        Text(department.headVisible
+                             ? (department.headName.map { String(localized: "الرئيس: \($0)") } ?? String(localized: "بلا رئيس نشط"))
+                             : String(localized: "الرئيس غير ظاهر لصلاحيتك"))
+                            .font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
+                        Picker(String(localized: "القسم الداخلي"), selection: $section) {
+                            ForEach(Part.allCases) { Text($0.title).tag($0) }
+                        }
+                        .pickerStyle(.segmented)
+                        .accessibilityIdentifier("department.sections")
+                    }
+                    .padding(.horizontal, Spacing.m)
+                    .padding(.vertical, Spacing.xs)
+                    switch section {
+                    case .goals: GoalsListView(context: context, dependencies: dependencies, departmentID: department.id)
+                    case .indicators: IndicatorsListView(dependencies: dependencies, departmentID: department.id)
+                    case .tasks:
+                        TaskListView(context: context, dependencies: dependencies,
+                                     initialFilter: TaskFilter(scope: .all, departmentID: department.id))
+                    case .reports: ReportsView(context: context, dependencies: dependencies, departmentID: department.id)
+                    case .achievements: AchievementsListView(context: context, dependencies: dependencies, departmentID: department.id)
+                    }
+                }
+                .navigationTitle(department.nameAr)
             } else if let loadError {
                 StateView(kind: .notFound, title: String(localized: "القسم غير متاح"), message: loadError.userMessage)
             } else {

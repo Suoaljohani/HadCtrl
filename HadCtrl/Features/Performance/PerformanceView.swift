@@ -3,12 +3,46 @@ import SwiftUI
 /// Indicators with their measured score and explicit "not updated" / "pending
 /// approval" states (spec §10, §11). Each row opens the indicator for the period.
 struct PerformanceView: View {
+    enum Segment: String, CaseIterable, Identifiable { case indicators, goals; var id: Self { self } }
+    let context: UserContext
     let dependencies: DependencyContainer
+    @State private var segment: Segment
+
+    init(context: UserContext, dependencies: DependencyContainer, initialSegment: Segment = .indicators) {
+        self.context = context
+        self.dependencies = dependencies
+        _segment = State(initialValue: initialSegment)
+    }
+
+    var body: some View {
+        VStack(spacing: 0) {
+            Picker(String(localized: "العرض"), selection: $segment) {
+                Text(String(localized: "المؤشرات")).tag(Segment.indicators)
+                Text(String(localized: "الأهداف")).tag(Segment.goals)
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal, Spacing.m)
+            .padding(.vertical, Spacing.xs)
+            switch segment {
+            case .indicators: IndicatorsListView(dependencies: dependencies)
+            case .goals: GoalsListView(context: context, dependencies: dependencies)
+            }
+        }
+        .background(Color.hcBackground)
+        .navigationTitle(String(localized: "الأداء"))
+    }
+}
+
+/// Indicators for the selected period; `departmentID` narrows to one department.
+struct IndicatorsListView: View {
+    let dependencies: DependencyContainer
+    var departmentID: UUID?
     @Environment(PeriodSelection.self) private var periods
     @State private var model: IndicatorListModel
 
-    init(dependencies: DependencyContainer) {
+    init(dependencies: DependencyContainer, departmentID: UUID? = nil) {
         self.dependencies = dependencies
+        self.departmentID = departmentID
         _model = State(initialValue: IndicatorListModel(repository: dependencies.indicators))
     }
 
@@ -21,8 +55,10 @@ struct PerformanceView: View {
             case .loaded(let items) where items.isEmpty:
                 StateView(kind: .empty, title: String(localized: "لا توجد مؤشرات معرّفة لهذه الفترة"),
                           message: String(localized: "يعرّف مدير المستشفى المؤشرات من الإعدادات ← الإدارة."))
-            case .loaded(let items):
-                if dependencies.environment.usesMockData { DemoDataBanner().listRowBackground(Color.clear) }
+            case .loaded(let all):
+                let items = all.filter { departmentID == nil || $0.departmentID == departmentID }
+                if dependencies.environment.usesMockData && departmentID == nil { DemoDataBanner().listRowBackground(Color.clear) }
+                if items.isEmpty { StateView(kind: .empty, title: String(localized: "لا توجد مؤشرات لهذا القسم")) }
                 ForEach(items) { item in
                     if let periodID = periods.selectedID {
                         NavigationLink(value: AppRoute.indicator(item.id, periodID: periodID)) { IndicatorRow(item: item) }
@@ -34,8 +70,6 @@ struct PerformanceView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
-        .background(Color.hcBackground)
-        .navigationTitle(String(localized: "الأداء"))
         .refreshable { await model.load(periodID: periods.selectedID, periodsLoaded: periods.hasLoaded) }
         // Follows the period chosen on the dashboard; reloads when it changes.
         .task(id: periods.selectedID) {

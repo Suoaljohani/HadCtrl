@@ -58,6 +58,7 @@ struct DependencyContainer: Sendable {
     let achievements: AchievementsRepository
     let admin: AdminRepository
     let notifications: NotificationsRepository
+    let goals: GoalsRepository
     /// Exposed for UI tests that need to shape mock behaviour.
     let mockStore: MockStore?
 
@@ -72,7 +73,7 @@ struct DependencyContainer: Sendable {
                                        dashboard: mocks.dashboard, departments: mocks.departments, tasks: mocks.tasks,
                                        reports: mocks.reports, indicators: mocks.indicators,
                                        achievements: mocks.achievements, admin: mocks.admin,
-                                       notifications: mocks.notifications, mockStore: store)
+                                       notifications: mocks.notifications, goals: mocks.goals, mockStore: store)
         case .production:
             switch BackendConfiguration.fromBundle() {
             case .failure(let error):
@@ -81,7 +82,7 @@ struct DependencyContainer: Sendable {
                 return DependencyContainer(environment: environment, clock: clock, session: unavailable,
                                            dashboard: unavailable, departments: unavailable, tasks: unavailable,
                                            reports: unavailable, indicators: unavailable, achievements: unavailable,
-                                           admin: unavailable, notifications: unavailable, mockStore: nil)
+                                           admin: unavailable, notifications: unavailable, goals: unavailable, mockStore: nil)
             case .success(let config):
                 let backend = SupabaseBackend(client: SupabaseClientFactory.make(config), cache: SessionCache(),
                                               calendar: .riyadh)
@@ -94,7 +95,8 @@ struct DependencyContainer: Sendable {
                                            indicators: SupabaseIndicatorsRepository(backend: backend),
                                            achievements: SupabaseAchievementsRepository(backend: backend),
                                            admin: SupabaseAdminRepository(backend: backend),
-                                           notifications: SupabaseNotificationsRepository(backend: backend), mockStore: nil)
+                                           notifications: SupabaseNotificationsRepository(backend: backend),
+                                           goals: SupabaseGoalsRepository(backend: backend), mockStore: nil)
             }
         }
     }
@@ -104,7 +106,7 @@ struct DependencyContainer: Sendable {
 /// surfaces the configuration error instead of showing demo data.
 struct UnavailableBackend: SessionRepository, DashboardRepository, DepartmentsRepository, TasksRepository,
                            ReportsRepository, IndicatorsRepository, AchievementsRepository, AdminRepository,
-                           NotificationsRepository {
+                           NotificationsRepository, GoalsRepository {
     let error: AppError
     func restore() async throws -> UserContext? { throw error }
     func signIn(email: String, password: String) async throws -> UserContext { throw error }
@@ -144,6 +146,12 @@ struct UnavailableBackend: SessionRepository, DashboardRepository, DepartmentsRe
     func decide(id: UUID, decision: AchievementDecision, expectedVersion: Int, note: String?, requestID: UUID) async throws { throw error }
     func linkableTasks(departmentID: UUID) async throws -> [TaskItem] { throw error }
     func inbox() async throws -> [InboxItem] { throw error }
+    func goals(departmentID: UUID?, asOf: Date) async throws -> [GoalSummary] { throw error }
+    func goal(id: UUID, asOf: Date) async throws -> GoalDetail { throw error }
+    func create(_ draft: NewGoalDraft, requestID: UUID) async throws -> UUID { throw error }
+    func decide(id: UUID, decision: GoalDecision, expectedVersion: Int, note: String?, requestID: UUID) async throws { throw error }
+    func requestCompletion(id: UUID, expectedVersion: Int, note: String?, requestID: UUID) async throws { throw error }
+    func setMilestone(id: UUID, approve: Bool, requestID: UUID) async throws { throw error }
     func unreadCount() async throws -> Int { throw error }
     func markRead(id: UUID) async throws { throw error }
     func markAllRead() async throws -> Int { throw error }

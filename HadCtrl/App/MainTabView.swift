@@ -37,7 +37,7 @@ struct MainTabView: View {
                 DepartmentsView(dependencies: dependencies)
             }
             tab(.performance, title: String(localized: "الأداء"), symbol: "chart.bar") {
-                PerformanceView(dependencies: dependencies)
+                PerformanceView(context: context, dependencies: dependencies)
             }
             tab(.execution, title: String(localized: "التنفيذ"), symbol: "checklist") {
                 ExecutionView(context: context, dependencies: dependencies, present: { sheet = $0 })
@@ -83,7 +83,7 @@ struct MainTabView: View {
         let tab: AppTab
         switch route {
         case .department: tab = .departments
-        case .goal, .indicator, .indicatorList: tab = .performance
+        case .goal, .indicator, .indicatorList, .goalList: tab = .performance
         case .task, .achievement, .taskList, .achievementList: tab = .execution
         case .report, .reportList: tab = .reports
         }
@@ -132,7 +132,11 @@ struct RouteDestination: View {
         case .reportList:
             ReportsView(context: context, dependencies: dependencies)
         case .indicatorList:
-            PerformanceView(dependencies: dependencies)
+            PerformanceView(context: context, dependencies: dependencies)
+        case .goalList:
+            PerformanceView(context: context, dependencies: dependencies, initialSegment: .goals)
+        case .goal(let id):
+            GoalDetailView(goalID: id, context: context, dependencies: dependencies)
         case .report(let id):
             ReportDetailView(reportID: id, context: context, dependencies: dependencies)
         case .indicator(let id, let periodID):
@@ -142,9 +146,6 @@ struct RouteDestination: View {
         case .achievementList:
             AchievementsListView(context: context, dependencies: dependencies)
                 .navigationTitle(String(localized: "المنجزات"))
-        case .goal:
-            StateView(kind: .empty, title: String(localized: "هذه الشاشة قيد التنفيذ"),
-                      message: String(localized: "ستُفعّل في شريحة الأهداف."))
         }
     }
 }

@@ -77,3 +77,14 @@ protocol AchievementsRepository: Sendable {
     /// Completed tasks of a department that may be linked as evidence (§16).
     func linkableTasks(departmentID: UUID) async throws -> [TaskItem]
 }
+
+protocol GoalsRepository: Sendable {
+    /// Goals the user may see; nil = all departments. Progress is computed as of `asOf`.
+    func goals(departmentID: UUID?, asOf: Date) async throws -> [GoalSummary]
+    func goal(id: UUID, asOf: Date) async throws -> GoalDetail
+    func create(_ draft: NewGoalDraft, requestID: UUID) async throws -> UUID
+    func decide(id: UUID, decision: GoalDecision, expectedVersion: Int, note: String?, requestID: UUID) async throws
+    func requestCompletion(id: UUID, expectedVersion: Int, note: String?, requestID: UUID) async throws
+    /// action: complete (department head) or approve (director).
+    func setMilestone(id: UUID, approve: Bool, requestID: UUID) async throws
+}

@@ -15,6 +15,7 @@ struct MockRepositories: Sendable {
     var reports: MockReportsRepository { MockReportsRepository(store: store, user: demoUser) }
     var indicators: MockIndicatorsRepository { MockIndicatorsRepository(store: store, user: demoUser, periods: dashboard) }
     var achievements: MockAchievementsRepository { MockAchievementsRepository(store: store, user: demoUser) }
+    var goals: MockGoalsRepository { MockGoalsRepository(store: store, user: demoUser) }
     var notifications: MockNotificationsRepository { MockNotificationsRepository(store: store, user: demoUser) }
 }
 
@@ -131,7 +132,7 @@ struct MockDashboardRepository: DashboardRepository {
             measuredScore: coverage.measuredScore, coverage: coverage.coverage, verdict: coverage.verdict,
             departmentsUpdated: isOctober ? 3 : 2, departmentsTotal: 3,
             readings: [
-                DashboardReading(metric: .goalsAchieved, numerator: isOctober ? 4 : 3, denominator: 9, route: .indicatorList),
+                DashboardReading(metric: .goalsAchieved, numerator: isOctober ? 4 : 3, denominator: 9, route: .goalList),
                 DashboardReading(metric: .indicatorsUpdated, numerator: isOctober ? 4 : 3, denominator: 4, route: .indicatorList),
                 DashboardReading(metric: .reportsReceived, numerator: isOctober ? 3 : 2, denominator: 3, route: .reportList),
                 DashboardReading(metric: .tasksCompleted, numerator: completed, denominator: assigned, route: .taskList(TaskFilter(scope: .all))),

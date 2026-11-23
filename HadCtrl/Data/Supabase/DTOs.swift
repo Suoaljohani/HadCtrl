@@ -402,6 +402,8 @@ struct MeasurementRowDTO: Decodable, Sendable {
     let submitted_at: Date?
     let approved_at: Date?
     let version: Int
+    /// Only selected by goal progress queries.
+    var period_id: UUID? = nil
     static let columns = "id,definition_version_id,revision,status,value,numerator,denominator,not_applicable_reason,source_note,entered_by,submitted_at,approved_at,version"
 
     func toDomain() -> MeasurementRevision? {

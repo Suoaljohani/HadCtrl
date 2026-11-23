@@ -129,7 +129,7 @@ enum DashboardMapper {
             departmentsUpdated: nil, departmentsTotal: nil,
             readings: [
                 DashboardReading(metric: .goalsAchieved, numerator: int(r.goals_achieved.numerator),
-                                 denominator: int(r.goals_achieved.denominator), route: .indicatorList),
+                                 denominator: int(r.goals_achieved.denominator), route: .goalList),
                 DashboardReading(metric: .indicatorsUpdated, numerator: int(r.indicators_updated.numerator),
                                  denominator: int(r.indicators_updated.denominator), route: .indicatorList),
                 DashboardReading(metric: .reportsReceived, numerator: int(r.reports_received.numerator),
