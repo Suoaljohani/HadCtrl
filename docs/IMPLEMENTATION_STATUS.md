@@ -15,10 +15,11 @@
 - **G5 server:** measurement submit/decide, corrections after freeze, `freeze_period` snapshots, SQL scoring with parity to Swift, `dashboard_snapshot`.
 - **Hosted Supabase:** all 11 migrations applied and verified against the tested build (TEST_REPORT, D-17).
 
+- **Hosted project bootstrapped (2026-11-23):** hospital (non-demo), first director (an existing profile was kept), current monthly period open. Verified as that user via the real RPCs: `my_context` returns `hospital_director`; `dashboard_snapshot` returns `insufficient_data` (no indicators yet). No departments yet.
 - **G1 verified in CI (run #11):** simulator build, 42/42 unit tests, 5/5 UI tests.
 
 ## Not done yet (in order)
-1. **G3 client (in progress):** supabase-swift 2.55.7 added. Session (sign-in, Keychain, restore, sign-out), dashboard (`dashboard_snapshot`), departments, tasks list/detail/create/transition are wired to Supabase. Contract tests decode real RPC output. Packages locked (`Config/Package.resolved`) and build green in CI (run #11). Pending: an end-to-end check against the hosted project, which needs the publishable key and a bootstrapped director.
+1. **G3 client (in progress):** supabase-swift 2.55.7 added. Session (sign-in, Keychain, restore, sign-out), dashboard (`dashboard_snapshot`), departments, tasks list/detail/create/transition are wired to Supabase. Contract tests decode real RPC output. Packages locked (`Config/Package.resolved`) and build green in CI (run #11). Key configured and director bootstrapped. Pending: a sign-in from the app itself on a simulator or device (needs the director's password, which is never shared with Claude).
 2. **G4–G5 client:** report and indicator screens wired to their RPCs; schedule `generate_report_instances` with Supabase Cron.
 3. **G6:** attachments (Storage policies, prepare/finalize), search, calendar, preferences sync, PDF/CSV export, in-app notification inbox, APNs worker.
 4. **G7:** accessibility/VoiceOver audit, performance, deep links.
