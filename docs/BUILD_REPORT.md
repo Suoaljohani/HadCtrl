@@ -46,6 +46,11 @@ Update this table after each run. A signed IPA (G7) needs the Apple inputs liste
 - IPA SHA-256 `2548bb6d2b86b30289c8900c6173278cae1e77296c4b71a74fe48318a85e346a` (matches SHA256SUMS.txt). Unsigned, `CFBundleVersion` 16, production backend, publishable key only.
 - Adds goals (list, detail, new goal, director lifecycle, milestones) and the full department card.
 
+## Unsigned device build 23 (commit ddc0d46), 2026-11-23
+- CI run #38 on the same commit: green (database; simulator build; unit tests incl. 2 new dashboard cache tests; all UI tests; screenshot tour in light, dark, head and accessibility-large text, 63 screens).
+- IPA SHA-256 `5ecc7fa618c3def6eeb312182b130e477c679894dcfbc4049fb6918e82e74e28` (matches SHA256SUMS.txt). Unsigned, `CFBundleVersion` 23, production backend, publishable key only.
+- Professional polish (D-34): motion system, redesigned dashboard, skeleton loading, zoom transitions (iOS 18+), per-period stale-while-revalidate, concurrent reads. Design review fixes from the build 22 screenshots: right-to-left order of mixed lines, unclipped row badges, large-text header.
+
 ## Unsigned device build 19 (commit 6023568), 2026-11-23
 - CI run #34 on the same commit: green (database incl. 89_attachments; simulator build; unit tests incl. 4 attachment tests; UI tests incl. read-only evidence on an approved achievement).
 - IPA SHA-256 `211af336d42f5e7885f560339fde974f0e25551720a918ee4fc9cb80b03fb826` (matches SHA256SUMS.txt). Unsigned, `CFBundleVersion` 19, production backend, publishable key only.
