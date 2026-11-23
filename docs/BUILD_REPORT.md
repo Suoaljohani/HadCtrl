@@ -29,3 +29,9 @@ Update this table after each run. A signed IPA (G7) needs the Apple inputs liste
 |---|---|---|---|
 | unsigned #1 | 947a1c4 | **UNSIGNED** Release device build (`generic/platform=iOS`), Xcode 26.3 | `HadCtrl-UNSIGNED-build1-947a1c4.ipa`, SHA-256 `b2d30114b25ea0c320298f865e79848f1bcb258d3c9496c8a8302d86c3ee5336`; artifact digest verified after download. Contents checked: arm64 Mach-O, `iphoneos`, min iOS 17.0, display name قيادة, production backend `vffusttzqmerfofqianz`, publishable key only (the only `sb_secret_` bytes are the guard-prefix constant, not a key), no `_CodeSignature`/profile, Janna LT and app icon present. **Not installable as-is; not a release IPA (§32).** |
 | signed | — | Release Testing (Ad Hoc) via `build-ipa.yml` | **Not produced:** needs Apple Developer membership, bundle ID, distribution .p12, Ad Hoc profile with registered UDIDs in the `ios-signing` environment, and the code merged to `main`. |
+
+## Unsigned device build 10 (commit 55ac439), 2026-11-23
+- CI run #25 on the same commit: green (database suite; simulator build; 69/69 unit tests in 13 suites; 9/9 UI tests).
+- Artifact `HadCtrl-UNSIGNED-build10`, IPA SHA-256 `7eba27a633989682d73f2af186c69acb064edf23ffc043cc00af95e137e7f994` (matches SHA256SUMS.txt).
+- Verified after download: no `_CodeSignature` (unsigned), `CFBundleVersion` 10, `HCDefaultAppEnvironment` production, `HCSupabaseURL` https://vffusttzqmerfofqianz.supabase.co, publishable key only; `UIBackgroundModes` fetch + `BGTaskSchedulerPermittedIdentifiers` for the inbox refresh (D-30).
+- Includes: reports and indicators screens (G4–G5 client), director definitions, in-app inbox. Must be re-signed by the owner (docs/INSTALL.md).
