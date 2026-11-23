@@ -6,7 +6,15 @@ struct ExecutionView: View {
     let context: UserContext
     let dependencies: DependencyContainer
     let present: (SheetRoute) -> Void
-    @State private var segment: Segment = .tasks
+    @State private var segment: Segment
+
+    init(context: UserContext, dependencies: DependencyContainer, present: @escaping (SheetRoute) -> Void,
+         initialSegment: Segment = .tasks) {
+        self.context = context
+        self.dependencies = dependencies
+        self.present = present
+        _segment = State(initialValue: initialSegment)
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -19,7 +27,7 @@ struct ExecutionView: View {
             .padding(.vertical, Spacing.xs)
             switch segment {
             case .tasks: TaskListView(context: context, dependencies: dependencies, initialFilter: TaskFilter())
-            case .achievements: AchievementsListView(dependencies: dependencies)
+            case .achievements: AchievementsListView(context: context, dependencies: dependencies)
             }
         }
         .background(Color.hcBackground)
@@ -331,42 +339,3 @@ struct NewTaskSheet: View {
     }
 }
 
-struct AchievementsListView: View {
-    let dependencies: DependencyContainer
-    @Environment(PeriodSelection.self) private var periods
-    @State private var state: LoadState<[AchievementItem]> = .idle
-
-    var body: some View {
-        List {
-            switch state {
-            case .idle, .loading: ProgressView().frame(maxWidth: .infinity)
-            case .failed(let e, _): StateView(kind: .error, title: String(localized: "تعذر تحميل المنجزات"), message: e.userMessage)
-            case .loaded(let items) where items.isEmpty: StateView(kind: .empty, title: String(localized: "لا توجد منجزات لهذه الفترة"))
-            case .loaded(let items):
-                ForEach(items) { a in
-                    VStack(alignment: .leading, spacing: Spacing.xxs) {
-                        Text(a.title).font(.hcHeadline)
-                        Text("\(a.departmentName) · \(a.periodTitle)").font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
-                        Text(a.impactSummary).font(.hcCallout)
-                        StatusBadge(text: a.status == .approved ? String(localized: "معتمد") : String(localized: "بانتظار الاعتماد"),
-                                    tone: a.status == .approved ? .good : .info)
-                    }
-                    .accessibilityElement(children: .combine)
-                }
-            }
-        }
-        .listStyle(.insetGrouped)
-        .scrollContentBackground(.hidden)
-        // Follows the period chosen on the dashboard; reloads when it changes.
-        .task(id: periods.selectedID) {
-            await periods.loadIfNeeded()
-            guard let periodID = periods.selectedID else {
-                if periods.hasLoaded { state = .loaded([]) }
-                return
-            }
-            state = .loading(previous: nil)
-            do { state = .loaded(try await dependencies.achievements.achievements(periodID: periodID)) }
-            catch { state = .failed(error as? AppError ?? .network(offline: false), previous: nil) }
-        }
-    }
-}

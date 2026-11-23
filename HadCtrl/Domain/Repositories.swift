@@ -68,4 +68,12 @@ protocol IndicatorsRepository: Sendable {
 
 protocol AchievementsRepository: Sendable {
     func achievements(periodID: UUID) async throws -> [AchievementItem]
+    func achievement(id: UUID) async throws -> AchievementDetail
+    /// Creates a draft (draft.id nil) or edits a draft/returned achievement.
+    func save(_ draft: AchievementDraft, requestID: UUID) async throws -> UUID
+    func submit(id: UUID, expectedVersion: Int, requestID: UUID) async throws
+    /// API-10: approve publishes; return/reject need a note.
+    func decide(id: UUID, decision: AchievementDecision, expectedVersion: Int, note: String?, requestID: UUID) async throws
+    /// Completed tasks of a department that may be linked as evidence (§16).
+    func linkableTasks(departmentID: UUID) async throws -> [TaskItem]
 }

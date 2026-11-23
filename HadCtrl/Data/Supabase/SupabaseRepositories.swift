@@ -137,7 +137,7 @@ enum DashboardMapper {
                 DashboardReading(metric: .tasksCompleted, numerator: int(r.tasks_completed.numerator),
                                  denominator: int(r.tasks_completed.denominator), route: .taskList(TaskFilter(scope: .all))),
                 DashboardReading(metric: .achievementsApproved, numerator: r.achievements_approved, denominator: nil,
-                                 route: .reportList),
+                                 route: .achievementList),
                 DashboardReading(metric: .awaitingDirector, numerator: r.awaiting_my_decision, denominator: nil,
                                  route: .taskList(TaskFilter(scope: .awaitingApproval))),
             ],
@@ -265,11 +265,6 @@ struct SupabaseTasksRepository: TasksRepository {
     }
 }
 
-/// Achievements are wired in a later client slice. Until then production shows
-/// an explicit "not available yet" error rather than demo data (AC-031).
-struct PendingSliceRepository: AchievementsRepository {
-    func achievements(periodID: UUID) async throws -> [AchievementItem] { throw AppError.notYetAvailable }
-}
 
 // MARK: - Administration (D-25)
 

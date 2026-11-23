@@ -14,7 +14,7 @@ struct MockRepositories: Sendable {
     var tasks: MockTasksRepository { MockTasksRepository(store: store, user: demoUser) }
     var reports: MockReportsRepository { MockReportsRepository(store: store, user: demoUser) }
     var indicators: MockIndicatorsRepository { MockIndicatorsRepository(store: store, user: demoUser, periods: dashboard) }
-    var achievements: MockAchievementsRepository { MockAchievementsRepository() }
+    var achievements: MockAchievementsRepository { MockAchievementsRepository(store: store, user: demoUser) }
     var notifications: MockNotificationsRepository { MockNotificationsRepository(store: store, user: demoUser) }
 }
 
@@ -135,7 +135,7 @@ struct MockDashboardRepository: DashboardRepository {
                 DashboardReading(metric: .indicatorsUpdated, numerator: isOctober ? 4 : 3, denominator: 4, route: .indicatorList),
                 DashboardReading(metric: .reportsReceived, numerator: isOctober ? 3 : 2, denominator: 3, route: .reportList),
                 DashboardReading(metric: .tasksCompleted, numerator: completed, denominator: assigned, route: .taskList(TaskFilter(scope: .all))),
-                DashboardReading(metric: .achievementsApproved, numerator: 2, denominator: nil, route: .reportList),
+                DashboardReading(metric: .achievementsApproved, numerator: 2, denominator: nil, route: .achievementList),
                 DashboardReading(metric: .awaitingDirector, numerator: awaiting.count, denominator: nil, route: .taskList(TaskFilter(scope: .awaitingApproval))),
             ],
             actions: actions, departments: pulses, isDemoData: true)
@@ -202,16 +202,5 @@ struct MockTasksRepository: TasksRepository {
     func transition(taskID: UUID, expectedVersion: Int, transition: TaskTransition, note: String?, requestID: UUID) async throws -> TaskItem {
         try await store.transition(taskID: taskID, expectedVersion: expectedVersion, transition: transition, note: note,
                                    requestID: requestID, context: MockDirectory.context(for: user))
-    }
-}
-
-struct MockAchievementsRepository: AchievementsRepository {
-    func achievements(periodID: UUID) async throws -> [AchievementItem] {
-        [
-            AchievementItem(id: UUID(uuidString: "00000000-0000-0000-0000-000000000401")!, title: "تقليص زمن إصدار النتائج",
-                            departmentName: "المختبر", impactSummary: "مرتبط بمؤشر LAB.TAT المعتمد لأكتوبر", periodTitle: "أكتوبر", status: .approved),
-            AchievementItem(id: UUID(uuidString: "00000000-0000-0000-0000-000000000402")!, title: "إطلاق برنامج تدريب الإنعاش",
-                            departmentName: "التدريب", impactSummary: "٤ دفعات مكتملة", periodTitle: "نوفمبر", status: .submitted),
-        ]
     }
 }

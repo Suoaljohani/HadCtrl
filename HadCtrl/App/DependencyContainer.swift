@@ -92,7 +92,7 @@ struct DependencyContainer: Sendable {
                                            tasks: SupabaseTasksRepository(backend: backend, clock: clock),
                                            reports: SupabaseReportsRepository(backend: backend),
                                            indicators: SupabaseIndicatorsRepository(backend: backend),
-                                           achievements: PendingSliceRepository(),
+                                           achievements: SupabaseAchievementsRepository(backend: backend),
                                            admin: SupabaseAdminRepository(backend: backend),
                                            notifications: SupabaseNotificationsRepository(backend: backend), mockStore: nil)
             }
@@ -138,6 +138,11 @@ struct UnavailableBackend: SessionRepository, DashboardRepository, DepartmentsRe
     func decideMeasurement(measurementID: UUID, approve: Bool, expectedVersion: Int, note: String?, requestID: UUID) async throws { throw error }
     func createIndicator(_ draft: NewIndicatorDraft, requestID: UUID) async throws -> UUID { throw error }
     func achievements(periodID: UUID) async throws -> [AchievementItem] { throw error }
+    func achievement(id: UUID) async throws -> AchievementDetail { throw error }
+    func save(_ draft: AchievementDraft, requestID: UUID) async throws -> UUID { throw error }
+    func submit(id: UUID, expectedVersion: Int, requestID: UUID) async throws { throw error }
+    func decide(id: UUID, decision: AchievementDecision, expectedVersion: Int, note: String?, requestID: UUID) async throws { throw error }
+    func linkableTasks(departmentID: UUID) async throws -> [TaskItem] { throw error }
     func inbox() async throws -> [InboxItem] { throw error }
     func unreadCount() async throws -> Int { throw error }
     func markRead(id: UUID) async throws { throw error }

@@ -145,6 +145,34 @@ final class HadCtrlUITests: XCTestCase {
         XCTAssertTrue(app.buttons["report.approve"].waitForExistence(timeout: 5) || app.scrollToHittable(app.buttons["report.approve"]).exists)
     }
 
+    /// The head adds the impact to the department's draft achievement and submits it (§16).
+    func testHeadSubmitsAchievement() {
+        let app = launch(user: "head")
+        app.tabBars.firstMatch.buttons["التنفيذ"].tap()
+        app.segmentedControls.buttons["المنجزات"].tap()
+        app.scrollToHittable(app.row("achievementRow.00000000-0000-0000-0000-000000000403")).tap()
+        app.expectBadge("achievementStatusBadge", "مسودة")
+        app.scrollToHittable(app.buttons["achievement.edit"]).tap()
+        let impact = app.textInput("achievement.impact")
+        XCTAssertTrue(impact.waitForExistence(timeout: 5))
+        impact.tap()
+        impact.typeText("انخفاض العينات المرفوضة من ٧ إلى ١")
+        app.buttons["achievement.saveDraft"].tap()
+        app.scrollToHittable(app.buttons["achievement.submit"]).tap()
+        app.expectBadge("achievementStatusBadge", "بانتظار الاعتماد")
+        XCTAssertFalse(app.buttons["achievement.approve"].exists, "a department never approves its own achievement")
+    }
+
+    /// The director approves a submitted achievement from another department.
+    func testDirectorApprovesAchievement() {
+        let app = launch()
+        app.tabBars.firstMatch.buttons["التنفيذ"].tap()
+        app.segmentedControls.buttons["المنجزات"].tap()
+        app.scrollToHittable(app.row("achievementRow.00000000-0000-0000-0000-000000000402")).tap()
+        app.scrollToHittable(app.buttons["achievement.approve"]).tap()
+        app.expectBadge("achievementStatusBadge", "معتمد")
+    }
+
     func testLargeTextDoesNotHideDecisions() {
         let app = launch(extraArgs: ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXL"])
         XCTAssertTrue(app.staticTexts["تحتاج قرارك"].waitForExistence(timeout: 10))

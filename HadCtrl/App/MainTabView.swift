@@ -84,7 +84,7 @@ struct MainTabView: View {
         switch route {
         case .department: tab = .departments
         case .goal, .indicator, .indicatorList: tab = .performance
-        case .task, .achievement, .taskList: tab = .execution
+        case .task, .achievement, .taskList, .achievementList: tab = .execution
         case .report, .reportList: tab = .reports
         }
         selection = tab
@@ -137,9 +137,14 @@ struct RouteDestination: View {
             ReportDetailView(reportID: id, context: context, dependencies: dependencies)
         case .indicator(let id, let periodID):
             IndicatorDetailView(definitionID: id, periodID: periodID, context: context, dependencies: dependencies)
-        case .goal, .achievement:
+        case .achievement(let id):
+            AchievementDetailView(achievementID: id, context: context, dependencies: dependencies)
+        case .achievementList:
+            AchievementsListView(context: context, dependencies: dependencies)
+                .navigationTitle(String(localized: "المنجزات"))
+        case .goal:
             StateView(kind: .empty, title: String(localized: "هذه الشاشة قيد التنفيذ"),
-                      message: String(localized: "ستُفعّل في شريحة الأهداف والمنجزات."))
+                      message: String(localized: "ستُفعّل في شريحة الأهداف."))
         }
     }
 }

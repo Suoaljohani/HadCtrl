@@ -221,6 +221,8 @@ struct AchievementItem: Sendable, Hashable, Identifiable {
     let impactSummary: String
     let periodTitle: String
     let status: Status
+    var departmentID: UUID?
+    var version: Int = 1
 }
 
 /// A "needs your decision" item with an explicit ordering rule (spec §06).
