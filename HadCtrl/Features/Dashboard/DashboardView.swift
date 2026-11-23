@@ -20,7 +20,9 @@ struct DashboardView: View {
 
     var body: some View {
         ScrollView {
-            LazyVStack(alignment: .leading, spacing: Spacing.l) {
+            // Eager stack: the dashboard is bounded (≤3 actions, 6 readings, departments),
+            // and every item must exist for VoiceOver and UI tests, not only once scrolled into view.
+            VStack(alignment: .leading, spacing: Spacing.l) {
                 header
                 if dependencies.environment.usesMockData { DemoDataBanner() }
                 content
@@ -138,15 +140,7 @@ struct DashboardView: View {
         .accessibilityIdentifier("pulseCard")
 
         // 3. Six readings
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: Spacing.s)], spacing: Spacing.s) {
-            ForEach(s.readings) { r in
-                Button { open(r.route) } label: {
-                    MetricTile(title: r.metric.title, numerator: r.numerator, denominator: r.denominator)
-                }
-                .buttonStyle(.plain)
-                .accessibilityIdentifier("reading.\(r.metric.rawValue)")
-            }
-        }
+        ReadingsGrid(readings: s.readings, open: open)
 
         // 4. Departments (vertical cards, no wide table on iPhone)
         SectionHeader(title: String(localized: "الأقسام"), trailing: String(localized: "\(s.departments.count) أقسام"))
@@ -226,5 +220,37 @@ struct DepartmentPulseCard: View {
         }
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(.isButton)
+    }
+}
+
+/// Six readings in two columns, or one column at accessibility text sizes (§20).
+/// Built eagerly so every tile is in the accessibility tree.
+struct ReadingsGrid: View {
+    let readings: [DashboardReading]
+    let open: (AppRoute) -> Void
+    @Environment(\.dynamicTypeSize) private var typeSize
+
+    private var rows: [[DashboardReading]] {
+        let perRow = typeSize.isAccessibilitySize ? 1 : 2
+        return stride(from: 0, to: readings.count, by: perRow).map { Array(readings[$0..<min($0 + perRow, readings.count)]) }
+    }
+
+    var body: some View {
+        VStack(spacing: Spacing.s) {
+            ForEach(rows, id: \.first?.id) { row in
+                HStack(alignment: .top, spacing: Spacing.s) {
+                    ForEach(row) { r in
+                        let tile = MetricTile(title: r.metric.title, numerator: r.numerator, denominator: r.denominator)
+                        Button { open(r.route) } label: { tile }
+                            .buttonStyle(.plain)
+                            .accessibilityLabel(tile.accessibilityText)
+                            .accessibilityIdentifier("reading.\(r.metric.rawValue)")
+                    }
+                    if row.count == 1 && !typeSize.isAccessibilitySize {
+                        Color.clear.frame(maxWidth: .infinity).accessibilityHidden(true)
+                    }
+                }
+            }
+        }
     }
 }

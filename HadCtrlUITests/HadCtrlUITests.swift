@@ -35,25 +35,20 @@ final class HadCtrlUITests: XCTestCase {
     /// Director opens "awaiting your approval", reviews the submitted task and approves it.
     func testDirectorApprovesSubmittedTask() {
         let app = launch()
-        let tile = app.buttons["reading.awaitingDirector"]
-        XCTAssertTrue(tile.waitForExistence(timeout: 10))
-        tile.tap()
-        let row = app.staticTexts["تحديث إجراءات استلام العينات"]
-        XCTAssertTrue(row.waitForExistence(timeout: 5))
-        row.tap()
-        let approve = app.buttons["action.approve"]
-        XCTAssertTrue(approve.waitForExistence(timeout: 5))
-        approve.tap()
-        XCTAssertTrue(app.staticTexts["مكتملة"].waitForExistence(timeout: 5))
-        XCTAssertFalse(app.buttons["action.approve"].exists, "approved task offers no further approval")
+        app.scrollToHittable(app.buttons["reading.awaitingDirector"]).tap()
+        app.scrollToHittable(app.staticTexts["تحديث إجراءات استلام العينات"]).tap()
+        app.scrollToHittable(app.buttons["action.approve"]).tap()
+        XCTAssertTrue(app.staticText(containing: "مكتملة").waitForExistence(timeout: 5), "status shows completed")
+        XCTAssertTrue(app.buttons["action.approve"].waitForNonExistence(timeout: 5),
+                      "approved task offers no further approval")
     }
 
     /// Returning requires a note (spec §12); the action is blocked until one is typed.
     func testReturnRequiresNote() {
         let app = launch()
-        app.buttons["reading.awaitingDirector"].firstMatchWait()
-        app.staticTexts["تحديث إجراءات استلام العينات"].firstMatchWait()
-        app.buttons["action.return"].firstMatchWait()
+        app.scrollToHittable(app.buttons["reading.awaitingDirector"]).tap()
+        app.scrollToHittable(app.staticTexts["تحديث إجراءات استلام العينات"]).tap()
+        app.scrollToHittable(app.buttons["action.return"]).tap()
         let confirm = app.buttons["confirmNote"]
         XCTAssertTrue(confirm.waitForExistence(timeout: 5))
         XCTAssertFalse(confirm.isEnabled)
@@ -62,7 +57,7 @@ final class HadCtrlUITests: XCTestCase {
         field.typeText("أرفق المحضر")
         XCTAssertTrue(confirm.isEnabled)
         confirm.tap()
-        XCTAssertTrue(app.staticTexts["معادة للاستكمال"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticText(containing: "معادة للاستكمال").waitForExistence(timeout: 5), "status shows returned")
     }
 
     /// Department head sees only their department and has no approval on own work.
@@ -85,9 +80,23 @@ final class HadCtrlUITests: XCTestCase {
     }
 }
 
-private extension XCUIElement {
-    func firstMatchWait(timeout: TimeInterval = 5, file: StaticString = #filePath, line: UInt = #line) {
-        XCTAssertTrue(waitForExistence(timeout: timeout), "\(self) not found", file: file, line: line)
-        tap()
+private extension XCUIApplication {
+    /// Scrolls the frontmost scroll view until `element` exists and is hittable, as a user would.
+    @discardableResult
+    func scrollToHittable(_ element: XCUIElement, maxSwipes: Int = 8,
+                          file: StaticString = #filePath, line: UInt = #line) -> XCUIElement {
+        _ = element.waitForExistence(timeout: 5)
+        var swipes = 0
+        while !(element.exists && element.isHittable) && swipes < maxSwipes {
+            swipeUp()   // scrolls whatever is frontmost, like a user's thumb
+            swipes += 1
+        }
+        XCTAssertTrue(element.exists && element.isHittable, "\(element) not reachable after \(swipes) swipes",
+                      file: file, line: line)
+        return element
+    }
+
+    func staticText(containing text: String) -> XCUIElement {
+        staticTexts.containing(NSPredicate(format: "label CONTAINS %@", text)).firstMatch
     }
 }

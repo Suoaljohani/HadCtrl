@@ -149,11 +149,10 @@ struct MetricTile: View {
         .frame(maxWidth: .infinity, minHeight: 84, alignment: .topLeading)
         .background(Color.hcSurface, in: RoundedRectangle(cornerRadius: Radius.card - 4, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: Radius.card - 4, style: .continuous).stroke(Color.hcSeparator, lineWidth: 0.5))
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(accessibilityText)
     }
 
-    private var accessibilityText: String {
+    /// Spoken form with numerator and denominator; applied by the containing control.
+    var accessibilityText: String {
         if let denominator { return String(localized: "\(title)، \(numerator) من \(denominator)") }
         return String(localized: "\(title)، \(numerator)")
     }
