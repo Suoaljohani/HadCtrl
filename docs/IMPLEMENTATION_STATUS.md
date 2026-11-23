@@ -12,8 +12,9 @@
 - **G1 app (CI-verified project generation; build/test result in BUILD_REPORT):** XcodeGen project, shared HadCtrl scheme, five-tab shell, director dashboard, execution (tasks + achievements), departments, performance, reports, sign-in/access-denied/settings, design tokens with dark mode, Janna LT, app icon, Arabic string catalog with English entries.
 - **Domain rules + tests:** scoring for all three directions and the zero-event rule, ratio-of-sums aggregation, latest/sum/weighted mean, coverage verdicts, number parsing, Riyadh deadlines, latest-request gate.
 
+- **Hosted Supabase:** all 11 migrations applied and verified against the tested build (TEST_REPORT, D-17).
+
 ## Not done yet (in order)
-1. **Apply the migrations to the hosted project.** Deferred so the full schema goes up in one reviewed pass.
 2. **G3 client:** add supabase-swift (pinned, Package.resolved from CI), Supabase repositories, sign-in, Keychain session.
 3. **G4 reports:** scheduler (Supabase Cron), `submit_report`/`decide_report`, waiver, compliance, plus tests AC-015..019.
 4. **G5 indicators:** `submit_measurement`/`decide_measurement`, corrections, `freeze_period` + snapshots, server-side scoring, `dashboard_snapshot`.

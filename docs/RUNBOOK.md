@@ -3,7 +3,7 @@
 ## 1. Schema changes
 - Add a new timestamped file under `supabase/migrations/`. Never edit an applied migration.
 - Run `scripts/db-test.sh` locally (empty database → all migrations → tests). CI repeats this.
-- Apply to the hosted project only after tests pass, in order. Never use `db reset`, `drop schema` or destructive statements on the hosted project. Fix forward with a corrective migration after inspecting the current state (§29).
+- Apply to the hosted project only after tests pass, in order. Afterwards, run the Supabase security advisor and compare the function fingerprint query in TEST_REPORT with the local database. Never use `db reset`, `drop schema` or destructive statements on the hosted project. Fix forward with a corrective migration after inspecting the current state (§29).
 
 ## 2. Bootstrap the first director (trusted admin path, §22)
 Run in the Supabase SQL editor as the project owner, after the person has accepted an Auth invite. Replace the placeholders after checking the identity out of band.

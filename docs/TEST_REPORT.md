@@ -7,17 +7,23 @@ Environment: Ubuntu 24.04 container, PostgreSQL 16.15, with the Supabase platfor
 | Suite | Assertions | Result |
 |---|---|---|
 | 00_fixtures | 1 | pass |
+| 05_grants (anon executes nothing; authenticated = documented RPC list; verified to fail without the lockdown migration) | 4 | pass |
 | 10_rls_isolation (anon, outsider, director, heads, coordinator, exec viewer, sysadmin, disabled, expired, delegate; direct-write denial) | 43 | pass |
 | 30_tasks_rpc (create/idempotency/validation/lifecycle/approve/return/extension/revocation/notifications/audit) | 50 | pass |
 | 40_reports_rpc (scheduler idempotency, drafts, submit, return, resubmit, stale approval, waiver, compliance) | 38 | pass |
 | 50_measurements_rpc (SQL scoring parity, input rules, approval, freeze, correction after freeze) | 31 | pass |
 | 60_dashboard (coverage/verdict, consistency, cross-department and cross-hospital non-leakage) | 13 | pass |
 | 90_concurrency.sh (two sessions, same request_id) | 3 | pass |
-| **Total** | **179** | **pass, 0 failures** |
+| **Total** | **183** | **pass, 0 failures** |
 
 All checks run as the real `authenticated`/`anon` roles with a JWT `sub`, never as `service_role`.
 
-Limits: PostgreSQL 16 locally vs 17 on the hosted project. Storage (`storage.objects`) policies are not covered yet. The suite has **not** yet been run against the hosted Supabase project.
+Limits: PostgreSQL 16 locally vs 17 on the hosted project. Storage (`storage.objects`) policies are not covered yet. ## Hosted project (HadCtrl, `vffusttzqmerfofqianz`), 2026-11-23
+- 11 migrations applied in order (`supabase_migrations.schema_migrations` = 11). Nothing destructive; the project held no data.
+- Structure matches the tested database: 38 tables, all with RLS; 40 policies; an md5 fingerprint over every `public`/`private` function body is identical locally and hosted (`f9dde17efc18b737ebb14af6be619fc9`).
+- Grants: anon can execute 0 functions and holds 0 table privileges. Authenticated can call exactly the 16 documented RPCs.
+- Security advisor: only accepted findings remain (D-18).
+- The behavioral test suite was **not** run on the hosted project, because it inserts fixture rows. The fingerprint shows the code is identical to what the suite exercised.
 
 ## iOS: CI only (no Xcode in this session)
 Swift Testing suites: `IndicatorScoringTests`, `AggregationTests`, `CoverageTests`, `NumberInputTests`, `HospitalCalendarTests`, `ArabicSearchTests`, `RouteTests`, `ConfigurationTests`, `ViewModelTests`. XCUITest: `HadCtrlUITests` (5 scenarios, Arabic locale, one at AX-XL text size).

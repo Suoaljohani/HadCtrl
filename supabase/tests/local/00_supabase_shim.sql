@@ -52,3 +52,18 @@ grant usage on schema public to anon, authenticated, service_role;
 alter default privileges in schema public grant all on tables to anon, authenticated, service_role;
 alter default privileges in schema public grant all on functions to anon, authenticated, service_role;
 alter default privileges in schema public grant all on sequences to anon, authenticated, service_role;
+
+-- Hosted Supabase grants EXECUTE on new public functions to anon/authenticated
+-- through platform-owned default privileges that a migration's own
+-- ALTER DEFAULT PRIVILEGES does not remove. Simulate that with an event
+-- trigger so the local suite sees the same starting point.
+create or replace function public._shim_grant_new_functions() returns event_trigger
+language plpgsql as $$
+declare r record;
+begin
+  for r in select * from pg_event_trigger_ddl_commands() where object_type = 'function' and schema_name = 'public' loop
+    execute format('grant execute on function %s to anon, authenticated', r.object_identity);
+  end loop;
+end $$;
+create event trigger _shim_grant_new_functions on ddl_command_end
+  when tag in ('CREATE FUNCTION') execute function public._shim_grant_new_functions();
