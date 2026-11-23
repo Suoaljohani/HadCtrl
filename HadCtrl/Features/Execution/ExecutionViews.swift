@@ -68,14 +68,14 @@ struct TaskListView: View {
             }
             switch model.state {
             case .idle, .loading(nil):
-                ProgressView().frame(maxWidth: .infinity)
+                SkeletonRows()
             case .failed(let error, _):
                 StateView(kind: .error, title: String(localized: "تعذر تحميل المهام"), message: error.userMessage) { model.reload() }
             case .loaded(let items) where items.isEmpty:
                 StateView(kind: .empty, title: String(localized: "لا توجد مهام ضمن هذه التصفية"))
             case .loaded(let items), .loading(let items?):
                 ForEach(items) { task in
-                    NavigationLink(value: AppRoute.task(task.id)) { TaskRow(task: task, now: dependencies.clock.now()) }
+                    HCLink(AppRoute.task(task.id)) { TaskRow(task: task, now: dependencies.clock.now()) }
                 }
             }
         }
@@ -129,7 +129,7 @@ struct TaskDetailView: View {
         Group {
             switch model.state {
             case .idle, .loading(nil):
-                ProgressView()
+                DetailSkeleton()
             case .failed(let error, _):
                 StateView(kind: error.code == .notFound ? .notFound : .error,
                           title: error.code == .notFound ? String(localized: "السجل غير متاح") : String(localized: "تعذر التحميل"),
@@ -140,6 +140,7 @@ struct TaskDetailView: View {
         }
         .background(Color.hcBackground)
         .navigationTitle(String(localized: "تفاصيل المهمة"))
+        .hcOutcomeFeedback(confirmation: model.lastConfirmation, error: model.actionError)
         .navigationBarTitleDisplayMode(.inline)
         .task { if case .idle = model.state { await model.load() } }
         .sheet(item: $noteFor) { transition in

@@ -110,7 +110,7 @@ struct InboxView: View {
                     Label(error.userMessage, systemImage: "exclamationmark.triangle").foregroundStyle(Color.hcCritical)
                 }
                 switch model.state {
-                case .idle, .loading(nil): ProgressView().frame(maxWidth: .infinity)
+                case .idle, .loading(nil): SkeletonRows()
                 case .failed(let e, nil):
                     StateView(kind: .error, title: String(localized: "تعذر تحميل الإشعارات"), message: e.userMessage) {
                         Task { await model.load() }

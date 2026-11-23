@@ -49,19 +49,19 @@ struct IndicatorsListView: View {
     var body: some View {
         List {
             switch model.state {
-            case .idle, .loading: ProgressView().frame(maxWidth: .infinity)
+            case .idle, .loading(nil): SkeletonRows()
             case .failed(let e, _):
                 StateView(kind: .error, title: String(localized: "تعذر تحميل المؤشرات"), message: e.userMessage)
             case .loaded(let items) where items.isEmpty:
                 StateView(kind: .empty, title: String(localized: "لا توجد مؤشرات معرّفة لهذه الفترة"),
                           message: String(localized: "يعرّف مدير المستشفى المؤشرات من الإعدادات ← الإدارة."))
-            case .loaded(let all):
+            case .loaded(let all), .loading(let all?):
                 let items = all.filter { departmentID == nil || $0.departmentID == departmentID }
                 if dependencies.environment.usesMockData && departmentID == nil { DemoDataBanner().listRowBackground(Color.clear) }
                 if items.isEmpty { StateView(kind: .empty, title: String(localized: "لا توجد مؤشرات لهذا القسم")) }
                 ForEach(items) { item in
                     if let periodID = periods.selectedID {
-                        NavigationLink(value: AppRoute.indicator(item.id, periodID: periodID)) { IndicatorRow(item: item) }
+                        HCLink(AppRoute.indicator(item.id, periodID: periodID)) { IndicatorRow(item: item) }
                     } else {
                         IndicatorRow(item: item)
                     }
@@ -213,7 +213,7 @@ struct IndicatorDetailView: View {
     var body: some View {
         Group {
             switch model.state {
-            case .idle, .loading(nil): ProgressView()
+            case .idle, .loading(nil): DetailSkeleton()
             case .failed(let error, _):
                 StateView(kind: error.code == .notFound ? .notFound : .error,
                           title: error.code == .notFound ? String(localized: "السجل غير متاح") : String(localized: "تعذر التحميل"),
@@ -224,6 +224,7 @@ struct IndicatorDetailView: View {
         }
         .background(Color.hcBackground)
         .navigationTitle(String(localized: "المؤشر"))
+        .hcOutcomeFeedback(confirmation: model.confirmation, error: model.actionError)
         .navigationBarTitleDisplayMode(.inline)
         .task { if case .idle = model.state { await model.load() } }
         .sheet(isPresented: $returning) {

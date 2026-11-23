@@ -100,7 +100,7 @@ struct AttachmentsSection: View {
     var body: some View {
         Section {
             switch model.items {
-            case .idle, .loading(nil): ProgressView()
+            case .idle, .loading(nil): SkeletonRows(rows: 1)
             case .failed(let e, nil): Text(e.userMessage).foregroundStyle(Color.hcCritical)
             case .loaded(let list), .loading(let list?), .failed(_, let list?):
                 if list.isEmpty { Text(String(localized: "لا توجد شواهد مرفقة")).foregroundStyle(Color.hcSecondaryText) }

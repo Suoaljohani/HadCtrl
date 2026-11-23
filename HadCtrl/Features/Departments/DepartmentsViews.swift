@@ -15,15 +15,15 @@ struct DepartmentsView: View {
     var body: some View {
         List {
             switch state {
-            case .idle, .loading: ProgressView().frame(maxWidth: .infinity)
+            case .idle, .loading(nil): SkeletonRows()
             case .failed(let e, _):
                 StateView(kind: .error, title: String(localized: "تعذر تحميل الأقسام"), message: e.userMessage) { Task { await load() } }
-            case .loaded:
+            case .loaded, .loading(.some(_)):
                 if filtered.isEmpty {
                     StateView(kind: .empty, title: String(localized: "لا توجد أقسام مطابقة"))
                 }
                 ForEach(filtered) { dept in
-                    NavigationLink(value: AppRoute.department(dept.id)) {
+                    HCLink(AppRoute.department(dept.id)) {
                         VStack(alignment: .leading, spacing: Spacing.xxs) {
                             HStack {
                                 Text(dept.nameAr).font(.hcHeadline)
@@ -112,7 +112,7 @@ struct DepartmentDetailView: View {
             } else if let loadError {
                 StateView(kind: .notFound, title: String(localized: "القسم غير متاح"), message: loadError.userMessage)
             } else {
-                ProgressView()
+                DetailSkeleton()
             }
         }
         .background(Color.hcBackground)

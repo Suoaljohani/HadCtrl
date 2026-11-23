@@ -62,13 +62,13 @@ struct AchievementsListView: View {
                 }
             }
             switch state {
-            case .idle, .loading: ProgressView().frame(maxWidth: .infinity)
+            case .idle, .loading(nil): SkeletonRows()
             case .failed(let e, _): StateView(kind: .error, title: String(localized: "تعذر تحميل المنجزات"), message: e.userMessage)
             case .loaded(let items) where items.isEmpty:
                 StateView(kind: .empty, title: String(localized: "لا توجد منجزات لهذه الفترة"))
-            case .loaded(let items):
+            case .loaded(let items), .loading(let items?):
                 ForEach(items) { a in
-                    NavigationLink(value: AppRoute.achievement(a.id)) { AchievementRow(item: a) }
+                    HCLink(AppRoute.achievement(a.id)) { AchievementRow(item: a) }
                 }
             }
         }
@@ -194,7 +194,7 @@ struct AchievementDetailView: View {
     var body: some View {
         Group {
             switch model.state {
-            case .idle, .loading(nil): ProgressView()
+            case .idle, .loading(nil): DetailSkeleton()
             case .failed(let error, _):
                 StateView(kind: error.code == .notFound ? .notFound : .error,
                           title: error.code == .notFound ? String(localized: "السجل غير متاح") : String(localized: "تعذر التحميل"),
@@ -205,6 +205,7 @@ struct AchievementDetailView: View {
         }
         .background(Color.hcBackground)
         .navigationTitle(String(localized: "المنجز"))
+        .hcOutcomeFeedback(confirmation: model.confirmation, error: model.actionError)
         .navigationBarTitleDisplayMode(.inline)
         .task { if case .idle = model.state { await model.load() } }
         .sheet(isPresented: $editing, onDismiss: { Task { await model.load() } }) {

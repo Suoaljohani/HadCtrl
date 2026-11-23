@@ -38,6 +38,36 @@ struct ViewModelTests {
         #expect(model.state.value == nil)
     }
 
+    @Test("Revisiting a period shows its own cached numbers at once, never another period's")
+    func revisitShowsSamePeriodCache() async {
+        let (store, repos) = mocks()
+        let model = DashboardViewModel(repository: repos.dashboard)
+        model.select(periodID: F.november)
+        await model.waitForIdle()
+        model.select(periodID: F.october)
+        #expect(model.state.value == nil, "October was never loaded: nothing from November is shown")
+        await model.waitForIdle()
+        await store.setLatency(.milliseconds(300), for: F.november)
+        model.select(periodID: F.november)
+        #expect(model.state.isLoading)
+        #expect(model.state.value?.periodID == F.november)
+        #expect(model.isRefreshingVisibleData)
+        await model.waitForIdle()
+        #expect(model.state.value?.periodID == F.november)
+    }
+
+    @Test("A failed refresh keeps the same period's last snapshot readable and reports the error")
+    func failedRefreshKeepsSamePeriod() async {
+        let (store, repos) = mocks()
+        let model = DashboardViewModel(repository: repos.dashboard)
+        model.select(periodID: F.november)
+        await model.waitForIdle()
+        await store.setFailure(.network(offline: true))
+        await model.refresh()
+        #expect(model.state.error == .network(offline: true))
+        #expect(model.state.value?.periodID == F.november)
+    }
+
     @Test("coverage below 80% yields no overall verdict on the dashboard")
     func dashboardVerdict() async throws {
         let (_, repos) = mocks()

@@ -47,81 +47,102 @@ struct SupabaseNotificationsRepository: NotificationsRepository {
     private struct GoalRef: Decodable, Sendable { let id: UUID; let title: String; let department_id: UUID }
 
     func inbox() async throws -> [InboxItem] {
-        let rows: [NotificationRowDTO] = try await backend.call {
+        async let rowsRequest: [NotificationRowDTO] = backend.call {
             try await backend.client.from("notifications").select(NotificationRowDTO.columns)
                 .order("created_at", ascending: false).order("id").limit(100).execute().value
         }
-        let departments = try await backend.departmentsByID()
-        func dept(_ id: UUID) -> String { departments[id]?.nameAr ?? "" }
-        var targets: [UUID: InboxTarget] = [:]
+        async let departmentsRequest = backend.departmentsByID()
+        let rows = try await rowsRequest
+        let departments = try await departmentsRequest
+        let names = departments.mapValues(\.nameAr)
 
-        let taskIDs = ids(rows, "task")
-        if !taskIDs.isEmpty {
-            let tasks: [TaskRef] = try await backend.call {
-                try await backend.client.from("tasks").select("id,title,department_id").in("id", values: taskIDs).execute().value
-            }
-            for t in tasks { targets[t.id] = InboxTarget(title: t.title, context: dept(t.department_id), route: .task(t.id)) }
-        }
-
-        let reportIDs = ids(rows, "report")
-        if !reportIDs.isEmpty {
-            let reports: [ReportRef] = try await backend.call {
-                try await backend.client.from("report_instances").select("id,department_id,template_version_id")
-                    .in("id", values: reportIDs).execute().value
-            }
-            let names = try await templateNames(Set(reports.map(\.template_version_id)))
-            for r in reports {
-                targets[r.id] = InboxTarget(title: names[r.template_version_id] ?? String(localized: "تقرير دوري"),
-                                            context: dept(r.department_id), route: .report(r.id))
-            }
-        }
-
-        let measurementIDs = ids(rows, "indicator")
-        if !measurementIDs.isEmpty {
-            let measurements: [MeasurementRef] = try await backend.call {
-                try await backend.client.from("indicator_measurements").select("id,definition_version_id,period_id")
-                    .in("id", values: measurementIDs).execute().value
-            }
-            let versionIDs = Set(measurements.map(\.definition_version_id)).map(\.uuidString)
-            var versions: [DefinitionVersionRef] = []
-            if !versionIDs.isEmpty {
-                versions = try await backend.call {
-                    try await backend.client.from("indicator_definition_versions").select("id,definition_id")
-                        .in("id", values: versionIDs).execute().value
-                }
-            }
-            let definitionByVersion = Dictionary(versions.map { ($0.id, $0.definition_id) }, uniquingKeysWith: { a, _ in a })
-            let definitionIDs = Set(versions.map(\.definition_id)).map(\.uuidString)
-            var definitions: [DefinitionRef] = []
-            if !definitionIDs.isEmpty {
-                definitions = try await backend.call {
-                    try await backend.client.from("indicator_definitions").select("id,title,department_id")
-                        .in("id", values: definitionIDs).execute().value
-                }
-            }
-            let definitionsByID = Dictionary(definitions.map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
-            for m in measurements {
-                guard let defID = definitionByVersion[m.definition_version_id], let d = definitionsByID[defID] else { continue }
-                targets[m.id] = InboxTarget(title: d.title, context: dept(d.department_id),
-                                            route: .indicator(d.id, periodID: m.period_id))
-            }
-        }
-        let achievementIDs = ids(rows, "achievement")
-        if !achievementIDs.isEmpty {
-            let refs: [AchievementRef] = try await backend.call {
-                try await backend.client.from("achievements").select("id,title,department_id")
-                    .in("id", values: achievementIDs).execute().value
-            }
-            for a in refs { targets[a.id] = InboxTarget(title: a.title, context: dept(a.department_id), route: .achievement(a.id)) }
-        }
-        let goalIDs = ids(rows, "goal")
-        if !goalIDs.isEmpty {
-            let refs: [GoalRef] = try await backend.call {
-                try await backend.client.from("goals").select("id,title,department_id").in("id", values: goalIDs).execute().value
-            }
-            for g in refs { targets[g.id] = InboxTarget(title: g.title, context: dept(g.department_id), route: .goal(g.id)) }
+        // Each record type resolves independently: run them together.
+        async let tasks = taskTargets(ids(rows, "task"), names)
+        async let reports = reportTargets(ids(rows, "report"), names)
+        async let indicators = indicatorTargets(ids(rows, "indicator"), names)
+        async let achievements = achievementTargets(ids(rows, "achievement"), names)
+        async let goals = goalTargets(ids(rows, "goal"), names)
+        var targets = try await tasks
+        let reportParts = try await reports
+        let indicatorParts = try await indicators
+        let achievementParts = try await achievements
+        let goalParts = try await goals
+        for part in [reportParts, indicatorParts, achievementParts, goalParts] {
+            targets.merge(part) { a, _ in a }
         }
         return InboxMapper.map(rows, targets: targets)
+    }
+
+    private func taskTargets(_ ids: [String], _ dept: [UUID: String]) async throws -> [UUID: InboxTarget] {
+        guard !ids.isEmpty else { return [:] }
+        let tasks: [TaskRef] = try await backend.call {
+            try await backend.client.from("tasks").select("id,title,department_id").in("id", values: ids).execute().value
+        }
+        return Dictionary(tasks.map { ($0.id, InboxTarget(title: $0.title, context: dept[$0.department_id] ?? "", route: .task($0.id))) },
+                          uniquingKeysWith: { a, _ in a })
+    }
+
+    private func reportTargets(_ ids: [String], _ dept: [UUID: String]) async throws -> [UUID: InboxTarget] {
+        guard !ids.isEmpty else { return [:] }
+        let reports: [ReportRef] = try await backend.call {
+            try await backend.client.from("report_instances").select("id,department_id,template_version_id")
+                .in("id", values: ids).execute().value
+        }
+        let names = try await templateNames(Set(reports.map(\.template_version_id)))
+        var out: [UUID: InboxTarget] = [:]
+        for r in reports {
+            out[r.id] = InboxTarget(title: names[r.template_version_id] ?? String(localized: "تقرير دوري"),
+                                    context: dept[r.department_id] ?? "", route: .report(r.id))
+        }
+        return out
+    }
+
+    private func indicatorTargets(_ ids: [String], _ dept: [UUID: String]) async throws -> [UUID: InboxTarget] {
+        guard !ids.isEmpty else { return [:] }
+        let measurements: [MeasurementRef] = try await backend.call {
+            try await backend.client.from("indicator_measurements").select("id,definition_version_id,period_id")
+                .in("id", values: ids).execute().value
+        }
+        let versionIDs = Set(measurements.map(\.definition_version_id)).map(\.uuidString)
+        guard !versionIDs.isEmpty else { return [:] }
+        let versions: [DefinitionVersionRef] = try await backend.call {
+            try await backend.client.from("indicator_definition_versions").select("id,definition_id")
+                .in("id", values: versionIDs).execute().value
+        }
+        let definitionByVersion = Dictionary(versions.map { ($0.id, $0.definition_id) }, uniquingKeysWith: { a, _ in a })
+        let definitionIDs = Set(versions.map(\.definition_id)).map(\.uuidString)
+        guard !definitionIDs.isEmpty else { return [:] }
+        let definitions: [DefinitionRef] = try await backend.call {
+            try await backend.client.from("indicator_definitions").select("id,title,department_id")
+                .in("id", values: definitionIDs).execute().value
+        }
+        let definitionsByID = Dictionary(definitions.map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
+        var out: [UUID: InboxTarget] = [:]
+        for m in measurements {
+            guard let defID = definitionByVersion[m.definition_version_id], let d = definitionsByID[defID] else { continue }
+            out[m.id] = InboxTarget(title: d.title, context: dept[d.department_id] ?? "",
+                                    route: .indicator(d.id, periodID: m.period_id))
+        }
+        return out
+    }
+
+    private func achievementTargets(_ ids: [String], _ dept: [UUID: String]) async throws -> [UUID: InboxTarget] {
+        guard !ids.isEmpty else { return [:] }
+        let refs: [AchievementRef] = try await backend.call {
+            try await backend.client.from("achievements").select("id,title,department_id")
+                .in("id", values: ids).execute().value
+        }
+        return Dictionary(refs.map { ($0.id, InboxTarget(title: $0.title, context: dept[$0.department_id] ?? "", route: .achievement($0.id))) },
+                          uniquingKeysWith: { a, _ in a })
+    }
+
+    private func goalTargets(_ ids: [String], _ dept: [UUID: String]) async throws -> [UUID: InboxTarget] {
+        guard !ids.isEmpty else { return [:] }
+        let refs: [GoalRef] = try await backend.call {
+            try await backend.client.from("goals").select("id,title,department_id").in("id", values: ids).execute().value
+        }
+        return Dictionary(refs.map { ($0.id, InboxTarget(title: $0.title, context: dept[$0.department_id] ?? "", route: .goal($0.id))) },
+                          uniquingKeysWith: { a, _ in a })
     }
 
     func unreadCount() async throws -> Int {

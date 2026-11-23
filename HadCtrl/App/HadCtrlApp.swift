@@ -28,6 +28,8 @@ struct HadCtrlApp: App {
                 .environment(session)
                 .tint(Color.hcPrimary)
                 .preferredColorScheme(Self.forcedScheme(dependencies.environment))
+                // UI tests run without decorative motion so they see the final layout.
+                .modifier(MotionPolicy(allowMotion: dependencies.environment != .uiTesting))
         }
         // iOS-scheduled refresh (D-30): reads the inbox, posts generic local alerts.
         .backgroundTask(.appRefresh(DeviceAlerts.refreshTaskID)) { [dependencies] in

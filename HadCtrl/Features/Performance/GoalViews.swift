@@ -72,13 +72,13 @@ struct GoalsListView: View {
                 }
             }
             switch state {
-            case .idle, .loading(nil): ProgressView().frame(maxWidth: .infinity)
+            case .idle, .loading(nil): SkeletonRows()
             case .failed(let e, _): StateView(kind: .error, title: String(localized: "تعذر تحميل الأهداف"), message: e.userMessage)
             case .loaded(let items) where items.isEmpty:
                 StateView(kind: .empty, title: String(localized: "لا توجد أهداف بعد"))
             case .loaded(let items), .loading(let items?):
                 ForEach(items) { g in
-                    NavigationLink(value: AppRoute.goal(g.id)) { GoalRow(goal: g) }
+                    HCLink(AppRoute.goal(g.id)) { GoalRow(goal: g) }
                 }
             }
         }
@@ -205,7 +205,7 @@ struct GoalDetailView: View {
     var body: some View {
         Group {
             switch model.state {
-            case .idle, .loading(nil): ProgressView()
+            case .idle, .loading(nil): DetailSkeleton()
             case .failed(let error, _):
                 StateView(kind: error.code == .notFound ? .notFound : .error,
                           title: error.code == .notFound ? String(localized: "السجل غير متاح") : String(localized: "تعذر التحميل"),
@@ -216,6 +216,7 @@ struct GoalDetailView: View {
         }
         .background(Color.hcBackground)
         .navigationTitle(String(localized: "الهدف"))
+        .hcOutcomeFeedback(confirmation: model.confirmation, error: model.actionError)
         .navigationBarTitleDisplayMode(.inline)
         .task { if case .idle = model.state { await model.load() } }
         .sheet(item: $noteFor) { decision in
@@ -309,7 +310,7 @@ struct GoalDetailView: View {
                 Section(String(localized: "المؤشرات المرتبطة")) {
                     ForEach(g.indicators) { link in
                         if let periodID = periods.selectedID {
-                            NavigationLink(value: AppRoute.indicator(link.id, periodID: periodID)) { indicatorLabel(link) }
+                            HCLink(AppRoute.indicator(link.id, periodID: periodID)) { indicatorLabel(link) }
                         } else {
                             indicatorLabel(link)
                         }

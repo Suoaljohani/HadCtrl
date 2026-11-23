@@ -12,6 +12,9 @@ final class ReportsListModel {
     private(set) var confirmation: String?
     private let repository: ReportsRepository
     private let gate = LatestRequestGate()
+    /// Last loaded list per period (this session): a revisit or refresh shows the
+    /// same period's rows at once while the request runs, never another period's.
+    @ObservationIgnored private var cache: [UUID: [ReportItem]] = [:]
 
     init(repository: ReportsRepository) { self.repository = repository }
 
@@ -21,10 +24,11 @@ final class ReportsListModel {
             if periodsLoaded { state = .loaded([]) }
             return
         }
-        state = .loading(previous: nil)
+        state = .loading(previous: cache[periodID])
         do {
             let items = try await repository.reports(periodID: periodID)
             guard gate.isLatest(token) else { return }
+            cache[periodID] = items
             state = .loaded(items)
         } catch is CancellationError {
         } catch {

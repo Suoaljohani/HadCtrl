@@ -3,6 +3,11 @@ import Observation
 
 /// Loads the dashboard for the selected period. Only the latest selection may
 /// update the screen (AC-004); real failures are shown, never replaced (AC-031).
+///
+/// Speed: snapshots are kept per period for this signed-in session, so revisiting
+/// a period (or pulling to refresh) shows that period's last loaded numbers with
+/// their "last updated" time while the fresh request runs. Another period's numbers
+/// are never shown under the selected title.
 @MainActor
 @Observable
 final class DashboardViewModel {
@@ -12,17 +17,23 @@ final class DashboardViewModel {
     private let repository: DashboardRepository
     private let gate = LatestRequestGate()
     private var inFlight: Task<Void, Never>?
+    @ObservationIgnored private var cache: [UUID: DashboardSnapshot] = [:]
 
     init(repository: DashboardRepository) {
         self.repository = repository
+    }
+
+    /// True while a request runs over numbers already on screen.
+    var isRefreshingVisibleData: Bool {
+        if case .loading(let previous?) = state { return previous.periodID == selectedPeriodID }
+        return false
     }
 
     func select(periodID: UUID) {
         selectedPeriodID = periodID
         inFlight?.cancel()
         let token = gate.next()
-        // Never show the previous period's numbers under the new period title.
-        state = .loading(previous: nil)
+        state = .loading(previous: cache[periodID])
         inFlight = Task { [repository] in
             let result: Result<DashboardSnapshot, AppError>
             do {
@@ -52,9 +63,11 @@ final class DashboardViewModel {
         switch result {
         case .success(let snapshot):
             guard snapshot.periodID == periodID else { return }
+            cache[periodID] = snapshot
             state = .loaded(snapshot)
         case .failure(let error):
-            state = .failed(error, previous: nil)
+            // The last snapshot of this same period stays readable, labelled with its time.
+            state = .failed(error, previous: cache[periodID])
         }
     }
 }

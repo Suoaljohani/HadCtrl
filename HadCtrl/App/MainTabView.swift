@@ -20,6 +20,11 @@ struct MainTabView: View {
     @State private var periodSelection: PeriodSelection
     @State private var inbox: InboxModel
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.hcMotionEnabled) private var motion
+    /// Rows and details in a tab share this namespace for the zoom transition.
+    @Namespace private var zoom
+    /// Routes opened without an on-screen origin (inbox, links) use the standard push.
+    @State private var pushedWithoutSource: Set<AppRoute> = []
 
     init(context: UserContext, dependencies: DependencyContainer) {
         self.context = context
@@ -31,7 +36,7 @@ struct MainTabView: View {
     var body: some View {
         TabView(selection: $selection) {
             tab(.home, title: String(localized: "الرئيسية"), symbol: "house") {
-                DashboardView(context: context, dependencies: dependencies, open: open, present: { sheet = $0 })
+                DashboardView(context: context, dependencies: dependencies, open: { push($0, in: .home) }, present: { sheet = $0 })
             }
             tab(.departments, title: String(localized: "الأقسام"), symbol: "building.2") {
                 DepartmentsView(dependencies: dependencies)
@@ -47,6 +52,8 @@ struct MainTabView: View {
             }
         }
         .environment(periodSelection)
+        .environment(\.hcZoomNamespace, zoom)
+        .sensoryFeedback(.selection, trigger: selection)
         .sheet(item: $sheet) { route in
             switch route {
             case .newTask(let dept):
@@ -79,6 +86,14 @@ struct MainTabView: View {
         }
     }
 
+    /// Opens a record from where the user is: the detail is pushed onto the
+    /// current tab so Back returns to the same place (spec §04, connected details).
+    private func push(_ route: AppRoute, in tab: AppTab) {
+        pushedWithoutSource.remove(route)
+        paths[tab, default: NavigationPath()].append(route)
+    }
+
+    /// Opens a record in its own tab (inbox, links): there is no on-screen origin.
     private func open(_ route: AppRoute) {
         let tab: AppTab
         switch route {
@@ -88,6 +103,7 @@ struct MainTabView: View {
         case .report, .reportList: tab = .reports
         }
         selection = tab
+        pushedWithoutSource.insert(route)
         paths[tab, default: NavigationPath()].append(route)
     }
 
@@ -96,6 +112,7 @@ struct MainTabView: View {
             content()
                 .navigationDestination(for: AppRoute.self) { route in
                     RouteDestination(route: route, context: context, dependencies: dependencies)
+                        .hcZoomDestination(route, in: zoom, enabled: motion && !pushedWithoutSource.contains(route))
                 }
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {

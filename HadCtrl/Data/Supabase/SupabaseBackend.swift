@@ -112,17 +112,20 @@ struct SupabaseBackend: Sendable {
 
     func departmentsByID() async throws -> [UUID: Department] {
         if let cached = await cache.cachedDepartments() { return cached }
-        let rows: [DepartmentRowDTO] = try await call {
+        // Both reads are independent: run them together (one round trip of latency).
+        async let rowsRequest: [DepartmentRowDTO] = call {
             try await client.from("departments").select(DepartmentRowDTO.columns)
                 .order("sort_order").order("name_ar").execute().value
         }
         // Primary heads are visible to the director, system admin and the head
         // themself; for others the head is "not visible", not "missing" (RLS).
-        let heads: [MembershipRowDTO] = try await call {
+        async let headsRequest: [MembershipRowDTO] = call {
             try await client.from("department_memberships").select(MembershipRowDTO.columns)
                 .eq("role", value: "department_head").eq("is_primary", value: true).eq("active", value: true)
                 .execute().value
         }
+        let rows = try await rowsRequest
+        let heads = try await headsRequest
         let headNames = try await displayNames(Set(heads.map(\.user_id)))
         let headByDept = Dictionary(heads.map { ($0.department_id, $0.user_id) }, uniquingKeysWith: { a, _ in a })
         // Membership rows are readable by the director/system admin (all) and by a

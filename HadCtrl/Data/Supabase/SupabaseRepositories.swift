@@ -75,11 +75,14 @@ struct SupabaseDashboardRepository: DashboardRepository {
 
     func snapshot(periodID: UUID) async throws -> DashboardSnapshot {
         struct Params: Encodable, Sendable { let p_period_id: UUID }
-        let dto: DashboardSnapshotDTO = try await backend.call {
+        // The snapshot and the department names are independent: fetch them together.
+        async let snapshot: DashboardSnapshotDTO = backend.call {
             try await backend.client.rpc("dashboard_snapshot", params: Params(p_period_id: periodID)).execute().value
         }
-        let departments = try await backend.departmentsByID()
-        return DashboardMapper.map(dto, departments: departments)
+        async let departments = backend.departmentsByID()
+        let dto = try await snapshot
+        let names = try await departments
+        return DashboardMapper.map(dto, departments: names)
     }
 }
 

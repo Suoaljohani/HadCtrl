@@ -57,9 +57,9 @@ struct ReportsView: View {
                     .accessibilityIdentifier("reports.confirmation")
             }
             switch model.state {
-            case .idle, .loading: ProgressView().frame(maxWidth: .infinity)
+            case .idle, .loading(nil): SkeletonRows()
             case .failed(let e, _): StateView(kind: .error, title: String(localized: "تعذر تحميل التقارير"), message: e.userMessage)
-            case .loaded(let all):
+            case .loaded(let all), .loading(let all?):
                 let items = all.filter { departmentID == nil || $0.departmentID == departmentID }
                 if periods.hasLoaded && periods.periods.isEmpty {
                     StateView(kind: .empty, title: String(localized: "لا توجد فترة تقارير بعد"),
@@ -71,7 +71,7 @@ struct ReportsView: View {
                     StateView(kind: .empty, title: String(localized: "لا توجد تقارير ضمن هذه التصفية"))
                 }
                 ForEach(shown) { report in
-                    NavigationLink(value: AppRoute.report(report.id)) { ReportRow(report: report) }
+                    HCLink(AppRoute.report(report.id)) { ReportRow(report: report) }
                 }
             }
         }
@@ -155,7 +155,7 @@ struct ReportDetailView: View {
     var body: some View {
         Group {
             switch model.state {
-            case .idle, .loading(nil): ProgressView()
+            case .idle, .loading(nil): DetailSkeleton()
             case .failed(let error, _):
                 StateView(kind: error.code == .notFound ? .notFound : .error,
                           title: error.code == .notFound ? String(localized: "السجل غير متاح") : String(localized: "تعذر التحميل"),
@@ -166,6 +166,7 @@ struct ReportDetailView: View {
         }
         .background(Color.hcBackground)
         .navigationTitle(String(localized: "تفاصيل التقرير"))
+        .hcOutcomeFeedback(confirmation: model.confirmation, error: model.actionError)
         .navigationBarTitleDisplayMode(.inline)
         .task { if case .idle = model.state { await model.load() } }
         .sheet(item: $noteSheet) { intent in

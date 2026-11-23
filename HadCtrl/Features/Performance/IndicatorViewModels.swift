@@ -7,6 +7,9 @@ final class IndicatorListModel {
     private(set) var state: LoadState<[IndicatorSummary]> = .idle
     private let repository: IndicatorsRepository
     private let gate = LatestRequestGate()
+    /// Last loaded list per period (this session): a revisit or refresh shows the
+    /// same period's rows at once while the request runs, never another period's.
+    @ObservationIgnored private var cache: [UUID: [IndicatorSummary]] = [:]
 
     init(repository: IndicatorsRepository) { self.repository = repository }
 
@@ -16,10 +19,11 @@ final class IndicatorListModel {
             if periodsLoaded { state = .loaded([]) }
             return
         }
-        state = .loading(previous: nil)
+        state = .loading(previous: cache[periodID])
         do {
             let items = try await repository.indicators(periodID: periodID)
             guard gate.isLatest(token) else { return }
+            cache[periodID] = items
             state = .loaded(items)
         } catch is CancellationError {
         } catch {
