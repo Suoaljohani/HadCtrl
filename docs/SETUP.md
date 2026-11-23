@@ -2,14 +2,14 @@
 
 ## What is already configured
 - Supabase project **HadCtrl** (`vffusttzqmerfofqianz`, region ap-southeast-1). URL: `https://vffusttzqmerfofqianz.supabase.co`, set in `Config/Shared.xcconfig`.
+- Publishable key `sb_publishable__q7R9…` in `Config/Shared.xcconfig` (supplied and approved by the owner; verified live that it is this project's enabled key and that signed-out calls are refused).
 - Brand: hospital logo and Janna LT in `Brand/` (Janna is bundled in the app under the license the owner confirmed).
 
 ## Still needed from the owner
 
 | Input | Where it goes | Blocks |
 |---|---|---|
-| Supabase **publishable** key (`sb_publishable_…`) | untracked `Config/Local.xcconfig` (`HC_SUPABASE_PUBLISHABLE_KEY = …`) for local runs; GitHub variable `HC_SUPABASE_PUBLISHABLE_KEY` for release builds | real sign-in. A Release build without it shows a configuration error, never demo data. The app refuses secret/service keys. |
-| First director account | Supabase Auth invite, then the bootstrap SQL in RUNBOOK §2 | any real data |
+| First director account | Auth → Add user, then `supabase/admin/01_bootstrap_first_director.sql` (RUNBOOK §2) | any real data |
 | Real departments (names, codes, heads) | admin SQL or the future admin screen | operational use |
 | Apple Team ID, bundle id | GitHub environment `ios-signing` variables `HC_APPLE_TEAM_ID`, `HC_APP_BUNDLE_ID` | G7 IPA |
 | Distribution certificate (.p12 + password), provisioning profile, keychain password | `ios-signing` secrets (see `docs/SETUP_INPUTS_AR.md`) | G7 IPA |

@@ -6,7 +6,9 @@ HC_APP_BUNDLE_ID = invalid.hadctrl.app
 HC_APPLE_TEAM_ID =
 // "https:/$()/" keeps the double slash from being read as an xcconfig comment.
 HC_SUPABASE_URL = https:/$()/vffusttzqmerfofqianz.supabase.co
-// Publishable (client) key only. Empty until supplied; the app then shows a
-// configuration error instead of falling back to demo data.
-HC_SUPABASE_PUBLISHABLE_KEY =
+// Publishable (client) key only: public by design, ships in every build, and
+// grants nothing without a signed-in user (anon has no table/function access).
+// Supplied and approved by the owner on 2026-11-23. Never put a secret/admin
+// key here: the app refuses to start with one, and CI scans for them.
+HC_SUPABASE_PUBLISHABLE_KEY = sb_publishable__q7R9yYmhyXRBznOYjyvRg_PWgaKdBh
 #include? "Local.xcconfig"

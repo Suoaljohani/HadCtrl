@@ -5,15 +5,14 @@
 - Run `scripts/db-test.sh` locally (empty database → all migrations → tests). CI repeats this.
 - Apply to the hosted project only after tests pass, in order. Afterwards, run the Supabase security advisor and compare the function fingerprint query in TEST_REPORT with the local database. Never use `db reset`, `drop schema` or destructive statements on the hosted project. Fix forward with a corrective migration after inspecting the current state (§29).
 
-## 2. Bootstrap the first director (trusted admin path, §22)
-Run in the Supabase SQL editor as the project owner, after the person has accepted an Auth invite. Replace the placeholders after checking the identity out of band.
+## 2. Bootstrap the hospital, first director and departments (trusted admin path, §22)
+Scripts: `supabase/admin/`. Run them in the Supabase dashboard → **SQL Editor** (as the project owner).
+1. Create the director's login: **Authentication → Users → Add user** (email + password) or **Invite user**.
+2. Open `supabase/admin/01_bootstrap_first_director.sql`, edit the four values in its `params` block (email, display name, job title, hospital name), paste and **Run**. It creates the hospital, the director's profile and membership, and the current open monthly period. It is idempotent, never deletes, and refuses to run if the email has no Auth account yet.
+3. For each department: create the head's login (if any), then edit and run `02_add_department_with_head.sql`.
+4. Sign in to the app with that email and password.
 
-```sql
-insert into public.organizations (name_ar, name_en) values ('مستشفى الحديثة العام', 'Alhadithah General Hospital') returning id;
-insert into public.profiles (user_id, display_name, job_title) values ('<auth user uuid>', '<name>', 'مدير المستشفى');
-insert into public.organization_memberships (organization_id, user_id, role) values ('<org id>', '<auth user uuid>', 'hospital_director');
-```
-There is deliberately no "first user becomes director" function.
+There is deliberately no "first user becomes director" function in the app. Roles come only from these server-side rows.
 
 ## 3. Revoking access
 Set `department_memberships.active = false` (or `organization_memberships`, or `profiles.active`). Every RPC and policy re-checks this on each call, so a still-valid token loses access immediately (AC-032). Reassign open tasks with `transition_task(..., 'reassign', ...)`. Do not delete history.
