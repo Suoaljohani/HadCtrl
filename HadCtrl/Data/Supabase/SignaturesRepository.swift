@@ -40,9 +40,13 @@ struct SupabaseSignaturesRepository: SignaturesRepository {
             try await backend.client.rpc("prepare_signature", params: Prepare(
                 p_entity_type: entity.type, p_entity_id: entity.id, p_purpose: purpose.rawValue, p_request_id: requestID)).execute().value
         }
-        _ = try await backend.call {
+        do {
             try await backend.client.storage.from(Self.bucket)
                 .upload(prepared.path, data: png, options: FileOptions(contentType: "image/png", upsert: false))
+        } catch {
+            // A replayed prepare returns the same path; an object already there is the earlier attempt's upload.
+            let text = String(describing: error).lowercased()
+            if !(text.contains("duplicate") || text.contains("already exists")) { throw SupabaseErrorMapper.map(error) }
         }
         _ = try await backend.call {
             try await backend.client.rpc("finalize_signature", params: Finalize(

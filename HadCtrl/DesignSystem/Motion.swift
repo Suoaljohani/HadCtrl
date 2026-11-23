@@ -177,7 +177,7 @@ extension View {
 private struct ScrollReveal: ViewModifier {
     @Environment(\.hcMotionEnabled) private var motion
 
-    func body(content: Content) -> some View {
+    @ViewBuilder func body(content: Content) -> some View {
         if motion {
             content.scrollTransition(.interactive, axis: .vertical) { view, phase in
                 view
@@ -194,7 +194,7 @@ private struct ScrollReveal: ViewModifier {
 private struct GlassCapsule: ViewModifier {
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
 
-    func body(content: Content) -> some View {
+    @ViewBuilder func body(content: Content) -> some View {
         if reduceTransparency {
             content.background(Color.hcInk.opacity(0.85), in: Capsule())
         } else if #available(iOS 26.0, *) {

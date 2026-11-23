@@ -6,12 +6,15 @@ import XCTest
 final class ScreenshotTour: XCTestCase {
     override func setUp() { continueAfterFailure = true }
 
+    private var english = false
+
     private func launch(user: String = "director", scheme: String, extraArgs: [String] = []) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchEnvironment["HC_APP_ENV"] = "ui-testing"
         app.launchEnvironment["HC_DEMO_USER"] = user
         app.launchEnvironment["HC_FORCE_SCHEME"] = scheme
-        app.launchArguments += ["-AppleLanguages", "(ar)", "-AppleLocale", "ar_SA"] + extraArgs
+        app.launchArguments += (english ? ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+                                        : ["-AppleLanguages", "(ar)", "-AppleLocale", "ar_SA"]) + extraArgs
         app.launch()
         return app
     }
@@ -24,8 +27,12 @@ final class ScreenshotTour: XCTestCase {
         add(attachment)
     }
 
+    private static let englishTitles = ["الرئيسية": "Home", "الأقسام": "Departments", "الأداء": "Performance",
+                                        "التنفيذ": "Execution", "التقارير": "Reports", "الأهداف": "Goals", "المنجزات": "Achievements"]
+    private func t(_ arabic: String) -> String { english ? (Self.englishTitles[arabic] ?? arabic) : arabic }
+
     private func tab(_ app: XCUIApplication, _ title: String) {
-        let button = app.tabBars.firstMatch.buttons[title]
+        let button = app.tabBars.firstMatch.buttons[t(title)]
         if button.waitForExistence(timeout: 10) { button.tap() }
     }
 
@@ -52,7 +59,7 @@ final class ScreenshotTour: XCTestCase {
 
         tab(app, "الأداء"); shot(app, "\(prefix)-06-indicators")
         tapFirst(app, prefix: "indicatorRow."); shot(app, "\(prefix)-07-indicator-detail"); back(app)
-        app.segmentedControls.buttons["الأهداف"].tap(); shot(app, "\(prefix)-08-goals")
+        app.segmentedControls.buttons[t("الأهداف")].tap(); shot(app, "\(prefix)-08-goals")
         tapFirst(app, prefix: "goalRow."); shot(app, "\(prefix)-09-goal-detail"); back(app)
 
         tab(app, "التنفيذ"); shot(app, "\(prefix)-10-tasks")
@@ -72,7 +79,7 @@ final class ScreenshotTour: XCTestCase {
             }
             back(app)
         }
-        app.segmentedControls.buttons["المنجزات"].tap(); shot(app, "\(prefix)-12-achievements")
+        app.segmentedControls.buttons[t("المنجزات")].tap(); shot(app, "\(prefix)-12-achievements")
         tapFirst(app, prefix: "achievementRow."); shot(app, "\(prefix)-13-achievement-detail"); back(app)
 
         tab(app, "التقارير"); shot(app, "\(prefix)-14-reports")
@@ -84,7 +91,7 @@ final class ScreenshotTour: XCTestCase {
             settings.tap(); shot(app, "\(prefix)-17-settings")
             app.swipeUp(); shot(app, "\(prefix)-18-settings-more")
             app.swipeUp(); shot(app, "\(prefix)-19-settings-bottom")
-            let done = app.navigationBars.buttons["تم"]
+            let done = app.navigationBars.buttons[english ? "Done" : "تم"]
             if done.exists { done.tap() }
         }
         let bell = app.buttons["inboxButton"].firstMatch
@@ -94,6 +101,10 @@ final class ScreenshotTour: XCTestCase {
     func testTourLight() { tour(scheme: "light", prefix: "light") }
     func testTourDark() { tour(scheme: "dark", prefix: "dark") }
     func testTourHeadLight() { tour(scheme: "light", user: "head", prefix: "head") }
+    func testTourEnglish() {
+        english = true
+        tour(scheme: "light", prefix: "en")
+    }
     func testTourLargeText() {
         tour(scheme: "light", extraArgs: ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityL"],
              prefix: "ax")

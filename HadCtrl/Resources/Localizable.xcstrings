@@ -2,152 +2,422 @@
   "sourceLanguage": "ar",
   "version": "1.0",
   "strings": {
-    "الرئيسية": {
+    " (أساسي)": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Home"
+            "value": "(primary)"
           }
         }
       }
     },
-    "الأقسام": {
+    "%@، %lld": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Departments"
+            "value": "%1$@, %2$lld"
           }
         }
       }
     },
-    "الأداء": {
+    "%@، %lld من %lld": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Performance"
+            "value": "%1$@, %2$lld of %3$lld"
           }
         }
       }
     },
-    "التنفيذ": {
+    "%lld أقسام": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Execution"
+            "value": "%lld departments"
           }
         }
       }
     },
-    "التقارير": {
+    "%lld بنود": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reports"
+            "value": "%lld items"
           }
         }
       }
     },
-    "الإعدادات": {
+    "%lld متأخرة": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Settings"
+            "value": "%lld overdue"
           }
         }
       }
     },
-    "تكليف جديد": {
+    "%lld مهام مفتوحة": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "New assignment"
+            "value": "%lld open tasks"
           }
         }
       }
     },
-    "تحتاج قرارك": {
+    "آخر تحديث %@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Needs your decision"
+            "value": "Last updated %@"
           }
         }
       }
     },
-    "المهام": {
+    "آخر قراءة (عداد تراكمي)": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tasks"
+            "value": "Latest reading (cumulative counter)"
           }
         }
       }
     },
-    "المنجزات": {
+    "أرقام لاتينية": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Achievements"
+            "value": "Latin digits"
           }
         }
       }
     },
-    "تسجيل الدخول": {
+    "أضف قسمًا أولًا": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sign in"
+            "value": "Add a department first"
           }
         }
       }
     },
-    "تسجيل الخروج": {
+    "أغلق التطبيق من مبدّل التطبيقات ثم افتحه لتطبيق اللغة واتجاه الواجهة.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sign out"
+            "value": "Close the app from the app switcher and reopen it to apply the language and layout direction."
           }
         }
       }
     },
-    "إعادة المحاولة": {
+    "أقسام مشاركة": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Retry"
+            "value": "Contributing departments"
           }
         }
       }
     },
-    "إلغاء": {
+    "أكتوبر ٢٠٢٦": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cancel"
+            "value": "October 2026"
           }
         }
       }
     },
-    "تأكيد": {
+    "أول إرسال": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Confirm"
+            "value": "First submission"
+          }
+        }
+      }
+    },
+    "أول إرسال %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First submitted %@"
+          }
+        }
+      }
+    },
+    "أول رفع": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First submitted"
+          }
+        }
+      }
+    },
+    "أُرسل التقرير للمراجعة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Report sent for review"
+          }
+        }
+      }
+    },
+    "أُرسل المنجز لاعتماد المدير": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Achievement sent for the director's approval"
+          }
+        }
+      }
+    },
+    "أُرسل طلب الإقفال للمدير": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Closure request sent to the director"
+          }
+        }
+      }
+    },
+    "أُرسلت القراءة للاعتماد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading sent for approval"
+          }
+        }
+      }
+    },
+    "أُسندت إليك مهمة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A task was assigned to you"
+          }
+        }
+      }
+    },
+    "أُعفي القسم من هذا التقرير": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The department was exempted from this report"
+          }
+        }
+      }
+    },
+    "أُعيد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Returned"
+          }
+        }
+      }
+    },
+    "أُعيد التقرير للاستكمال": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Report returned for completion"
+          }
+        }
+      }
+    },
+    "أُعيد للتوضيح": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Returned for clarification"
+          }
+        }
+      }
+    },
+    "أُعيدت القراءة للقسم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading returned to the department"
+          }
+        }
+      }
+    },
+    "أُعيدت قراءة المؤشر للقسم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indicator reading returned to the department"
+          }
+        }
+      }
+    },
+    "أُعيدت مهمتك للاستكمال": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your task was returned for completion"
+          }
+        }
+      }
+    },
+    "أُلغي الطلب.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Request cancelled."
+          }
+        }
+      }
+    },
+    "أُنشئ %lld تقرير لهذه الفترة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld reports created for this period"
+          }
+        }
+      }
+    },
+    "أُنشئ الحساب": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account created"
+          }
+        }
+      }
+    },
+    "أُنشئ القالب وجُدول لـ %lld قسم. تُولَّد التقارير من تبويب التقارير أو تلقائيًا يوميًا.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Template created and scheduled for %lld departments. Reports are generated from the Reports tab or automatically each day."
+          }
+        }
+      }
+    },
+    "أُنشئ حسابك بكلمة مرور مؤقتة. اختر كلمة مرور خاصة بك للمتابعة.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your account was created with a temporary password. Choose your own password to continue."
+          }
+        }
+      }
+    },
+    "إداري": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Administrative"
+          }
+        }
+      }
+    },
+    "إدخال قراءة الفترة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter this period's reading"
+          }
+        }
+      }
+    },
+    "إرسال التقرير": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Submit report"
+          }
+        }
+      }
+    },
+    "إرسال القراءة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Submit reading"
+          }
+        }
+      }
+    },
+    "إرسال تصحيح": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Submit correction"
+          }
+        }
+      }
+    },
+    "إرسال للاعتماد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send for approval"
+          }
+        }
+      }
+    },
+    "إرفاق صورة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attach photo"
+          }
+        }
+      }
+    },
+    "إرفاق ملف (PDF أو جدول)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attach file (PDF or spreadsheet)"
           }
         }
       }
@@ -162,62 +432,112 @@
         }
       }
     },
-    "بيانات تجريبية — ليست نتائج تشغيلية": {
+    "إشعار": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Demo data — not operational results"
+            "value": "Notification"
           }
         }
       }
     },
-    "لم يُحدّث": {
+    "إضافة حقل": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Not updated"
+            "value": "Add field"
           }
         }
       }
     },
-    "كيف يُقاس؟": {
+    "إضافة قسم": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "How is it measured?"
+            "value": "Add department"
           }
         }
       }
     },
-    "قيادة": {
+    "إضافة مرحلة": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Qiyada"
+            "value": "Add milestone"
           }
         }
       }
     },
-    "لا توجد عضوية نشطة": {
+    "إضافة موظف": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No active membership"
+            "value": "Add employee"
           }
         }
       }
     },
-    "اعتماد": {
+    "إضافة نقطة في الخطة": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Approve"
+            "value": "Add plan point"
+          }
+        }
+      }
+    },
+    "إظهار %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show %@"
+          }
+        }
+      }
+    },
+    "إعادة إسناد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reassign"
+          }
+        }
+      }
+    },
+    "إعادة القراءة للقسم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return the reading to the department"
+          }
+        }
+      }
+    },
+    "إعادة المحاولة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try again"
+          }
+        }
+      }
+    },
+    "إعادة لطلب توضيح أو شاهد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to request clarification or evidence"
           }
         }
       }
@@ -232,12 +552,2342 @@
         }
       }
     },
-    "رفع الإنجاز": {
+    "إعادة للتوضيح": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Submit completion"
+            "value": "Return for clarification"
+          }
+        }
+      }
+    },
+    "إعادة للقسم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to department"
+          }
+        }
+      }
+    },
+    "إعادة للقسم مع ملاحظة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to the department with a note"
+          }
+        }
+      }
+    },
+    "إعداد الاتصال بالخادم غير مكتمل في هذا الإصدار.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The server connection is not configured in this build."
+          }
+        }
+      }
+    },
+    "إعداد غير مكتمل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incomplete setup"
+          }
+        }
+      }
+    },
+    "إعفاء القسم من هذا التقرير": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exempt the department from this report"
+          }
+        }
+      }
+    },
+    "إعفاء من التقرير": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exempt from report"
+          }
+        }
+      }
+    },
+    "إغلاق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        }
+      }
+    },
+    "إقفال": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        }
+      }
+    },
+    "إقفال الهدف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close goal"
+          }
+        }
+      }
+    },
+    "إقفال الهدف كمكتمل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close goal as completed"
+          }
+        }
+      }
+    },
+    "إلزامي": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Required"
+          }
+        }
+      }
+    },
+    "إلغاء": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
+    "إلغاء المهمة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel task"
+          }
+        }
+      }
+    },
+    "إلغاء الهدف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel goal"
+          }
+        }
+      }
+    },
+    "إلغاء الهدف بسبب موثق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel the goal with a documented reason"
+          }
+        }
+      }
+    },
+    "إنجاز مرفوع بانتظار اعتمادك": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Achievement awaiting your approval"
+          }
+        }
+      }
+    },
+    "إنشاء الأقسام والحسابات والقوالب والمؤشرات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create departments, accounts, templates and indicators"
+          }
+        }
+      }
+    },
+    "إنشاء الحساب": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create account"
+          }
+        }
+      }
+    },
+    "إيقاف الحركات الزخرفية داخل التطبيق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn off decorative motion inside the app"
+          }
+        }
+      }
+    },
+    "ابحث بالاسم أو الرمز": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search by name or code"
+          }
+        }
+      }
+    },
+    "احفظ المسودة أولًا لإرفاق الشواهد.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save the draft first to attach evidence."
+          }
+        }
+      }
+    },
+    "اختر": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose"
+          }
+        }
+      }
+    },
+    "اختر القسم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose department"
+          }
+        }
+      }
+    },
+    "اختر قسمًا واحدًا على الأقل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose at least one department"
+          }
+        }
+      }
+    },
+    "اذكر سبب عدم الانطباق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "State why it does not apply"
+          }
+        }
+      }
+    },
+    "ارسم توقيعك بإصبع واحد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Draw your signature with one finger"
+          }
+        }
+      }
+    },
+    "اسألني كل مرة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ask me every time"
+          }
+        }
+      }
+    },
+    "استئناف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resume"
+          }
+        }
+      }
+    },
+    "استخدم قاعدة «صفر أحداث» للمستهدف صفر": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use the “zero events” rule for a zero target"
+          }
+        }
+      }
+    },
+    "استعادة الترتيب الافتراضي": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore default order"
+          }
+        }
+      }
+    },
+    "اسحب لإعادة الترتيب": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag to reorder"
+          }
+        }
+      }
+    },
+    "اسم التقرير (مثل التقرير الشهري)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Report name (e.g. Monthly report)"
+          }
+        }
+      }
+    },
+    "اسم القسم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Department name"
+          }
+        }
+      }
+    },
+    "اسم المؤشر": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indicator name"
+          }
+        }
+      }
+    },
+    "اعتماد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approve"
+          }
+        }
+      }
+    },
+    "اعتماد التعريف وتفعيل الهدف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approve the definition and activate the goal"
+          }
+        }
+      }
+    },
+    "اعتماد التقرير": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approve report"
+          }
+        }
+      }
+    },
+    "اعتماد التقرير: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approve report: %@"
+          }
+        }
+      }
+    },
+    "اعتماد القراءة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approve reading"
+          }
+        }
+      }
+    },
+    "اعتماد المرحلة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approve milestone"
+          }
+        }
+      }
+    },
+    "اعتماد المنجز: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approve achievement: %@"
+          }
+        }
+      }
+    },
+    "اعتماد المهمة: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approve task: %@"
+          }
+        }
+      }
+    },
+    "اعتماد الهدف وتفعيله": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approve and activate the goal"
+          }
+        }
+      }
+    },
+    "اعتماد قراءة المؤشر": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approve indicator reading"
+          }
+        }
+      }
+    },
+    "اعتماد ونشر": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approve and publish"
+          }
+        }
+      }
+    },
+    "اعتُمد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approved"
+          }
+        }
+      }
+    },
+    "اعتُمد التقرير": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Report approved"
+          }
+        }
+      }
+    },
+    "اعتُمدت القراءة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading approved"
+          }
+        }
+      }
+    },
+    "اعتُمدت المرحلة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Milestone approved"
+          }
+        }
+      }
+    },
+    "اعتُمدت قراءة المؤشر": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indicator reading approved"
+          }
+        }
+      }
+    },
+    "اعتُمدت مهمتك": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your task was approved"
+          }
+        }
+      }
+    },
+    "افتح فترة الشهر الحالي لإنشاء التقارير المجدولة.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open this month's period to create the scheduled reports."
+          }
+        }
+      }
+    },
+    "افتح قيادة لعرض التفاصيل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open HadCtrl to see the details"
+          }
+        }
+      }
+    },
+    "افتح قيادة للمتابعة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open HadCtrl to continue"
+          }
+        }
+      }
+    },
+    "اكتب اسم التقرير": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter the report name"
+          }
+        }
+      }
+    },
+    "اكتب اسم القسم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter the department name"
+          }
+        }
+      }
+    },
+    "اكتب اسم المؤشر": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter the indicator name"
+          }
+        }
+      }
+    },
+    "اكتب اسم الموظف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter the employee's name"
+          }
+        }
+      }
+    },
+    "اكتب الأثر قبل الإرسال": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write the impact before submitting"
+          }
+        }
+      }
+    },
+    "اكتب السبب أو الملاحظة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write the reason or note"
+          }
+        }
+      }
+    },
+    "اكتب عنوان الهدف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter the goal title"
+          }
+        }
+      }
+    },
+    "اكتب عنوانًا لكل حقل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter a title for every field"
+          }
+        }
+      }
+    },
+    "اكتب عنوانًا مختصرًا": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter a short title"
+          }
+        }
+      }
+    },
+    "الأثر": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impact"
+          }
+        }
+      }
+    },
+    "الأثر (رقم من قراءة معتمدة أو نتيجة موثقة)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impact (a number from an approved reading or a documented result)"
+          }
+        }
+      }
+    },
+    "الأداء": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Performance"
+          }
+        }
+      }
+    },
+    "الأعلى أفضل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Higher is better"
+          }
+        }
+      }
+    },
+    "الأعلى أفضل: الدرجة = الأدنى بين ١٠٠ و(الفعلي ÷ المستهدف × ١٠٠).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Higher is better: score = the lower of 100 and (actual ÷ target × 100)."
+          }
+        }
+      }
+    },
+    "الأقسام": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Departments"
+          }
+        }
+      }
+    },
+    "الأقسام المحدّثة %lld من %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Departments updated %1$lld of %2$lld"
+          }
+        }
+      }
+    },
+    "الأقسام المطالَبة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Required departments"
+          }
+        }
+      }
+    },
+    "الأقسام والموظفون": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Departments and employees"
+          }
+        }
+      }
+    },
+    "الأقل أفضل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lower is better"
+          }
+        }
+      }
+    },
+    "الأقل أفضل: الدرجة = الأدنى بين ١٠٠ و(المستهدف ÷ الفعلي × ١٠٠)، والصفر يعطي ١٠٠.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lower is better: score = the lower of 100 and (target ÷ actual × 100); zero gives 100."
+          }
+        }
+      }
+    },
+    "الأمان": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Security"
+          }
+        }
+      }
+    },
+    "الأهداف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goals"
+          }
+        }
+      }
+    },
+    "الأولوية": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Priority"
+          }
+        }
+      }
+    },
+    "الإجراءات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actions"
+          }
+        }
+      }
+    },
+    "الإدارة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Administration"
+          }
+        }
+      }
+    },
+    "الإشعارات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications"
+          }
+        }
+      }
+    },
+    "الإشعارات الفورية": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Push notifications"
+          }
+        }
+      }
+    },
+    "الإشعارات، %lld غير مقروء": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications, %lld unread"
+          }
+        }
+      }
+    },
+    "الإصدار": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version"
+          }
+        }
+      }
+    },
+    "الإعدادات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        }
+      }
+    },
+    "الإنجاز الخام": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raw achievement"
+          }
+        }
+      }
+    },
+    "الاتجاه": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Direction"
+          }
+        }
+      }
+    },
+    "الاستحقاق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Due"
+          }
+        }
+      }
+    },
+    "الاستحقاق %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Due %@"
+          }
+        }
+      }
+    },
+    "الاستحقاق الأصلي": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Original due date"
+          }
+        }
+      }
+    },
+    "الاستحقاق الحالي": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current due date"
+          }
+        }
+      }
+    },
+    "الاستحقاق: يوم %lld من الشهر التالي": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Due: day %lld of the following month"
+          }
+        }
+      }
+    },
+    "الاسم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name"
+          }
+        }
+      }
+    },
+    "الاهتزاز اللمسي": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haptics"
+          }
+        }
+      }
+    },
+    "البداية": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start"
+          }
+        }
+      }
+    },
+    "البريد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Email"
+          }
+        }
+      }
+    },
+    "البريد الإلكتروني": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Email"
+          }
+        }
+      }
+    },
+    "البريد الإلكتروني أو كلمة المرور غير صحيحة.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The email or password is incorrect."
+          }
+        }
+      }
+    },
+    "البسط": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Numerator"
+          }
+        }
+      }
+    },
+    "البسط (ماذا يُعد؟)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Numerator (what is counted?)"
+          }
+        }
+      }
+    },
+    "البسط أكبر من المقام": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The numerator is larger than the denominator"
+          }
+        }
+      }
+    },
+    "البسط: %@. المقام: %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Numerator: %1$@. Denominator: %2$@."
+          }
+        }
+      }
+    },
+    "التأكيد لا يطابق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirmation does not match"
+          }
+        }
+      }
+    },
+    "التجميع": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggregation"
+          }
+        }
+      }
+    },
+    "التصفية": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filter"
+          }
+        }
+      }
+    },
+    "التصنيف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Category"
+          }
+        }
+      }
+    },
+    "التطبيق مقفل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The app is locked"
+          }
+        }
+      }
+    },
+    "التقارير": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reports"
+          }
+        }
+      }
+    },
+    "التقارير المستلمة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reports received"
+          }
+        }
+      }
+    },
+    "التقارير والمؤشرات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reports and indicators"
+          }
+        }
+      }
+    },
+    "التقدم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progress"
+          }
+        }
+      }
+    },
+    "التقرير": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Report"
+          }
+        }
+      }
+    },
+    "التكرار": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frequency"
+          }
+        }
+      }
+    },
+    "التنفيذ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Execution"
+          }
+        }
+      }
+    },
+    "التوقيع": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signature"
+          }
+        }
+      }
+    },
+    "التوقيع اليدوي على الاعتمادات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Handwritten signature on approvals"
+          }
+        }
+      }
+    },
+    "التوقيعات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signatures"
+          }
+        }
+      }
+    },
+    "الحد الأدنى": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minimum"
+          }
+        }
+      }
+    },
+    "الحد الأعلى": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maximum"
+          }
+        }
+      }
+    },
+    "الحد الأقصى ١٠ ملفات لكل سجل.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At most 10 files per record."
+          }
+        }
+      }
+    },
+    "الحد الأقصى ٢٠ ميغابايت للملف.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At most 20 MB per file."
+          }
+        }
+      }
+    },
+    "الحساب": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account"
+          }
+        }
+      }
+    },
+    "الحساب الجديد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New account"
+          }
+        }
+      }
+    },
+    "الحساب موجود مسبقًا وأُضيفت له الصلاحيات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The account already existed; the permissions were added to it"
+          }
+        }
+      }
+    },
+    "الحقل الفارغ لا يُحسب صفرًا. اختر «لا ينطبق» مع السبب إن لم تنطبق الفترة.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An empty field does not count as zero. Choose “Not applicable” with a reason if the period does not apply."
+          }
+        }
+      }
+    },
+    "الحقول": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fields"
+          }
+        }
+      }
+    },
+    "الحقول المعلّمة بـ * إلزامية. المسودة لا تُعد تسليمًا حتى تُرسل.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fields marked * are required. A draft is not a submission until it is sent."
+          }
+        }
+      }
+    },
+    "الخطة تتزايد مع الوقت": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The plan increases over time"
+          }
+        }
+      }
+    },
+    "الدخول متاح للحسابات المدعوة فقط.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign-in is available to invited accounts only."
+          }
+        }
+      }
+    },
+    "الدور": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Role"
+          }
+        }
+      }
+    },
+    "الرئيس الأساسي للقسم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primary head of the department"
+          }
+        }
+      }
+    },
+    "الرئيس غير ظاهر لصلاحيتك": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The head is not visible with your permissions"
+          }
+        }
+      }
+    },
+    "الرئيس: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Head: %@"
+          }
+        }
+      }
+    },
+    "الرئيسية": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home"
+          }
+        }
+      }
+    },
+    "الرمز (مثل LAB)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code (e.g. LAB)"
+          }
+        }
+      }
+    },
+    "الرمز (مثل LAB.TAT)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code (e.g. LAB.TAT)"
+          }
+        }
+      }
+    },
+    "الرمز مستخدم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code already in use"
+          }
+        }
+      }
+    },
+    "الروابط والأقسام المشاركة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Links and contributing departments"
+          }
+        }
+      }
+    },
+    "الروابط والمشاركة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Links and contributions"
+          }
+        }
+      }
+    },
+    "السجل غير متاح": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record unavailable"
+          }
+        }
+      }
+    },
+    "السجل غير موجود أو لم يعد متاحًا لك.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The record does not exist or is no longer available to you."
+          }
+        }
+      }
+    },
+    "الشاهد يثبت الأثر؛ لا تُرفق صور أشخاص أو نشاط لا تثبت النتيجة.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Evidence proves the impact; do not attach photos of people or activity that do not prove the result."
+          }
+        }
+      }
+    },
+    "الشواهد والمرفقات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Evidence and attachments"
+          }
+        }
+      }
+    },
+    "الصلاحية": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permission"
+          }
+        }
+      }
+    },
+    "العرض": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View"
+          }
+        }
+      }
+    },
+    "العنوان (النتيجة المتوقعة)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Title (the expected result)"
+          }
+        }
+      }
+    },
+    "العنوان قصير جدًا": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The title is too short"
+          }
+        }
+      }
+    },
+    "العوائق والاحتياجات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blockers and needs"
+          }
+        }
+      }
+    },
+    "الفترة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Period"
+          }
+        }
+      }
+    },
+    "الفترة مجمّدة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Period frozen"
+          }
+        }
+      }
+    },
+    "الفترة مجمّدة ولا تقبل التعديل.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The period is frozen and cannot be changed."
+          }
+        }
+      }
+    },
+    "الفجوة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gap"
+          }
+        }
+      }
+    },
+    "الفعلي": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actual"
+          }
+        }
+      }
+    },
+    "الفعلي %@ من %@ %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actual %1$@ of %2$@ %3$@"
+          }
+        }
+      }
+    },
+    "الفعلي المعتمد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approved actual"
+          }
+        }
+      }
+    },
+    "القراءات في هذه الفترة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Readings in this period"
+          }
+        }
+      }
+    },
+    "القسم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Department"
+          }
+        }
+      }
+    },
+    "القسم الافتراضي للتكليف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Default department for assignments"
+          }
+        }
+      }
+    },
+    "القسم الداخلي": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Internal department"
+          }
+        }
+      }
+    },
+    "القسم صاحب المنجز ليس قسمًا مشاركًا": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The owning department is not a contributing department"
+          }
+        }
+      }
+    },
+    "القسم غير متاح": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Department unavailable"
+          }
+        }
+      }
+    },
+    "القيمة (%@)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Value (%@)"
+          }
+        }
+      }
+    },
+    "القيمة المستهدفة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Target value"
+          }
+        }
+      }
+    },
+    "الكل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All"
+          }
+        }
+      }
+    },
+    "اللغة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Language"
+          }
+        }
+      }
+    },
+    "المؤشر": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indicator"
+          }
+        }
+      }
+    },
+    "المؤشر الذي يقيس النتيجة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The indicator that measures the outcome"
+          }
+        }
+      }
+    },
+    "المؤشرات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indicators"
+          }
+        }
+      }
+    },
+    "المؤشرات المحدّثة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indicators updated"
+          }
+        }
+      }
+    },
+    "المؤشرات المرتبطة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Linked indicators"
+          }
+        }
+      }
+    },
+    "المتأخرة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overdue"
+          }
+        }
+      }
+    },
+    "المتوقع": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expected"
+          }
+        }
+      }
+    },
+    "المتوقع حتى اليوم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expected to date"
+          }
+        }
+      }
+    },
+    "المحتسب في التجميع": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Counted in aggregates"
+          }
+        }
+      }
+    },
+    "المحتوى المرسل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Submitted content"
+          }
+        }
+      }
+    },
+    "المخرج المتوقع": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expected output"
+          }
+        }
+      }
+    },
+    "المراحل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Milestones"
+          }
+        }
+      }
+    },
+    "المسؤول": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Owner"
+          }
+        }
+      }
+    },
+    "المسؤولية والموعد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Owner and due date"
+          }
+        }
+      }
+    },
+    "المستفيد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beneficiary"
+          }
+        }
+      }
+    },
+    "المستفيد (اختياري)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beneficiary (optional)"
+          }
+        }
+      }
+    },
+    "المستهدف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Target"
+          }
+        }
+      }
+    },
+    "المستهدف يجب أن يكون أكبر من صفر": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The target must be greater than zero"
+          }
+        }
+      }
+    },
+    "المستهدفات المحققة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Targets achieved"
+          }
+        }
+      }
+    },
+    "المسمى الوظيفي (اختياري)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Job title (optional)"
+          }
+        }
+      }
+    },
+    "المسندة إليّ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assigned to me"
+          }
+        }
+      }
+    },
+    "المصدر: %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Source: %@."
+          }
+        }
+      }
+    },
+    "المظهر": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appearance"
+          }
+        }
+      }
+    },
+    "المفتاح بجانب كل حقل يحدد ما إذا كان إلزاميًا قبل الإرسال.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The switch beside each field sets whether it is required before submitting."
+          }
+        }
+      }
+    },
+    "المقام": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denominator"
+          }
+        }
+      }
+    },
+    "المقام (من أي مجموع؟)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denominator (out of which total?)"
+          }
+        }
+      }
+    },
+    "الملاحظة (إلزامية)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note (required)"
+          }
+        }
+      }
+    },
+    "الملاحظة مطلوبة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A note is required"
+          }
+        }
+      }
+    },
+    "المنجز": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Achievement"
+          }
+        }
+      }
+    },
+    "المنجزات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Achievements"
+          }
+        }
+      }
+    },
+    "المنجزات المعتمدة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approved achievements"
+          }
+        }
+      }
+    },
+    "المهام": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tasks"
+          }
+        }
+      }
+    },
+    "المهام المكتملة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tasks completed"
+          }
+        }
+      }
+    },
+    "المهمة المرتبطة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Linked task"
+          }
+        }
+      }
+    },
+    "الموظفون": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Employees"
+          }
+        }
+      }
+    },
+    "الموعد %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Due %@"
+          }
+        }
+      }
+    },
+    "الموعد يجب أن يكون في المستقبل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The due date must be in the future"
+          }
+        }
+      }
+    },
+    "النتيجة المقاسة للمؤشرات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measured indicator result"
+          }
+        }
+      }
+    },
+    "النتيجة المقاسة والتغطية": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measured result and coverage"
+          }
+        }
+      }
+    },
+    "النسخة %lld — %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Revision %1$lld — %2$@"
+          }
+        }
+      }
+    },
+    "النسخة %lld — أُرسلت %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Revision %1$lld — submitted %2$@"
+          }
+        }
+      }
+    },
+    "النطاق: %@–%@ %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Range: %1$@–%2$@ %3$@"
+          }
+        }
+      }
+    },
+    "النهاية": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "End"
+          }
+        }
+      }
+    },
+    "النوع": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type"
+          }
+        }
+      }
+    },
+    "الهدف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal"
+          }
+        }
+      }
+    },
+    "الوحدة (مثل برنامج، ساعة)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unit (e.g. program, hour)"
+          }
+        }
+      }
+    },
+    "الوحدة (مثل ساعة، عينة)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unit (e.g. hour, sample)"
+          }
+        }
+      }
+    },
+    "الوزن من ١٠٠": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight out of 100"
+          }
+        }
+      }
+    },
+    "الوصف (اختياري)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Description (optional)"
+          }
+        }
+      }
+    },
+    "انتهت الجلسة. سجّل الدخول مرة أخرى.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your session ended. Sign in again."
+          }
+        }
+      }
+    },
+    "بانتظار اعتمادك": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Awaiting your approval"
+          }
+        }
+      }
+    },
+    "بانتظار الاعتماد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Awaiting approval"
+          }
+        }
+      }
+    },
+    "بانتظار المراجعة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Awaiting review"
+          }
+        }
+      }
+    },
+    "بانتظار تحديث الخادم (ترحيل التوقيعات)؛ تُعتمد القرارات حاليًا دون توقيع": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Awaiting the server update (signatures migration); decisions are currently recorded without a signature"
+          }
+        }
+      }
+    },
+    "بدء التنفيذ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start work"
+          }
+        }
+      }
+    },
+    "بدون": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "None"
+          }
+        }
+      }
+    },
+    "بدون قسم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No department"
+          }
+        }
+      }
+    },
+    "بريد إلكتروني غير صالح": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invalid email"
+          }
+        }
+      }
+    },
+    "بطاقات أصغر دون أشرطة التقدم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Smaller cards without progress bars"
+          }
+        }
+      }
+    },
+    "بعد دقيقة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After 1 minute"
+          }
+        }
+      }
+    },
+    "بعد ١٥ دقيقة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After 15 minutes"
+          }
+        }
+      }
+    },
+    "بعد ٥ دقائق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After 5 minutes"
+          }
+        }
+      }
+    },
+    "بلا رئيس بعد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No head yet"
+          }
+        }
+      }
+    },
+    "بلا رئيس نشط": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No active head"
+          }
+        }
+      }
+    },
+    "بلا مسؤول": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unassigned"
+          }
+        }
+      }
+    },
+    "بيئة التشغيل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Environment"
+          }
+        }
+      }
+    },
+    "بيانات تجريبية — ليست نتائج تشغيلية": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo data — not operational results"
+          }
+        }
+      }
+    },
+    "بيانات غير كافية للحكم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not enough data for a verdict"
+          }
+        }
+      }
+    },
+    "تأكيد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirm"
           }
         }
       }
@@ -252,12 +2902,2432 @@
         }
       }
     },
-    "بدء التنفيذ": {
+    "تأكيد تفعيل قفل التطبيق": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start"
+            "value": "Confirm turning on the app lock"
+          }
+        }
+      }
+    },
+    "تأكيد كلمة المرور": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirm password"
+          }
+        }
+      }
+    },
+    "تاريخ النهاية بعد البداية": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The end date must be after the start"
+          }
+        }
+      }
+    },
+    "تجاهل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discard"
+          }
+        }
+      }
+    },
+    "تجاهل التغييرات؟": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discard changes?"
+          }
+        }
+      }
+    },
+    "تجاوز موعد التسليم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Submission deadline passed"
+          }
+        }
+      }
+    },
+    "تحتاج قرارك": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Needs your decision"
+          }
+        }
+      }
+    },
+    "تحديد الكل كمقروء": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mark all as read"
+          }
+        }
+      }
+    },
+    "تحقّق بـ %@ للمتابعة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verify with %@ to continue"
+          }
+        }
+      }
+    },
+    "تخصيص": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Customize"
+          }
+        }
+      }
+    },
+    "تخصيص لوحة القيادة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Customize the dashboard"
+          }
+        }
+      }
+    },
+    "ترتيب الأقسام وإظهارها وكثافة القراءات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Order and visibility of sections and reading density"
+          }
+        }
+      }
+    },
+    "تسجيل إنجاز المرحلة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record milestone completion"
+          }
+        }
+      }
+    },
+    "تسجيل الخروج": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign out"
+          }
+        }
+      }
+    },
+    "تسجيل الخروج من هذا الجهاز؟": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign out of this device?"
+          }
+        }
+      }
+    },
+    "تسجيل الدخول": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in"
+          }
+        }
+      }
+    },
+    "تسجيل عائق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Report a blocker"
+          }
+        }
+      }
+    },
+    "تصحيح القراءة المعتمدة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Correct the approved reading"
+          }
+        }
+      }
+    },
+    "تظهر مرة واحدة فقط ولا تُحفظ. سلّمها للموظف بطريقة آمنة؛ سيُطلب منه تغييرها عند أول دخول.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shown only once and never stored. Hand it to the employee securely; they will be asked to change it at first sign-in."
+          }
+        }
+      }
+    },
+    "تعارض في معرف الطلب. أعد المحاولة كطلب جديد.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Request id conflict. Retry as a new request."
+          }
+        }
+      }
+    },
+    "تعديل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit"
+          }
+        }
+      }
+    },
+    "تعديل المنجز": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit achievement"
+          }
+        }
+      }
+    },
+    "تعذر الاتصال بالخادم. حاول مرة أخرى.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not reach the server. Try again."
+          }
+        }
+      }
+    },
+    "تعذر التحديث": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not refresh"
+          }
+        }
+      }
+    },
+    "تعذر التحقق؛ لم يتغير القفل.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verification failed; the lock was not changed."
+          }
+        }
+      }
+    },
+    "تعذر التحميل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not load"
+          }
+        }
+      }
+    },
+    "تعذر تجهيز صورة التوقيع.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not prepare the signature image."
+          }
+        }
+      }
+    },
+    "تعذر تحميل الأقسام": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not load departments"
+          }
+        }
+      }
+    },
+    "تعذر تحميل الأهداف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not load goals"
+          }
+        }
+      }
+    },
+    "تعذر تحميل الإشعارات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not load notifications"
+          }
+        }
+      }
+    },
+    "تعذر تحميل التقارير": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not load reports"
+          }
+        }
+      }
+    },
+    "تعذر تحميل الفترات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not load periods"
+          }
+        }
+      }
+    },
+    "تعذر تحميل اللوحة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not load the dashboard"
+          }
+        }
+      }
+    },
+    "تعذر تحميل المؤشرات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not load indicators"
+          }
+        }
+      }
+    },
+    "تعذر تحميل المنجزات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not load achievements"
+          }
+        }
+      }
+    },
+    "تعذر تحميل المهام": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not load tasks"
+          }
+        }
+      }
+    },
+    "تعذر تغيير كلمة المرور.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not change the password."
+          }
+        }
+      }
+    },
+    "تعذر فتح الملف.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not open the file."
+          }
+        }
+      }
+    },
+    "تعذر قراءة استجابة الخادم.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not read the server's response."
+          }
+        }
+      }
+    },
+    "تعذر معالجة الملف.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not process the file."
+          }
+        }
+      }
+    },
+    "تغطية %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coverage %@"
+          }
+        }
+      }
+    },
+    "تغطية البيانات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data coverage"
+          }
+        }
+      }
+    },
+    "تفاصيل التقرير": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Report details"
+          }
+        }
+      }
+    },
+    "تفاصيل المهمة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Task details"
+          }
+        }
+      }
+    },
+    "تفعيل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn on"
+          }
+        }
+      }
+    },
+    "تفعيل التنبيهات على الجهاز": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn on device alerts"
+          }
+        }
+      }
+    },
+    "تفعيل الهدف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activate goal"
+          }
+        }
+      }
+    },
+    "تقرير بانتظار مراجعتك": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Report awaiting your review"
+          }
+        }
+      }
+    },
+    "تقرير تجاوز موعده": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Report overdue"
+          }
+        }
+      }
+    },
+    "تقرير دوري": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Periodic report"
+          }
+        }
+      }
+    },
+    "تقرير يقترب موعده": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Report due soon"
+          }
+        }
+      }
+    },
+    "تقليل الحركة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reduce motion"
+          }
+        }
+      }
+    },
+    "تكليف جديد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New assignment"
+          }
+        }
+      }
+    },
+    "تلقائي": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatic"
+          }
+        }
+      }
+    },
+    "تم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        }
+      }
+    },
+    "تم: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done: %@"
+          }
+        }
+      }
+    },
+    "تنبيه فوري عند إسناد أو اعتماد أو إرجاع": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instant alerts for assignments, approvals and returns"
+          }
+        }
+      }
+    },
+    "توثيق منجز جديد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Document a new achievement"
+          }
+        }
+      }
+    },
+    "توجد قراءة بانتظار الاعتماد لهذه الفترة.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A reading is awaiting approval for this period."
+          }
+        }
+      }
+    },
+    "توزيع خطي (عند ملاءمته فقط)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Linear distribution (only when appropriate)"
+          }
+        }
+      }
+    },
+    "توزيع خطي معتمد من البداية إلى النهاية": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approved linear distribution from start to end"
+          }
+        }
+      }
+    },
+    "توقيع و%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign and %@"
+          }
+        }
+      }
+    },
+    "توليد تقارير الفترة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Generate this period's reports"
+          }
+        }
+      }
+    },
+    "تُحسب من درجات المؤشرات المعتمدة فقط بأوزانها؛ لا يصدر حكم إجمالي تحت تغطية ٨٠٪.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Computed only from approved indicator scores, by weight; no overall verdict below 80% coverage."
+          }
+        }
+      }
+    },
+    "تُرسل الشواهد مع التقرير، ولا تُحذف بعد الإرسال.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Evidence is sent with the report and is not deleted after submission."
+          }
+        }
+      }
+    },
+    "تُعرض آخر بيانات محمّلة لهذه الفترة (%@). %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Showing the last data loaded for this period (%1$@). %2$@"
+          }
+        }
+      }
+    },
+    "جارٍ التحقق من الجلسة…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checking your session…"
+          }
+        }
+      }
+    },
+    "جارٍ التحميل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading"
+          }
+        }
+      }
+    },
+    "جارٍ تحميل اللوحة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading the dashboard"
+          }
+        }
+      }
+    },
+    "جارٍ رفع الملف والتحقق منه…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uploading and verifying the file…"
+          }
+        }
+      }
+    },
+    "حدث خطأ في الخادم. حاول لاحقًا.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A server error occurred. Try later."
+          }
+        }
+      }
+    },
+    "حدد المسؤول": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose the owner"
+          }
+        }
+      }
+    },
+    "حدد المستهدف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set the target"
+          }
+        }
+      }
+    },
+    "حدد الوحدة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set the unit"
+          }
+        }
+      }
+    },
+    "حدد قيمة مستهدفة أكبر من صفر — لا يوجد «١٠٠٪» افتراضي": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set a target value above zero — there is no default “100%”"
+          }
+        }
+      }
+    },
+    "حدد مصدر البيانات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set the data source"
+          }
+        }
+      }
+    },
+    "حدد موعد الاستحقاق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set the due date"
+          }
+        }
+      }
+    },
+    "حدد نطاقًا صحيحًا (الأدنى ≤ الأعلى)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set a valid range (minimum ≤ maximum)"
+          }
+        }
+      }
+    },
+    "حدد وحدة القياس": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set the unit of measure"
+          }
+        }
+      }
+    },
+    "حذف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
+          }
+        }
+      }
+    },
+    "حرف واحد على الأقل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At least one letter"
+          }
+        }
+      }
+    },
+    "حسابك غير مرتبط بمستشفى أو قسم حاليًا. تواصل مع مدير النظام لتفعيل عضويتك.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your account is not linked to a hospital or department. Contact the system administrator to activate your membership."
+          }
+        }
+      }
+    },
+    "حفظ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        }
+      }
+    },
+    "حفظ كلمة المرور": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save password"
+          }
+        }
+      }
+    },
+    "حفظ مسودة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save draft"
+          }
+        }
+      }
+    },
+    "حفظ وإرسال للاعتماد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save and send for approval"
+          }
+        }
+      }
+    },
+    "حفظ وجدولة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save and schedule"
+          }
+        }
+      }
+    },
+    "حقل إلزامي": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Required field"
+          }
+        }
+      }
+    },
+    "حكم مؤقت": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Provisional verdict"
+          }
+        }
+      }
+    },
+    "حول التطبيق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About"
+          }
+        }
+      }
+    },
+    "حُفظت المسودة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Draft saved"
+          }
+        }
+      }
+    },
+    "خارج النطاق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Out of range"
+          }
+        }
+      }
+    },
+    "خط الأساس (اختياري)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baseline (optional)"
+          }
+        }
+      }
+    },
+    "خطة التقدم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progress plan"
+          }
+        }
+      }
+    },
+    "خطة التقدم الزمنية": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progress timeline"
+          }
+        }
+      }
+    },
+    "خطة الفترة القادمة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next period's plan"
+          }
+        }
+      }
+    },
+    "رئيس": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Head"
+          }
+        }
+      }
+    },
+    "رئيس قسم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Department head"
+          }
+        }
+      }
+    },
+    "راجع الحقول المظللة.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check the highlighted fields."
+          }
+        }
+      }
+    },
+    "رفض": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reject"
+          }
+        }
+      }
+    },
+    "رفض الإقفال": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refuse closure"
+          }
+        }
+      }
+    },
+    "رفض المنجز": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reject achievement"
+          }
+        }
+      }
+    },
+    "رفع الإنجاز": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Submit work"
+          }
+        }
+      }
+    },
+    "رقم غير صالح": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invalid number"
+          }
+        }
+      }
+    },
+    "رقم واحد على الأقل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At least one digit"
+          }
+        }
+      }
+    },
+    "رمز الجهاز": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Device passcode"
+          }
+        }
+      }
+    },
+    "رمز لاتيني مثل LAB.TAT": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Latin code such as LAB.TAT"
+          }
+        }
+      }
+    },
+    "رمز من حروف لاتينية وأرقام، حتى ١٦ خانة (مثل LAB)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A code of Latin letters and digits, up to 16 characters (e.g. LAB)"
+          }
+        }
+      }
+    },
+    "رُفض": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rejected"
+          }
+        }
+      }
+    },
+    "سبب الإعفاء": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exemption reason"
+          }
+        }
+      }
+    },
+    "سبب الإلغاء": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancellation reason"
+          }
+        }
+      }
+    },
+    "سبب التصحيح": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Correction reason"
+          }
+        }
+      }
+    },
+    "سبب التصحيح مطلوب لاستبدال قيمة معتمدة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A correction reason is required to replace an approved value"
+          }
+        }
+      }
+    },
+    "سبب عدم الانطباق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reason it does not apply"
+          }
+        }
+      }
+    },
+    "ستظهر هنا الإسنادات والمراجعات والمواعيد.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assignments, reviews and deadlines will appear here."
+          }
+        }
+      }
+    },
+    "سجل القرارات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Decision history"
+          }
+        }
+      }
+    },
+    "سجل المراجعة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Review history"
+          }
+        }
+      }
+    },
+    "سجل لم يعد متاحًا لك": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A record no longer available to you"
+          }
+        }
+      }
+    },
+    "سُجّل إنجاز المرحلة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Milestone completion recorded"
+          }
+        }
+      }
+    },
+    "سُجّل القرار": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Decision recorded"
+          }
+        }
+      }
+    },
+    "سُلّم في موعده": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Submitted on time"
+          }
+        }
+      }
+    },
+    "سُلّم متأخرًا": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Submitted late"
+          }
+        }
+      }
+    },
+    "شاشة البداية": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start screen"
+          }
+        }
+      }
+    },
+    "شهري": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monthly"
+          }
+        }
+      }
+    },
+    "صباح الخير": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good morning"
+          }
+        }
+      }
+    },
+    "صدر قرار الإنجاز": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A decision was made on the achievement"
+          }
+        }
+      }
+    },
+    "صدر قرار بشأن الهدف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A decision was made on the goal"
+          }
+        }
+      }
+    },
+    "صدر قرار طلب التمديد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A decision was made on the extension request"
+          }
+        }
+      }
+    },
+    "صفر أحداث (المستهدف صفر)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zero events (target zero)"
+          }
+        }
+      }
+    },
+    "صفر أحداث: صفر يعطي ١٠٠، وأي حدث يعطي صفرًا.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zero events: zero gives 100 and any event gives zero."
+          }
+        }
+      }
+    },
+    "صلاحية على مستوى المستشفى": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hospital-wide permission"
+          }
+        }
+      }
+    },
+    "صورة التوقيع": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signature image"
+          }
+        }
+      }
+    },
+    "ضمن المسار": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On track"
+          }
+        }
+      }
+    },
+    "ضمن نطاق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Within range"
+          }
+        }
+      }
+    },
+    "ضمن نطاق: ١٠٠ داخل النطاق المعتمد، وخارج النطاق يظهر صراحة.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Within range: 100 inside the approved range; outside the range is shown explicitly."
+          }
+        }
+      }
+    },
+    "طبي": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medical"
+          }
+        }
+      }
+    },
+    "طريقة القياس": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How it is measured"
+          }
+        }
+      }
+    },
+    "طلب إقفال": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Request closure"
+          }
+        }
+      }
+    },
+    "طلب إقفال الهدف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Request goal closure"
+          }
+        }
+      }
+    },
+    "طلب التحقق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Require verification"
+          }
+        }
+      }
+    },
+    "طلب تمديد بانتظار قرارك": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extension request awaiting your decision"
+          }
+        }
+      }
+    },
+    "طلبات كثيرة. انتظر قليلًا ثم حاول مجددًا.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too many requests. Wait a moment and try again."
+          }
+        }
+      }
+    },
+    "عائق عاجل يحتاج قرارًا": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Urgent blocker needs a decision"
+          }
+        }
+      }
+    },
+    "عاجلة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Urgent"
+          }
+        }
+      }
+    },
+    "عادية": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal"
+          }
+        }
+      }
+    },
+    "عالية": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "High"
+          }
+        }
+      }
+    },
+    "عداد تراكمي (يُحسب بآخر قراءة)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cumulative counter (latest reading counts)"
+          }
+        }
+      }
+    },
+    "عدد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Count"
+          }
+        }
+      }
+    },
+    "عدّل شخص آخر هذا السجل. راجع النسخة الأحدث قبل الحفظ.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Someone else changed this record. Review the latest version before saving."
+          }
+        }
+      }
+    },
+    "عرض الأرقام بصيغة 123 بدل ١٢٣": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show numbers as 123 instead of ١٢٣"
+          }
+        }
+      }
+    },
+    "عرّف البسط": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Define the numerator"
+          }
+        }
+      }
+    },
+    "عرّف المقام": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Define the denominator"
+          }
+        }
+      }
+    },
+    "عشرة أحرف على الأقل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At least ten characters"
+          }
+        }
+      }
+    },
+    "عضويتك غير نشطة. تواصل مع إدارة النظام.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your membership is inactive. Contact system administration."
+          }
+        }
+      }
+    },
+    "عند الاعتماد والإرجاع وتبديل التبويب": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On approval, return and tab change"
+          }
+        }
+      }
+    },
+    "عنوان التكليف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assignment title"
+          }
+        }
+      }
+    },
+    "عنوان الحقل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Field title"
+          }
+        }
+      }
+    },
+    "عنوان المرحلة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Milestone title"
+          }
+        }
+      }
+    },
+    "عنوان مختصر": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Short title"
+          }
+        }
+      }
+    },
+    "غير قابل للحساب": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not computable"
+          }
+        }
+      }
+    },
+    "غير متاحة في هذا البناء؛ تتطلب توقيعًا بحساب مطوّر يدعم الإشعارات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not available in this build; requires signing with a developer account that supports notifications"
+          }
+        }
+      }
+    },
+    "غير مقروء": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unread"
+          }
+        }
+      }
+    },
+    "فتح الفترة الحالية": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the current period"
+          }
+        }
+      }
+    },
+    "فتح بـ %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unlock with %@"
+          }
+        }
+      }
+    },
+    "فعّل رمز الجهاز أو Face ID من إعدادات iPhone لاستخدام القفل.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn on a device passcode or Face ID in iPhone Settings to use the lock."
+          }
+        }
+      }
+    },
+    "فني": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Technical"
+          }
+        }
+      }
+    },
+    "فورًا": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Immediately"
+          }
+        }
+      }
+    },
+    "قاعدة الاحتساب غير متسقة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inconsistent calculation rule"
+          }
+        }
+      }
+    },
+    "قاعدة صفر أحداث للمؤشرات «الأقل أفضل» فقط": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The zero-events rule applies to “lower is better” indicators only"
+          }
+        }
+      }
+    },
+    "قالب تقرير جديد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New report template"
+          }
+        }
+      }
+    },
+    "قالب تقرير دوري جديد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New periodic report template"
+          }
+        }
+      }
+    },
+    "قراءات الفترة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Period readings"
+          }
+        }
+      }
+    },
+    "قراءات مضغوطة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compact readings"
+          }
+        }
+      }
+    },
+    "قراءة بانتظار اعتمادك": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading awaiting your approval"
+          }
+        }
+      }
+    },
+    "قراءة بانتظار الاعتماد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading awaiting approval"
+          }
+        }
+      }
+    },
+    "قراءة مؤشر بانتظار اعتمادك": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indicator reading awaiting your approval"
+          }
+        }
+      }
+    },
+    "قراءة معادة للقسم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading returned to the department"
+          }
+        }
+      }
+    },
+    "قرار المدير": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Director's decision"
+          }
+        }
+      }
+    },
+    "قرار مطلوب منك": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A decision is required from you"
+          }
+        }
+      }
+    },
+    "قسم جديد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New department"
+          }
+        }
+      }
+    },
+    "قفل التطبيق بـ %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lock the app with %@"
+          }
+        }
+      }
+    },
+    "قيادة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HadCtrl"
+          }
+        }
+      }
+    },
+    "قيد التنفيذ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In progress"
+          }
+        }
+      }
+    },
+    "قيمة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Value"
+          }
+        }
+      }
+    },
+    "كلمة المرور": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Password"
+          }
+        }
+      }
+    },
+    "كلمة المرور الجديدة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New password"
+          }
+        }
+      }
+    },
+    "كلمة المرور المؤقتة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temporary password"
+          }
+        }
+      }
+    },
+    "كلمة مرور جديدة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New password"
+          }
+        }
+      }
+    },
+    "كيف يُقاس؟": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How is it measured?"
+          }
+        }
+      }
+    },
+    "لا تملك صلاحية تنفيذ هذا الإجراء.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You are not allowed to perform this action."
+          }
+        }
+      }
+    },
+    "لا توجد أقسام بعد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No departments yet"
+          }
+        }
+      }
+    },
+    "لا توجد أقسام مطابقة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No matching departments"
+          }
+        }
+      }
+    },
+    "لا توجد أهداف بعد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No goals yet"
+          }
+        }
+      }
+    },
+    "لا توجد إجراءات معلقة الآن.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No pending actions right now."
+          }
+        }
+      }
+    },
+    "لا توجد إشعارات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No notifications"
+          }
+        }
+      }
+    },
+    "لا توجد تقارير جديدة؛ كل الجداول مولّدة لهذه الفترة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No new reports; every schedule is already generated for this period"
+          }
+        }
+      }
+    },
+    "لا توجد تقارير ضمن هذه التصفية": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No reports match this filter"
+          }
+        }
+      }
+    },
+    "لا توجد شواهد مرفقة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No evidence attached"
+          }
+        }
+      }
+    },
+    "لا توجد عضوية نشطة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No active membership"
+          }
+        }
+      }
+    },
+    "لا توجد فترات تقارير معرّفة بعد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No reporting periods defined yet"
+          }
+        }
+      }
+    },
+    "لا توجد فترة تقارير بعد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No reporting period yet"
+          }
+        }
+      }
+    },
+    "لا توجد فترة مفتوحة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No open period"
+          }
+        }
+      }
+    },
+    "لا توجد قراءات بعد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No readings yet"
+          }
+        }
+      }
+    },
+    "لا توجد قراءة معتمدة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No approved reading"
+          }
+        }
+      }
+    },
+    "لا توجد مؤشرات لهذا القسم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No indicators for this department"
+          }
+        }
+      }
+    },
+    "لا توجد مؤشرات لهذا القسم بعد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No indicators for this department yet"
+          }
+        }
+      }
+    },
+    "لا توجد مؤشرات معرّفة لهذه الفترة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No indicators defined for this period"
+          }
+        }
+      }
+    },
+    "لا توجد منجزات لهذه الفترة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No achievements for this period"
+          }
+        }
+      }
+    },
+    "لا توجد مهام ضمن هذه التصفية": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No tasks match this filter"
+          }
+        }
+      }
+    },
+    "لا توجد نسخة معتمدة من التعريف تنطبق على هذه الفترة.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No approved version of the definition applies to this period."
+          }
+        }
+      }
+    },
+    "لا تُنشر المهمة نفسها كأكثر من منجز في الفترة نفسها. المنجز المشترك يُعد مرة واحدة.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A task is not published as more than one achievement in the same period. A shared achievement counts once."
+          }
+        }
+      }
+    },
+    "لا حكم إجمالي": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No overall verdict"
+          }
+        }
+      }
+    },
+    "لا يحتوي القالب على حقول": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The template has no fields"
+          }
+        }
+      }
+    },
+    "لا يقبل قيمة سالبة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Negative values are not accepted"
+          }
+        }
+      }
+    },
+    "لا ينطبق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not applicable"
+          }
+        }
+      }
+    },
+    "لا ينطبق: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not applicable: %@"
+          }
+        }
+      }
+    },
+    "لا يوجد «١٠٠٪» افتراضي: حدد قيمة مستهدفة أو مراحل بأوزان مجموعها ١٠٠.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There is no default “100%”: set a target value or milestones whose weights total 100."
+          }
+        }
+      }
+    },
+    "لا يوجد اتصال بالإنترنت. تُعرض آخر بيانات محفوظة إن وجدت.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No internet connection. Showing the last saved data, if any."
+          }
+        }
+      }
+    },
+    "لا يوجد رئيس نشط": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No active head"
+          }
+        }
+      }
+    },
+    "لا يُمنح دور مدير المستشفى من التطبيق.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The hospital director role cannot be granted from the app."
+          }
+        }
+      }
+    },
+    "لديك %lld إشعارات جديدة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You have %lld new notifications"
+          }
+        }
+      }
+    },
+    "لغة التطبيق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App language"
+          }
+        }
+      }
+    },
+    "لغة الجهاز": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Device language"
+          }
+        }
+      }
+    },
+    "لكل مرحلة عنوان ومعيار إنجاز ووزن": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each milestone needs a title, a completion criterion and a weight"
+          }
+        }
+      }
+    },
+    "للاعتماد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To approve"
+          }
+        }
+      }
+    },
+    "للقسم رئيس أساسي نشط": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The department has an active primary head"
+          }
+        }
+      }
+    },
+    "للمراجعة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To review"
+          }
+        }
+      }
+    },
+    "لم تُنجز": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not done"
+          }
+        }
+      }
+    },
+    "لم تُنشأ كلمة مرور جديدة. يدخل الموظف بكلمة مروره الحالية.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No new password was created. The employee signs in with their current password."
+          }
+        }
+      }
+    },
+    "لم يبدأ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not started"
+          }
+        }
+      }
+    },
+    "لم يتم التحقق. حاول مرة أخرى.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verification failed. Try again."
+          }
+        }
+      }
+    },
+    "لم يغيّر كلمة المرور المؤقتة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Has not changed the temporary password"
+          }
+        }
+      }
+    },
+    "لم يكتمل رفع مرفق إلزامي.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A required attachment did not finish uploading."
+          }
+        }
+      }
+    },
+    "لم يُحدّث": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not updated"
+          }
+        }
+      }
+    },
+    "لم يُرسل محتوى بعد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No content submitted yet"
+          }
+        }
+      }
+    },
+    "لم يُسلّم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not submitted"
+          }
+        }
+      }
+    },
+    "لم يُكتب الأثر بعد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impact not written yet"
+          }
+        }
+      }
+    },
+    "ليلي": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dark"
+          }
+        }
+      }
+    },
+    "مؤرشف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Archived"
+          }
+        }
+      }
+    },
+    "مؤشر أداء جديد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New performance indicator"
+          }
+        }
+      }
+    },
+    "مؤشر جديد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New indicator"
+          }
+        }
+      }
+    },
+    "ما معنى الإنجاز؟": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What does completion mean?"
+          }
+        }
+      }
+    },
+    "متأخر عن الخطة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Behind plan"
           }
         }
       }
@@ -268,6 +5338,976 @@
           "stringUnit": {
             "state": "translated",
             "value": "Overdue"
+          }
+        }
+      }
+    },
+    "متعثرة بعائق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocked"
+          }
+        }
+      }
+    },
+    "متوسط موزون": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weighted average"
+          }
+        }
+      }
+    },
+    "مجموع الأوزان يجب أن يساوي ١٠٠": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The weights must total 100"
+          }
+        }
+      }
+    },
+    "مجموع البسط ÷ مجموع المقام (لا متوسط نسب)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sum of numerators ÷ sum of denominators (not an average of ratios)"
+          }
+        }
+      }
+    },
+    "مجموع القراءات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sum of readings"
+          }
+        }
+      }
+    },
+    "محتوى التقرير": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Report content"
+          }
+        }
+      }
+    },
+    "مدة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duration"
+          }
+        }
+      }
+    },
+    "مدير المستشفى": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hospital director"
+          }
+        }
+      }
+    },
+    "مدير النظام": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System administrator"
+          }
+        }
+      }
+    },
+    "مراحل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Milestones"
+          }
+        }
+      }
+    },
+    "مرحلة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Milestone"
+          }
+        }
+      }
+    },
+    "مرفوض": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rejected"
+          }
+        }
+      }
+    },
+    "مرفوضة من إعدادات النظام": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denied in system settings"
+          }
+        }
+      }
+    },
+    "مرفوعة للاعتماد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Submitted for approval"
+          }
+        }
+      }
+    },
+    "مسؤول تقني": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Technical administrator"
+          }
+        }
+      }
+    },
+    "مساء الخير": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good evening"
+          }
+        }
+      }
+    },
+    "مساحة التوقيع": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signature area"
+          }
+        }
+      }
+    },
+    "مساحة العمل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workspace"
+          }
+        }
+      }
+    },
+    "مساحة عمل المدير": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Director's workspace"
+          }
+        }
+      }
+    },
+    "مساحة عمل رئيس القسم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Department head's workspace"
+          }
+        }
+      }
+    },
+    "مساند": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supporting"
+          }
+        }
+      }
+    },
+    "مستبدلة بتصحيح": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Superseded by a correction"
+          }
+        }
+      }
+    },
+    "مستلمة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acknowledged"
+          }
+        }
+      }
+    },
+    "مسح": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear"
+          }
+        }
+      }
+    },
+    "مسندة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assigned"
+          }
+        }
+      }
+    },
+    "مسودة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Draft"
+          }
+        }
+      }
+    },
+    "مسودة بانتظار الاعتماد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Draft awaiting approval"
+          }
+        }
+      }
+    },
+    "مشاهد تنفيذي": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Executive viewer"
+          }
+        }
+      }
+    },
+    "مصدر البيانات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data source"
+          }
+        }
+      }
+    },
+    "معاد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Returned"
+          }
+        }
+      }
+    },
+    "معاد للاستكمال": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Returned for completion"
+          }
+        }
+      }
+    },
+    "معاد للتوضيح": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Returned for clarification"
+          }
+        }
+      }
+    },
+    "معادة للاستكمال": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Returned for completion"
+          }
+        }
+      }
+    },
+    "معادة للقسم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Returned to the department"
+          }
+        }
+      }
+    },
+    "معتمد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approved"
+          }
+        }
+      }
+    },
+    "معتمدة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approved"
+          }
+        }
+      }
+    },
+    "معفى": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exempted"
+          }
+        }
+      }
+    },
+    "معيار الإنجاز": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completion criterion"
+          }
+        }
+      }
+    },
+    "مفعّلة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On"
+          }
+        }
+      }
+    },
+    "مفعّلة ومسجّلة لهذا الجهاز": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On and registered for this device"
+          }
+        }
+      }
+    },
+    "مكتمل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completed"
+          }
+        }
+      }
+    },
+    "مكتملة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completed"
+          }
+        }
+      }
+    },
+    "مكتملة والفترة مفتوحة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Complete, period still open"
+          }
+        }
+      }
+    },
+    "ملاحظة المصدر (اختياري)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Source note (optional)"
+          }
+        }
+      }
+    },
+    "ملخص الإنجاز": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Achievement summary"
+          }
+        }
+      }
+    },
+    "ملغاة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelled"
+          }
+        }
+      }
+    },
+    "ملغى": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelled"
+          }
+        }
+      }
+    },
+    "من حقل واحد إلى ٣٠ حقلًا": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From one field to 30 fields"
+          }
+        }
+      }
+    },
+    "منجز جديد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New achievement"
+          }
+        }
+      }
+    },
+    "منجزة بانتظار الاعتماد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done, awaiting approval"
+          }
+        }
+      }
+    },
+    "منخفضة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low"
+          }
+        }
+      }
+    },
+    "منسق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coordinator"
+          }
+        }
+      }
+    },
+    "مهمة تجاوزت موعدها": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Task overdue"
+          }
+        }
+      }
+    },
+    "مهمة غير متاحة لك": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Task not available to you"
+          }
+        }
+      }
+    },
+    "مهمة مرفوعة بانتظار اعتمادك": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Task submitted, awaiting your approval"
+          }
+        }
+      }
+    },
+    "مهمة مكتملة مرتبطة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Linked completed task"
+          }
+        }
+      }
+    },
+    "مهمة يقترب موعدها": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Task due soon"
+          }
+        }
+      }
+    },
+    "موظف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Employee"
+          }
+        }
+      }
+    },
+    "موظف جديد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New employee"
+          }
+        }
+      }
+    },
+    "موعد الاستحقاق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Due date"
+          }
+        }
+      }
+    },
+    "مُسلّم": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Submitted"
+          }
+        }
+      }
+    },
+    "نتيجة نهائية": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Final result"
+          }
+        }
+      }
+    },
+    "نسبة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ratio"
+          }
+        }
+      }
+    },
+    "نسبة (بسط ÷ مقام)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ratio (numerator ÷ denominator)"
+          }
+        }
+      }
+    },
+    "نسخ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy"
+          }
+        }
+      }
+    },
+    "نشط": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active"
+          }
+        }
+      }
+    },
+    "نقاط الخطة داخل مدة الهدف وبقيم صحيحة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plan points inside the goal's dates, with valid values"
+          }
+        }
+      }
+    },
+    "نهاري": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light"
+          }
+        }
+      }
+    },
+    "نوع الإدخال": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Input type"
+          }
+        }
+      }
+    },
+    "نوع القياس": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measurement type"
+          }
+        }
+      }
+    },
+    "نوع الملف غير مسموح (PDF أو صورة أو جدول).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "File type not allowed (PDF, image or spreadsheet)."
+          }
+        }
+      }
+    },
+    "نوفمبر ٢٠٢٦": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "November 2026"
+          }
+        }
+      }
+    },
+    "نُسخت (تُمسح بعد دقيقتين)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copied (cleared after two minutes)"
+          }
+        }
+      }
+    },
+    "هدف جديد": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New goal"
+          }
+        }
+      }
+    },
+    "هذه الشاشة لم تُربط بالخادم بعد في هذا الإصدار.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This screen is not connected to the server yet in this build."
+          }
+        }
+      }
+    },
+    "وصف مختصر (اختياري)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Short description (optional)"
+          }
+        }
+      }
+    },
+    "وقّع بإصبعك داخل الإطار": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign with your finger inside the frame"
+          }
+        }
+      }
+    },
+    "يبقى صندوق الإشعارات داخل التطبيق هو المرجع؛ تظهر على شاشة القفل عبارة عامة دون أسماء أو تفاصيل.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The in-app inbox stays the reference; the lock screen shows generic text without names or details."
+          }
+        }
+      }
+    },
+    "يبقى ظاهرًا دائمًا": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Always shown"
+          }
+        }
+      }
+    },
+    "يرسل رئيس القسم التقرير بعد اكتماله.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The department head submits the report once it is complete."
+          }
+        }
+      }
+    },
+    "يرسل رئيس القسم المنجز للاعتماد.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The department head submits the achievement for approval."
+          }
+        }
+      }
+    },
+    "يستحق خلال ثلاثة أيام": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Due within three days"
+          }
+        }
+      }
+    },
+    "يطلب التحقق عند فتح التطبيق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Asks for verification when opening the app"
+          }
+        }
+      }
+    },
+    "يعرّف مدير المستشفى المؤشرات من الإعدادات ← الإدارة.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The hospital director defines indicators in Settings → Administration."
+          }
+        }
+      }
+    },
+    "يفتح مدير المستشفى فترة التقارير.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The hospital director opens the reporting period."
+          }
+        }
+      }
+    },
+    "يفتح معاينة الملف": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens a preview of the file"
+          }
+        }
+      }
+    },
+    "يفحص الجهاز الإشعارات الجديدة في الخلفية حين يسمح iOS بذلك، وقد يتأخر التنبيه. لا تظهر أسماء المهام أو التقارير على شاشة القفل.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The device checks for new notifications in the background when iOS allows it, so alerts may be late. Task and report names never appear on the lock screen."
+          }
+        }
+      }
+    },
+    "يقرر المدير الإقفال وفق تعريف الهدف؛ اكتمال المهام وحده لا يكفي.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The director decides closure by the goal's definition; completed tasks alone are not enough."
+          }
+        }
+      }
+    },
+    "يقيس النتيجة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measures the outcome"
+          }
+        }
+      }
+    },
+    "يوم الاستحقاق من ١ إلى ٢٨": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Due day from 1 to 28"
+          }
+        }
+      }
+    },
+    "يُحتسب الموعد حتى نهاية اليوم بتوقيت المستشفى.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The deadline runs to the end of the day in hospital time."
+          }
+        }
+      }
+    },
+    "يُحسب من أوزان المراحل المعتمدة فقط.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Computed only from approved milestone weights."
+          }
+        }
+      }
+    },
+    "يُحسب من القراءات المعتمدة للمؤشر المقيس، لا من اكتمال المهام. الإنجاز الخام قد يتجاوز ١٠٠٪ والمحتسب له سقف ١٠٠٪.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Computed from the approved readings of the measuring indicator, not from task completion. The raw achievement can exceed 100%; the counted value is capped at 100%."
+          }
+        }
+      }
+    },
+    "يُحفظ التوقيع مع القرار في سجل التدقيق ولا يمكن تعديله أو حذفه بعد الاعتماد.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The signature is stored with the decision in the audit trail and cannot be edited or deleted after approval."
+          }
+        }
+      }
+    },
+    "يُطلب توقيعك بإصبعك قبل كل اعتماد ويُحفظ مع القرار": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You sign with your finger before every approval, and the signature is stored with the decision"
+          }
+        }
+      }
+    },
+    "يُعتمد التعريف عند حفظه، ويسري من بداية الشهر الحالي.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The definition is approved when saved and applies from the start of the current month."
+          }
+        }
+      }
+    },
+    "يُنشئ مدير النظام الفترات قبل بدء المتابعة.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The system administrator creates the periods before tracking begins."
           }
         }
       }
