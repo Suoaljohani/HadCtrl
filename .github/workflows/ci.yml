@@ -29,8 +29,9 @@ jobs:
         run: bash scripts/check-no-secrets.sh .
       - name: Migrations + tests
         run: |
-          sudo chmod -R a+rX "$GITHUB_WORKSPACE"
-          sudo -u postgres bash scripts/db-test.sh
+          # Throwaway runner database: let the runner OS user connect as a local superuser.
+          sudo -u postgres createuser --superuser "$USER"
+          bash scripts/db-test.sh
 
   ios-simulator:
     name: iOS simulator build + tests
