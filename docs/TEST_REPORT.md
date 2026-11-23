@@ -24,7 +24,11 @@ Environment: Ubuntu 24.04 container, PostgreSQL 16.15, with the Supabase platfor
 
 All checks run as the real `authenticated`/`anon` roles with a JWT `sub`, never as `service_role`.
 
-Limits: PostgreSQL 16 locally vs 17 on the hosted project. Storage (`storage.objects`) policies are not covered yet. ## Hosted project after migration 001600 (2026-11-23)
+Limits: PostgreSQL 16 locally vs 17 on the hosted project. Storage (`storage.objects`) policies are not covered yet. ## Hosted project after migration 001700 (2026-11-23)
+- Owner ran `20261123001700_attachments.sql` in the SQL Editor (not listed in `schema_migrations`). Verified: fingerprint (CR-stripped) `e6bf655eceb7afca3accd62d07724751` over 89 functions = local; bucket `hadctrl-evidence` private, 20 MB, the six allowed types; policies `hc_evidence_insert` (INSERT, authenticated, reservation check) and `hc_evidence_select` (SELECT, authenticated, record visibility) on `storage.objects`; anon executes no public function; advisor lists only the accepted findings (34 documented RPCs).
+- Not yet exercised: a real upload through the hosted Storage API (needs a signed-in device).
+
+## Hosted project after migration 001600 (2026-11-23)
 - Owner ran `20261123001600_goals.sql` in the SQL Editor (not listed in `schema_migrations`). Verified: fingerprint (CR-stripped) `c6eface4586550616ec1c24b888c09d4` over 83 functions = local; anon executes no public function; `goal_decided` in the notification constraint; the 4 goal RPCs granted to authenticated only.
 
 ## Hosted project after migration 001500 (2026-11-23)
