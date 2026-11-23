@@ -150,6 +150,7 @@ struct TaskDetailView: View {
                     Text(task.title).font(.hcTitle).foregroundStyle(Color.hcInk)
                     HStack {
                         StatusBadge(text: task.status.title, tone: task.status.tone)
+                            .accessibilityIdentifier("taskStatusBadge")
                         if task.isOverdue(now: dependencies.clock.now()) {
                             StatusBadge(text: String(localized: "متأخرة"), tone: .critical, symbol: "clock")
                         }

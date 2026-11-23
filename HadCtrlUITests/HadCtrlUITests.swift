@@ -38,7 +38,7 @@ final class HadCtrlUITests: XCTestCase {
         app.scrollToHittable(app.buttons["reading.awaitingDirector"]).tap()
         app.scrollToHittable(app.staticTexts["تحديث إجراءات استلام العينات"]).tap()
         app.scrollToHittable(app.buttons["action.approve"]).tap()
-        XCTAssertTrue(app.staticText(containing: "مكتملة").waitForExistence(timeout: 5), "status shows completed")
+        app.expectTaskStatus("مكتملة")
         XCTAssertTrue(app.buttons["action.approve"].waitForNonExistence(timeout: 5),
                       "approved task offers no further approval")
     }
@@ -57,7 +57,7 @@ final class HadCtrlUITests: XCTestCase {
         field.typeText("أرفق المحضر")
         XCTAssertTrue(confirm.isEnabled)
         confirm.tap()
-        XCTAssertTrue(app.staticText(containing: "معادة للاستكمال").waitForExistence(timeout: 5), "status shows returned")
+        app.expectTaskStatus("معادة للاستكمال")
     }
 
     /// Department head sees only their department and has no approval on own work.
@@ -81,14 +81,16 @@ final class HadCtrlUITests: XCTestCase {
 }
 
 private extension XCUIApplication {
-    /// Scrolls the frontmost scroll view until `element` exists and is hittable, as a user would.
+    /// Waits for `element` to exist (content may still be loading), then scrolls
+    /// toward it until it is hittable, as a user would.
     @discardableResult
-    func scrollToHittable(_ element: XCUIElement, maxSwipes: Int = 8,
+    func scrollToHittable(_ element: XCUIElement, loadTimeout: TimeInterval = 15, maxSwipes: Int = 8,
                           file: StaticString = #filePath, line: UInt = #line) -> XCUIElement {
-        _ = element.waitForExistence(timeout: 5)
+        XCTAssertTrue(element.waitForExistence(timeout: loadTimeout), "\(element) never appeared", file: file, line: line)
         var swipes = 0
-        while !(element.exists && element.isHittable) && swipes < maxSwipes {
-            swipeUp()   // scrolls whatever is frontmost, like a user's thumb
+        while element.exists && !element.isHittable && swipes < maxSwipes {
+            // Scroll in the element's direction instead of blindly upward.
+            if element.frame.minY < frame.midY { swipeDown() } else { swipeUp() }
             swipes += 1
         }
         XCTAssertTrue(element.exists && element.isHittable, "\(element) not reachable after \(swipes) swipes",
@@ -96,7 +98,14 @@ private extension XCUIApplication {
         return element
     }
 
-    func staticText(containing text: String) -> XCUIElement {
-        staticTexts.containing(NSPredicate(format: "label CONTAINS %@", text)).firstMatch
+    /// Asserts the task detail status badge shows exactly `title`.
+    func expectTaskStatus(_ title: String, timeout: TimeInterval = 5,
+                          file: StaticString = #filePath, line: UInt = #line) {
+        let badge = descendants(matching: .any)["taskStatusBadge"]
+        let matches = NSPredicate(format: "label == %@", title)
+        let expectation = XCTNSPredicateExpectation(predicate: matches, object: badge)
+        let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
+        XCTAssertEqual(result, .completed, "task status is '\(badge.exists ? badge.label : "<missing>")', expected '\(title)'",
+                       file: file, line: line)
     }
 }
