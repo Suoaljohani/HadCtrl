@@ -1,0 +1,106 @@
+# HadCtrl CI: database tests (Linux) and unsigned simulator build + tests (macOS).
+# No signing secrets, no production access, read-only token (spec §31, AC-033).
+name: HadCtrl CI
+on:
+  pull_request:
+  push:
+    branches: [main, 'claude/**']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: hadctrl-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  database:
+    name: Database (migrations from empty + RLS/RPC tests)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Start local PostgreSQL
+        run: |
+          sudo systemctl start postgresql.service
+          sudo -u postgres psql -X -c 'select version()'
+      - name: Secret scan
+        run: bash scripts/check-no-secrets.sh .
+      - name: Migrations + tests
+        run: |
+          sudo chmod -R a+rX "$GITHUB_WORKSPACE"
+          sudo -u postgres bash scripts/db-test.sh
+
+  ios-simulator:
+    name: iOS simulator build + tests
+    runs-on: macos-15
+    timeout-minutes: 45
+    env:
+      HC_XCODEGEN_VERSION: '2.43.0'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Select Xcode
+        shell: bash
+        env:
+          HC_XCODE_VERSION: ${{ vars.HC_XCODE_VERSION }}
+        run: |
+          set -euo pipefail
+          echo "Installed Xcode versions:"; ls -d /Applications/Xcode*.app
+          if [ -n "${HC_XCODE_VERSION:-}" ]; then
+            app="/Applications/Xcode_${HC_XCODE_VERSION}.app"
+          else
+            # Until HC_XCODE_VERSION is pinned: newest stable (non-beta/RC) Xcode on the image.
+            app=$(ls -d /Applications/Xcode_*.app | grep -viE 'beta|rc|release_candidate' | sort -V | tail -1)
+          fi
+          test -d "$app" || { echo "Xcode not found: $app" >&2; exit 1; }
+          sudo xcode-select --switch "$app/Contents/Developer"
+          xcodebuild -version
+          xcrun simctl list runtimes
+      - name: Install XcodeGen ${{ env.HC_XCODEGEN_VERSION }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL -o "$RUNNER_TEMP/xcodegen.zip" \
+            "https://github.com/yonaskolb/XcodeGen/releases/download/${HC_XCODEGEN_VERSION}/xcodegen.zip"
+          shasum -a 256 "$RUNNER_TEMP/xcodegen.zip"
+          unzip -q "$RUNNER_TEMP/xcodegen.zip" -d "$RUNNER_TEMP/xcodegen"
+          echo "$RUNNER_TEMP/xcodegen/xcodegen/bin" >> "$GITHUB_PATH"
+      - name: Generate project and verify scheme (G1)
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodegen --version
+          xcodegen generate --spec project.yml
+          xcodebuild -list -project HadCtrl.xcodeproj | tee "$RUNNER_TEMP/xcodebuild-list.txt"
+          grep -q 'HadCtrl' "$RUNNER_TEMP/xcodebuild-list.txt"
+          test -f HadCtrl.xcodeproj/xcshareddata/xcschemes/HadCtrl.xcscheme
+      - name: Build and test on simulator
+        shell: bash
+        run: bash scripts/ci-simulator.sh
+      - name: Secret scan of built app
+        if: success()
+        shell: bash
+        run: |
+          app=$(find "$RUNNER_TEMP/HadCtrlDerivedData/Build/Products" -name 'HadCtrl.app' -maxdepth 3 | head -1)
+          bash scripts/check-no-secrets.sh "$app"
+      - name: Upload test evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: HadCtrl-tests-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/HadCtrlTests.xcresult
+          if-no-files-found: error
+          retention-days: 14
+      - name: Upload generated project
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: HadCtrl-xcodeproj-${{ github.run_id }}
+          path: |
+            HadCtrl.xcodeproj
+            ${{ runner.temp }}/xcodebuild-list.txt
+          if-no-files-found: error
+          retention-days: 14

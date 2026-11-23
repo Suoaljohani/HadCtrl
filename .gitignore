@@ -1,0 +1,15 @@
+# Xcode / build
+HadCtrl.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+DerivedData/
+build/
+*.xcresult
+*.ipa
+*.dSYM.zip
+# local config and signing material — never commit
+Config/Local.xcconfig
+*.p12
+*.mobileprovision
+*.cer
+.env
+.env.*

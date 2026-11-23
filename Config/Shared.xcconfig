@@ -1,0 +1,12 @@
+// Non-secret build settings. Real values are supplied at build time by
+// CI variables (HC_*) or an untracked Config/Local.xcconfig — never committed.
+// A placeholder bundle id makes an unsigned simulator build possible and can
+// never be mistaken for a real identity.
+HC_APP_BUNDLE_ID = invalid.hadctrl.app
+HC_APPLE_TEAM_ID =
+// "https:/$()/" keeps the double slash from being read as an xcconfig comment.
+HC_SUPABASE_URL = https:/$()/vffusttzqmerfofqianz.supabase.co
+// Publishable (client) key only. Empty until supplied; the app then shows a
+// configuration error instead of falling back to demo data.
+HC_SUPABASE_PUBLISHABLE_KEY =
+#include? "Local.xcconfig"

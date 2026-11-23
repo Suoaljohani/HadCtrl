@@ -1,0 +1,2 @@
+#include "Shared.xcconfig"
+HC_DEFAULT_APP_ENV = production
