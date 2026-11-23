@@ -23,3 +23,9 @@
 | **#11** | **0492f7a** | **pass** | **pass: project generated from project.yml, `xcodebuild -list` + shared HadCtrl scheme, locked packages, simulator build, unit 42/42, UI 5/5, built-app secret scan clean. G1 gate met (simulator only).** |
 
 Update this table after each run. A signed IPA (G7) needs the Apple inputs listed in SETUP.md.
+
+## Device builds
+| Build | Commit | Kind | Result |
+|---|---|---|---|
+| unsigned #1 | 947a1c4 | **UNSIGNED** Release device build (`generic/platform=iOS`), Xcode 26.3 | `HadCtrl-UNSIGNED-build1-947a1c4.ipa`, SHA-256 `b2d30114b25ea0c320298f865e79848f1bcb258d3c9496c8a8302d86c3ee5336`; artifact digest verified after download. Contents checked: arm64 Mach-O, `iphoneos`, min iOS 17.0, display name قيادة, production backend `vffusttzqmerfofqianz`, publishable key only (the only `sb_secret_` bytes are the guard-prefix constant, not a key), no `_CodeSignature`/profile, Janna LT and app icon present. **Not installable as-is; not a release IPA (§32).** |
+| signed | — | Release Testing (Ad Hoc) via `build-ipa.yml` | **Not produced:** needs Apple Developer membership, bundle ID, distribution .p12, Ad Hoc profile with registered UDIDs in the `ios-signing` environment, and the code merged to `main`. |
