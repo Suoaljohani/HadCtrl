@@ -25,7 +25,16 @@ Limits: PostgreSQL 16 locally vs 17 on the hosted project. Storage (`storage.obj
 - Security advisor: only accepted findings remain (D-18).
 - The behavioral test suite was **not** run on the hosted project, because it inserts fixture rows. The fingerprint shows the code is identical to what the suite exercised.
 
-## iOS: CI only (no Xcode in this session)
-Swift Testing suites: `IndicatorScoringTests`, `AggregationTests`, `CoverageTests`, `NumberInputTests`, `HospitalCalendarTests`, `ArabicSearchTests`, `RouteTests`, `ConfigurationTests`, `ViewModelTests`. XCUITest: `HadCtrlUITests` (5 scenarios, Arabic locale, one at AX-XL text size).
+## iOS: GitHub Actions run #11 (commit 0492f7a), 2026-11-23
+Environment: `macos-15-arm64` image 20261118.0550, Xcode 26.3 (17C529), Swift 6.2.4, simulator iPhone SE (3rd generation) on iOS 26.2. Unsigned Debug build, `HC_APP_ENV=ui-testing` (labelled mock repositories). The `.xcresult` is uploaded as artifact `HadCtrl-tests-45154877788-1`.
 
-Results come from GitHub Actions `HadCtrl CI` → job "iOS simulator build + tests"; the `.xcresult` is uploaded as an artifact. See BUILD_REPORT.md for run status. Nothing iOS-related is reported as passing unless that job is green.
+| Suite | Result |
+|---|---|
+| Swift Testing (10 suites, 42 tests: scoring, aggregation, coverage, number input, calendar, search, routes, configuration, view models, Supabase contracts) | 42/42 pass |
+| XCUITest `HadCtrlUITests` (five tabs + demo banner; director approves; director returns with mandatory note; head scope + no self-approval; AX-XL text) | 5/5 pass |
+| Built-app secret scan | clean |
+
+Limits:
+- Simulator only, on the iOS 26.2 runtime. The deployment target is iOS 17, and no iOS 17 runtime exists on the image, so running on 17 is not yet verified (§31).
+- UI tests run against mock repositories. The Supabase client is covered by contract tests on captured server output, not by a live end-to-end run: that needs the publishable key and a bootstrapped director.
+- One green run. The UI tests needed several runner-specific fixes (runs #2–#10); watch the next runs for flakiness before treating them as stable.

@@ -59,9 +59,9 @@ DB tests: `scripts/db-test.sh` (local Postgres, real `anon`/`authenticated` role
 
 | Gate | Status |
 |---|---|
-| G1 project | CI run pending — see `docs/BUILD_REPORT.md` |
+| G1 project | **verified** (simulator): CI run #11, project generated, shared scheme, build, 42 unit + 5 UI tests |
 | G2 database | local: verified (166 assertions + concurrency); CI database job: see BUILD_REPORT |
-| G3 assignments | server: verified; client: mock-backed, SDK wiring pending |
+| G3 assignments | server: verified; client: supabase-swift 2.55.7 wired and compiled, contract tests pass, UI flows pass on mocks; live end-to-end pending key + director |
 | G4 reports | server: verified locally (38 assertions); client wiring pending |
 | G5 indicators | server: verified locally (31 assertions, Swift/SQL scoring parity); `dashboard_snapshot` pending |
 | G6–G8 | planned |

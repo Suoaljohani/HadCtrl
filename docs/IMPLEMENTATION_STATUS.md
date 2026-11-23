@@ -15,13 +15,14 @@
 - **G5 server:** measurement submit/decide, corrections after freeze, `freeze_period` snapshots, SQL scoring with parity to Swift, `dashboard_snapshot`.
 - **Hosted Supabase:** all 11 migrations applied and verified against the tested build (TEST_REPORT, D-17).
 
+- **G1 verified in CI (run #11):** simulator build, 42/42 unit tests, 5/5 UI tests.
+
 ## Not done yet (in order)
-1. **Fix the failing iOS CI build/test step** (run #2) so G1 is verified.
-2. **G3 client (in progress):** supabase-swift 2.55.7 added. Session (sign-in, Keychain, restore, sign-out), dashboard (`dashboard_snapshot`), departments, tasks list/detail/create/transition are wired to Supabase. Contract tests decode real RPC output. Pending: committing `Config/Package.resolved` from the first CI resolve; an end-to-end check against the hosted project, which needs the publishable key and a bootstrapped director.
-3. **G4–G5 client:** report and indicator screens wired to their RPCs; schedule `generate_report_instances` with Supabase Cron.
-4. **G6:** attachments (Storage policies, prepare/finalize), search, calendar, preferences sync, PDF/CSV export, in-app notification inbox, APNs worker.
-5. **G7:** accessibility/VoiceOver audit, performance, deep links.
-6. **G8:** signing, IPA export and verification. Blocked on Apple inputs (see SETUP.md).
+1. **G3 client (in progress):** supabase-swift 2.55.7 added. Session (sign-in, Keychain, restore, sign-out), dashboard (`dashboard_snapshot`), departments, tasks list/detail/create/transition are wired to Supabase. Contract tests decode real RPC output. Packages locked (`Config/Package.resolved`) and build green in CI (run #11). Pending: an end-to-end check against the hosted project, which needs the publishable key and a bootstrapped director.
+2. **G4–G5 client:** report and indicator screens wired to their RPCs; schedule `generate_report_instances` with Supabase Cron.
+3. **G6:** attachments (Storage policies, prepare/finalize), search, calendar, preferences sync, PDF/CSV export, in-app notification inbox, APNs worker.
+4. **G7:** accessibility/VoiceOver audit, performance, deep links.
+5. **G8:** signing, IPA export and verification. Blocked on Apple inputs (see SETUP.md).
 
 ## Known shortcuts to remove
 - `DepartmentDetailView` currently shows only the department's tasks; goals/indicators/reports tabs come with G4/G5.
