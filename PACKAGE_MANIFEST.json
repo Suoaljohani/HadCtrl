@@ -1,0 +1,98 @@
+{
+  "title": "HadCtrl Claude Implementation Package",
+  "version": "1.0",
+  "date": "2026-11-23",
+  "pdf_pages": 46,
+  "spec_words": 15594,
+  "chapters": 39,
+  "references": 29,
+  "acceptance_cases": 36,
+  "scope": "Specifications and reference templates, not a built iOS application.",
+  "validation": [
+    "PDF visual review",
+    "PDF page and print-bound checks",
+    "Markdown parity",
+    "YAML and JSON parsing",
+    "Bash syntax",
+    "embedded Python syntax",
+    "ZIP integrity"
+  ],
+  "not_executed": [
+    "Xcode compile/tests",
+    "Apple signing",
+    "physical iPhone installation",
+    "Supabase schema deployment or RLS execution"
+  ],
+  "files": [
+    {
+      "path": "CLAUDE.md",
+      "bytes": 2983,
+      "sha256": "eeac4db92bee119a4d7f0d0f600b5dcc6188a06e72eeeb25b1cfad0a2dfeda4e"
+    },
+    {
+      "path": "HadCtrl_Complete_Spec_AR.pdf",
+      "bytes": 273291,
+      "sha256": "64a15e998d10c34d38421d31ad3ae28387c1b54cf765be0571d74b2e1a8a9944"
+    },
+    {
+      "path": "START_HERE_AR.md",
+      "bytes": 2205,
+      "sha256": "cb818b516a817ffd484876683cb6e3af463d2db81ab454817f1f600c92b8f134"
+    },
+    {
+      "path": "docs/ACCEPTANCE_MATRIX.csv",
+      "bytes": 5793,
+      "sha256": "9c38cd3bcbf7f1d21597fc853e8e772e06a4a078f1ad9fd34e3d4514913a95d8"
+    },
+    {
+      "path": "docs/CLAUDE_START_PROMPT_AR.md",
+      "bytes": 4288,
+      "sha256": "956eb8d094899b9ea21584bb5ea8a4b1b8d360c6fe5576db7fef7119bff17064"
+    },
+    {
+      "path": "docs/HadCtrl_Complete_Spec_AR.md",
+      "bytes": 168058,
+      "sha256": "88ebd8f23ea57ad335d97dcbd7558431e88c2cab965392a4ee220c3e01cddffd"
+    },
+    {
+      "path": "docs/REQUIREMENTS_LEDGER.csv",
+      "bytes": 5155,
+      "sha256": "d41af835b460c8284049d7c469f0c58b60f464e36de3e8d454c172341582d86f"
+    },
+    {
+      "path": "docs/SETUP_INPUTS_AR.md",
+      "bytes": 3863,
+      "sha256": "30221aa3085d0f71385ebf61dc25e980317e9722f851439b9c4cd179acb9654e"
+    },
+    {
+      "path": "docs/SKILLS_AND_TOOLS_AR.md",
+      "bytes": 7950,
+      "sha256": "f2ebd4d86b060a6c616acd4cb15b4707b50823f1c1c81ae524694efe8acb89dd"
+    },
+    {
+      "path": "templates/.claude/settings.local-mac.example.json",
+      "bytes": 718,
+      "sha256": "7d49dc4bdbee7aa3b63d77edcee648d5d9a4497080573fc017eb54bd978afc45"
+    },
+    {
+      "path": "templates/github/build-ipa.template.yml",
+      "bytes": 2065,
+      "sha256": "c80334d7ac8d2a8093f88d17b239673207de3b1d03da2f3e2e7f2c47aea606de"
+    },
+    {
+      "path": "templates/github/ci-ios.template.yml",
+      "bytes": 1510,
+      "sha256": "c7129cd3b567fe58ae372beda63c1129a1a17b04a0cbaa192df2b39361c0d8b8"
+    },
+    {
+      "path": "templates/scripts/ci-simulator.template.sh",
+      "bytes": 2465,
+      "sha256": "77572d16beb6a683ee7cded3747533c7ce61e76c8325f95d1368d48a3656b2b6"
+    },
+    {
+      "path": "templates/scripts/sign-and-export.template.sh",
+      "bytes": 9900,
+      "sha256": "9f3bb55502a5d5bcf7897b5a7f13687a5cbbbdf481ca1314cad3304f5f22b360"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+# TEMPLATE: implement the Xcode project and tests, verify/pin action SHAs,
+# then install as .github/workflows/ci-ios.yml. No signing secrets here.
+name: HadCtrl iOS verification
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_call:
+permissions:
+  contents: read
+concurrency:
+  group: hadctrl-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  simulator:
+    runs-on: macos-15
+    timeout-minutes: 40
+    env:
+      HC_XCODE_VERSION: ${{ vars.HC_XCODE_VERSION || '26.2' }}
+      HC_APP_ENV: ui-testing
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Verify Xcode and project
+        shell: bash
+        run: |
+          set -euo pipefail
+          hc_xcode="/Applications/Xcode_${HC_XCODE_VERSION}.app/Contents/Developer"
+          test -d "$hc_xcode"
+          sudo xcode-select --switch "$hc_xcode"
+          xcodebuild -version
+          test -f HadCtrl.xcodeproj/project.pbxproj
+          xcodebuild -list -project HadCtrl.xcodeproj
+      - name: Resolve and run deterministic simulator tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash scripts/ci-simulator.sh
+      - name: Upload test evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: HadCtrl-tests-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/HadCtrlTests.xcresult
+          if-no-files-found: error
+          retention-days: 14

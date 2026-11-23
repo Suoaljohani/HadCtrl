@@ -1,0 +1,54 @@
+# TEMPLATE: install only after implementing the project and passing all gates.
+# Pin each action to a verified immutable SHA before enabling signing.
+name: HadCtrl signed IPA
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/ci-ios.yml
+  sign:
+    if: github.ref == 'refs/heads/main'
+    needs: verify
+    runs-on: macos-15
+    timeout-minutes: 40
+    environment: ios-signing
+    env:
+      HC_XCODE_VERSION: ${{ vars.HC_XCODE_VERSION || '26.2' }}
+      HC_APP_BUNDLE_ID: ${{ vars.HC_APP_BUNDLE_ID }}
+      HC_APPLE_TEAM_ID: ${{ vars.HC_APPLE_TEAM_ID }}
+      HC_SUPABASE_URL: ${{ vars.HC_SUPABASE_URL }}
+      HC_SUPABASE_PUBLISHABLE_KEY: ${{ vars.HC_SUPABASE_PUBLISHABLE_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Select verified Xcode
+        shell: bash
+        run: |
+          set -euo pipefail
+          hc_xcode="/Applications/Xcode_${HC_XCODE_VERSION}.app/Contents/Developer"
+          test -d "$hc_xcode"
+          sudo xcode-select --switch "$hc_xcode"
+          xcodebuild -version
+      - name: Archive, sign, export, and verify
+        shell: bash
+        env:
+          HC_CERTIFICATE_BASE64: ${{ secrets.HC_CERTIFICATE_BASE64 }}
+          HC_P12_PASSWORD: ${{ secrets.HC_P12_PASSWORD }}
+          HC_PROVISION_PROFILE_BASE64: ${{ secrets.HC_PROVISION_PROFILE_BASE64 }}
+          HC_KEYCHAIN_PASSWORD: ${{ secrets.HC_KEYCHAIN_PASSWORD }}
+        run: bash scripts/sign-and-export.sh
+      - name: Upload verified IPA only
+        uses: actions/upload-artifact@v7
+        with:
+          name: HadCtrl-IPA-${{ github.run_number }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/hadctrl-delivery/HadCtrl.ipa
+            ${{ runner.temp }}/hadctrl-delivery/SHA256SUMS.txt
+            ${{ runner.temp }}/hadctrl-delivery/BUILD_REPORT.txt
+            ${{ runner.temp }}/hadctrl-delivery/dSYMs.zip
+          if-no-files-found: error
+          retention-days: 14
