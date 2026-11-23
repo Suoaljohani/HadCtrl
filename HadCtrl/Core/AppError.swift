@@ -24,6 +24,10 @@ enum AppError: Error, Equatable, Sendable {
     case decoding(String)
     case file(String)
     case cancelled
+    /// Wrong email or password (Supabase Auth `invalid_credentials`).
+    case invalidCredentials
+    /// A screen whose server slice is not wired in this build (never replaced by demo data).
+    case notYetAvailable
 
     var code: HCErrorCode? {
         if case .server(let code, _, _, _) = self { return code }
@@ -68,6 +72,10 @@ enum AppError: Error, Equatable, Sendable {
             return String(localized: "تعذر معالجة الملف.")
         case .cancelled:
             return String(localized: "أُلغي الطلب.")
+        case .invalidCredentials:
+            return String(localized: "البريد الإلكتروني أو كلمة المرور غير صحيحة.")
+        case .notYetAvailable:
+            return String(localized: "هذه الشاشة لم تُربط بالخادم بعد في هذا الإصدار.")
         }
     }
 }

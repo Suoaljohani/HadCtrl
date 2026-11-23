@@ -1,0 +1,95 @@
+{
+    "my_context": {
+        "profile": {
+            "job_title": null,
+            "display_name": "user 11"
+        },
+        "user_id": "00000000-0000-0000-0000-000000000011",
+        "organizations": [
+            {
+                "roles": [
+                    "hospital_director"
+                ],
+                "is_demo": true,
+                "name_ar": "مستشفى الحديثة العام (تجريبي)",
+                "name_en": "Alhadithah General Hospital (demo)",
+                "timezone": "Asia/Riyadh",
+                "departments": [
+                ],
+                "organization_id": "00000000-0000-0000-0000-0000000000a0"
+            }
+        ]
+    },
+    "create_task": {
+        "due_at": "2026-11-26T09:06:46.063891+00:00",
+        "status": "assigned",
+        "task_id": "00000000-0000-0000-0000-000000000c01",
+        "version": 1,
+        "replayed": false,
+        "created_at": "2026-11-23T09:06:46.063891+00:00",
+        "updated_at": "2026-11-23T09:06:46.063891+00:00",
+        "assignee_id": "00000000-0000-0000-0000-000000000012",
+        "original_due_at": "2026-11-26T09:06:46.063891+00:00"
+    },
+    "dashboard_snapshot": {
+        "actions": [
+        ],
+        "coverage": {
+            "policy": "coverage-80/v1",
+            "verdict": "final",
+            "coverage_pct": 100.0000,
+            "covered_weight": 1,
+            "measured_score": 96.8421,
+            "required_weight": 1
+        },
+        "readings": {
+            "goals_achieved": {
+                "numerator": 0,
+                "denominator": 0
+            },
+            "tasks_completed": {
+                "cancelled": 0,
+                "numerator": 1,
+                "denominator": 3
+            },
+            "reports_received": {
+                "late": 0,
+                "waived": 1,
+                "numerator": 1,
+                "denominator": 1
+            },
+            "indicators_updated": {
+                "unit": "weight",
+                "numerator": 1,
+                "denominator": 1
+            },
+            "awaiting_my_decision": 0,
+            "achievements_approved": 0
+        },
+        "period_id": "00000000-0000-0000-0000-0000000000f1",
+        "departments": [
+            {
+                "code": "TRN",
+                "name_ar": "التدريب",
+                "archived": false,
+                "open_tasks": 1,
+                "department_id": "00000000-0000-0000-0000-0000000000d2",
+                "overdue_tasks": 0,
+                "reports_pending": 0
+            },
+            {
+                "code": "LAB",
+                "name_ar": "المختبر",
+                "archived": false,
+                "open_tasks": 2,
+                "department_id": "00000000-0000-0000-0000-0000000000d1",
+                "overdue_tasks": 0,
+                "reports_pending": 0
+            }
+        ],
+        "generated_at": "2026-11-23T09:06:46.063891+00:00",
+        "period_state": "frozen",
+        "schema_version": 1,
+        "organization_id": "00000000-0000-0000-0000-0000000000a0"
+    }
+}

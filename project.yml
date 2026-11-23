@@ -20,6 +20,12 @@ settings:
     LOCALIZATION_PREFERS_STRING_CATALOGS: YES
     SWIFT_EMIT_LOC_STRINGS: YES
     DEAD_CODE_STRIPPING: YES
+packages:
+  # Official Supabase Swift SDK, pinned exactly (D-19). Transitive versions are
+  # locked by Config/Package.resolved, which CI installs into the generated project.
+  Supabase:
+    url: https://github.com/supabase/supabase-swift
+    exactVersion: 2.55.7
 configFiles:
   Debug: Config/Debug.xcconfig
   Release: Config/Release.xcconfig
@@ -32,6 +38,9 @@ targets:
         excludes:
           - "**/*.md"
           - "Resources/Info.plist"
+    dependencies:
+      - package: Supabase
+        product: Supabase
     settings:
       base:
         PRODUCT_NAME: HadCtrl

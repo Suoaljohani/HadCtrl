@@ -333,6 +333,7 @@ struct NewTaskSheet: View {
 
 struct AchievementsListView: View {
     let dependencies: DependencyContainer
+    @Environment(PeriodSelection.self) private var periods
     @State private var state: LoadState<[AchievementItem]> = .idle
 
     var body: some View {
@@ -356,9 +357,15 @@ struct AchievementsListView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
-        .task {
+        // Follows the period chosen on the dashboard; reloads when it changes.
+        .task(id: periods.selectedID) {
+            await periods.loadIfNeeded()
+            guard let periodID = periods.selectedID else {
+                if periods.hasLoaded { state = .loaded([]) }
+                return
+            }
             state = .loading(previous: nil)
-            do { state = .loaded(try await dependencies.achievements.achievements(periodID: MockStore.Fixture.november)) }
+            do { state = .loaded(try await dependencies.achievements.achievements(periodID: periodID)) }
             catch { state = .failed(error as? AppError ?? .network(offline: false), previous: nil) }
         }
     }

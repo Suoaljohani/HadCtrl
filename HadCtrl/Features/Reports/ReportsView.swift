@@ -26,6 +26,7 @@ struct ReportsView: View {
     }
 
     let dependencies: DependencyContainer
+    @Environment(PeriodSelection.self) private var periods
     @State private var state: LoadState<[ReportItem]> = .idle
     @State private var filter: Filter = .all
 
@@ -67,9 +68,15 @@ struct ReportsView: View {
         .scrollContentBackground(.hidden)
         .background(Color.hcBackground)
         .navigationTitle(String(localized: "التقارير"))
-        .task {
+        // Follows the period chosen on the dashboard; reloads when it changes.
+        .task(id: periods.selectedID) {
+            await periods.loadIfNeeded()
+            guard let periodID = periods.selectedID else {
+                if periods.hasLoaded { state = .loaded([]) }
+                return
+            }
             state = .loading(previous: nil)
-            do { state = .loaded(try await dependencies.reports.reports(periodID: MockStore.Fixture.november)) }
+            do { state = .loaded(try await dependencies.reports.reports(periodID: periodID)) }
             catch { state = .failed(error as? AppError ?? .network(offline: false), previous: nil) }
         }
     }

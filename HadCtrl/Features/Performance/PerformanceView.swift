@@ -4,6 +4,7 @@ import SwiftUI
 /// "how is it measured?" explanation on every row (spec §10, §11).
 struct PerformanceView: View {
     let dependencies: DependencyContainer
+    @Environment(PeriodSelection.self) private var periods
     @State private var state: LoadState<[IndicatorSummary]> = .idle
     @State private var explaining: IndicatorSummary?
     private let style = NumberStyle()
@@ -54,9 +55,15 @@ struct PerformanceView: View {
             }
             .presentationDetents([.medium, .large])
         }
-        .task {
+        // Follows the period chosen on the dashboard; reloads when it changes.
+        .task(id: periods.selectedID) {
+            await periods.loadIfNeeded()
+            guard let periodID = periods.selectedID else {
+                if periods.hasLoaded { state = .loaded([]) }
+                return
+            }
             state = .loading(previous: nil)
-            do { state = .loaded(try await dependencies.indicators.indicators(periodID: MockStore.Fixture.november)) }
+            do { state = .loaded(try await dependencies.indicators.indicators(periodID: periodID)) }
             catch { state = .failed(error as? AppError ?? .network(offline: false), previous: nil) }
         }
     }

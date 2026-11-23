@@ -29,9 +29,22 @@ PY
 xcrun simctl boot "$sim_id" 2>/dev/null || true
 xcrun simctl bootstatus "$sim_id" -b
 
-xcodebuild -resolvePackageDependencies -project HadCtrl.xcodeproj -scheme HadCtrl
+lock="HadCtrl.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+if [ -f Config/Package.resolved ]; then
+  # Locked: fail instead of silently picking different versions.
+  xcodebuild -resolvePackageDependencies -project HadCtrl.xcodeproj -scheme HadCtrl \
+    -onlyUsePackageVersionsFromResolvedFile -disableAutomaticPackageResolution
+  locked_flags=(-onlyUsePackageVersionsFromResolvedFile -disableAutomaticPackageResolution)
+else
+  xcodebuild -resolvePackageDependencies -project HadCtrl.xcodeproj -scheme HadCtrl
+  locked_flags=()
+fi
+mkdir -p "$RUNNER_TEMP/swiftpm"
+cp "$lock" "$RUNNER_TEMP/swiftpm/Package.resolved"
+echo "----- Package.resolved -----"; cat "$lock"; echo "----------------------------"
 xcodebuild test -project HadCtrl.xcodeproj -scheme HadCtrl \
   -configuration Debug -destination "platform=iOS Simulator,id=$sim_id" \
   -derivedDataPath "$RUNNER_TEMP/HadCtrlDerivedData" \
   -resultBundlePath "$RUNNER_TEMP/HadCtrlTests.xcresult" \
+  "${locked_flags[@]}" \
   CODE_SIGNING_ALLOWED=NO

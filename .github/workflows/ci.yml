@@ -60,6 +60,7 @@ jobs:
           sudo xcode-select --switch "$app/Contents/Developer"
           xcodebuild -version
           xcrun simctl list runtimes
+          swift --version
       - name: Install XcodeGen ${{ env.HC_XCODEGEN_VERSION }}
         shell: bash
         run: |
@@ -74,7 +75,7 @@ jobs:
         run: |
           set -euo pipefail
           xcodegen --version
-          xcodegen generate --spec project.yml
+          bash scripts/generate-project.sh
           xcodebuild -list -project HadCtrl.xcodeproj | tee "$RUNNER_TEMP/xcodebuild-list.txt"
           grep -q 'HadCtrl' "$RUNNER_TEMP/xcodebuild-list.txt"
           test -f HadCtrl.xcodeproj/xcshareddata/xcschemes/HadCtrl.xcscheme
@@ -103,5 +104,6 @@ jobs:
           path: |
             HadCtrl.xcodeproj
             ${{ runner.temp }}/xcodebuild-list.txt
+            ${{ runner.temp }}/swiftpm/Package.resolved
           if-no-files-found: error
           retention-days: 14

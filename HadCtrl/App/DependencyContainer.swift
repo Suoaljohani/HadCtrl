@@ -23,19 +23,25 @@ struct BackendConfiguration: Sendable, Equatable {
     let publishableKey: String
 
     static func fromBundle(_ bundle: Bundle = .main) -> Result<BackendConfiguration, AppError> {
-        guard let urlString = bundle.object(forInfoDictionaryKey: "HCSupabaseURL") as? String,
-              let url = URL(string: urlString), url.scheme == "https", url.host != nil else {
-            return .failure(.configuration("HCSupabaseURL missing or not https"))
-        }
+        let urlString = (bundle.object(forInfoDictionaryKey: "HCSupabaseURL") as? String) ?? ""
         let key = (bundle.object(forInfoDictionaryKey: "HCSupabasePublishableKey") as? String) ?? ""
+        if let error = validate(urlString: urlString, key: key) { return .failure(error) }
+        return .success(BackendConfiguration(url: URL(string: urlString)!, publishableKey: key))
+    }
+
+    /// Returns the reason a URL/key pair must not be used by the client, or nil if acceptable.
+    static func validate(urlString: String, key: String) -> AppError? {
+        guard let url = URL(string: urlString), url.scheme == "https", url.host != nil else {
+            return .configuration("HCSupabaseURL missing or not https")
+        }
         guard !key.isEmpty, !key.hasPrefix("$(") else {
-            return .failure(.configuration("HCSupabasePublishableKey not supplied"))
+            return .configuration("HCSupabasePublishableKey not supplied")
         }
         // Refuse anything that looks like a secret/service key (spec §22, §36).
         guard !key.hasPrefix("sb_secret_"), !key.localizedCaseInsensitiveContains("service_role") else {
-            return .failure(.configuration("A secret key was supplied to the client; refusing to start"))
+            return .configuration("A secret key was supplied to the client; refusing to start")
         }
-        return .success(BackendConfiguration(url: url, publishableKey: key))
+        return nil
     }
 }
 
@@ -65,21 +71,32 @@ struct DependencyContainer: Sendable {
                                        reports: mocks.reports, indicators: mocks.indicators,
                                        achievements: mocks.achievements, mockStore: store)
         case .production:
-            let backend = UnavailableBackend(error: {
-                switch BackendConfiguration.fromBundle() {
-                case .success: return AppError.configuration("Supabase client not yet linked in this build")
-                case .failure(let e): return e
-                }
-            }())
-            return DependencyContainer(environment: environment, clock: clock, session: backend, dashboard: backend,
-                                       departments: backend, tasks: backend, reports: backend, indicators: backend,
-                                       achievements: backend, mockStore: nil)
+            switch BackendConfiguration.fromBundle() {
+            case .failure(let error):
+                // No publishable key / bad URL: show the configuration error, never demo data (AC-031).
+                let unavailable = UnavailableBackend(error: error)
+                return DependencyContainer(environment: environment, clock: clock, session: unavailable,
+                                           dashboard: unavailable, departments: unavailable, tasks: unavailable,
+                                           reports: unavailable, indicators: unavailable, achievements: unavailable,
+                                           mockStore: nil)
+            case .success(let config):
+                let backend = SupabaseBackend(client: SupabaseClientFactory.make(config), cache: SessionCache(),
+                                              calendar: .riyadh)
+                let pending = PendingSliceRepository()
+                return DependencyContainer(environment: environment, clock: clock,
+                                           session: SupabaseSessionRepository(backend: backend),
+                                           dashboard: SupabaseDashboardRepository(backend: backend),
+                                           departments: SupabaseDepartmentsRepository(backend: backend),
+                                           tasks: SupabaseTasksRepository(backend: backend, clock: clock),
+                                           reports: pending, indicators: pending, achievements: pending,
+                                           mockStore: nil)
+            }
         }
     }
 }
 
-/// Production placeholder until the Supabase adapters land (G3 client slice).
-/// It surfaces a real configuration error instead of showing demo data.
+/// Used when the backend configuration is missing or invalid: every call
+/// surfaces the configuration error instead of showing demo data.
 struct UnavailableBackend: SessionRepository, DashboardRepository, DepartmentsRepository, TasksRepository,
                            ReportsRepository, IndicatorsRepository, AchievementsRepository {
     let error: AppError

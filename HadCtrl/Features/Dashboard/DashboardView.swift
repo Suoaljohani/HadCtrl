@@ -8,6 +8,7 @@ struct DashboardView: View {
     let open: (AppRoute) -> Void
     let present: (SheetRoute) -> Void
     @State private var model: DashboardViewModel
+    @Environment(PeriodSelection.self) private var periods
     private let style = NumberStyle()
 
     init(context: UserContext, dependencies: DependencyContainer, open: @escaping (AppRoute) -> Void, present: @escaping (SheetRoute) -> Void) {
@@ -43,7 +44,10 @@ struct DashboardView: View {
                 }
             }
         }
-        .task { await model.start() }
+        .task { await periods.loadIfNeeded() }
+        .onChange(of: periods.selectedID, initial: true) { _, id in
+            if let id, id != model.selectedPeriodID { model.select(periodID: id) }
+        }
     }
 
     private var header: some View {
@@ -59,13 +63,13 @@ struct DashboardView: View {
     }
 
     @ViewBuilder private var periodPicker: some View {
-        if !model.periods.isEmpty {
+        if !periods.periods.isEmpty {
             Menu {
-                ForEach(model.periods) { period in
-                    Button(period.title) { model.select(periodID: period.id) }
+                ForEach(periods.periods) { period in
+                    Button(period.title) { periods.selectedID = period.id }
                 }
             } label: {
-                Label(model.periods.first { $0.id == model.selectedPeriodID }?.title ?? String(localized: "الفترة"),
+                Label(periods.selected?.title ?? String(localized: "الفترة"),
                       systemImage: "calendar")
                     .font(.hcFootnote)
             }
@@ -74,10 +78,13 @@ struct DashboardView: View {
     }
 
     @ViewBuilder private var content: some View {
-        if let error = model.periodsError {
+        if let error = periods.error {
             StateView(kind: .error, title: String(localized: "تعذر تحميل الفترات"), message: error.userMessage) {
-                Task { await model.start() }
+                Task { await periods.reload() }
             }
+        } else if periods.hasLoaded && periods.periods.isEmpty {
+            StateView(kind: .empty, title: String(localized: "لا توجد فترات تقارير معرّفة بعد"),
+                      message: String(localized: "يُنشئ مدير النظام الفترات قبل بدء المتابعة."))
         } else {
             switch model.state {
             case .idle, .loading:
@@ -131,8 +138,13 @@ struct DashboardView: View {
                     Text(String(localized: "لا حكم إجمالي")).font(.hcTitle).foregroundStyle(Color.hcSecondaryText)
                 }
             }
-            Text(String(localized: "تغطية البيانات \(style.percent(s.coverage)) · الأقسام المحدّثة \(s.departmentsUpdated) من \(s.departmentsTotal)"))
-                .font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
+            if let updated = s.departmentsUpdated, let total = s.departmentsTotal {
+                Text(String(localized: "تغطية البيانات \(style.percent(s.coverage)) · الأقسام المحدّثة \(updated) من \(total)"))
+                    .font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
+            } else {
+                Text(String(localized: "تغطية البيانات \(style.percent(s.coverage))"))
+                    .font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
+            }
             Text(String(localized: "تُحسب من درجات المؤشرات المعتمدة فقط بأوزانها؛ لا يصدر حكم إجمالي تحت تغطية ٨٠٪."))
                 .font(.hcCaption).foregroundStyle(Color.hcSecondaryText)
         }
@@ -200,8 +212,11 @@ struct DepartmentPulseCard: View {
             HStack {
                 VStack(alignment: .leading, spacing: Spacing.xxs) {
                     Text(pulse.department.nameAr).font(.hcHeadline).foregroundStyle(Color.hcInk)
-                    Text(pulse.department.headName ?? String(localized: "لا يوجد رئيس نشط"))
-                        .font(.hcFootnote).foregroundStyle(pulse.department.headName == nil ? Color.hcWarning : Color.hcSecondaryText)
+                    if let head = pulse.department.headName {
+                        Text(head).font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
+                    } else if pulse.department.headVisible {
+                        Text(String(localized: "لا يوجد رئيس نشط")).font(.hcFootnote).foregroundStyle(Color.hcWarning)
+                    }
                 }
                 Spacer()
                 if pulse.overdueTasks > 0 {

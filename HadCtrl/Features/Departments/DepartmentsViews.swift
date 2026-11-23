@@ -30,8 +30,11 @@ struct DepartmentsView: View {
                                 Text(dept.code).font(.hcCaption).foregroundStyle(Color.hcSecondaryText)
                                     .environment(\.layoutDirection, .leftToRight)
                             }
-                            Text(dept.headName ?? String(localized: "لا يوجد رئيس نشط"))
-                                .font(.hcFootnote).foregroundStyle(dept.headName == nil ? Color.hcWarning : Color.hcSecondaryText)
+                            if let head = dept.headName {
+                                Text(head).font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
+                            } else if dept.headVisible {
+                                Text(String(localized: "لا يوجد رئيس نشط")).font(.hcFootnote).foregroundStyle(Color.hcWarning)
+                            }
                         }
                         .accessibilityElement(children: .combine)
                     }

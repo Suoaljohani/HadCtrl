@@ -57,6 +57,9 @@ struct Department: Sendable, Hashable, Identifiable {
     let nameAr: String
     let category: DepartmentCategory
     let headName: String?
+    /// False when the caller may not read this department's memberships (RLS);
+    /// then a missing head is unknown, not "no active head".
+    var headVisible: Bool = true
     let isArchived: Bool
 }
 
@@ -250,8 +253,9 @@ struct DashboardSnapshot: Sendable, Equatable {
     let measuredScore: Decimal?
     let coverage: Decimal
     let verdict: CoverageResult.Verdict
-    let departmentsUpdated: Int
-    let departmentsTotal: Int
+    /// Departments with updated data; nil when the source does not report it.
+    let departmentsUpdated: Int?
+    let departmentsTotal: Int?
     let readings: [DashboardReading]
     let actions: [ActionItem]
     let departments: [DepartmentPulse]

@@ -8,7 +8,7 @@
 
 | Input | Where it goes | Blocks |
 |---|---|---|
-| Supabase **publishable** key (`sb_publishable_…`) | repo variable `HC_SUPABASE_PUBLISHABLE_KEY`, or untracked `Config/Local.xcconfig` | real sign-in in the app (production build shows a config error until then) |
+| Supabase **publishable** key (`sb_publishable_…`) | untracked `Config/Local.xcconfig` (`HC_SUPABASE_PUBLISHABLE_KEY = …`) for local runs; GitHub variable `HC_SUPABASE_PUBLISHABLE_KEY` for release builds | real sign-in. A Release build without it shows a configuration error, never demo data. The app refuses secret/service keys. |
 | First director account | Supabase Auth invite, then the bootstrap SQL in RUNBOOK §2 | any real data |
 | Real departments (names, codes, heads) | admin SQL or the future admin screen | operational use |
 | Apple Team ID, bundle id | GitHub environment `ios-signing` variables `HC_APPLE_TEAM_ID`, `HC_APP_BUNDLE_ID` | G7 IPA |
@@ -19,4 +19,5 @@ Never paste keys, passwords or certificates into chat or commit them. `scripts/c
 
 ## Local development
 - Database: `sudo -u postgres ./scripts/db-test.sh` (needs a local PostgreSQL 16+). It drops and recreates `hadctrl_test` on localhost only.
-- iOS (on a Mac): `brew install xcodegen` (2.43.0), then `xcodegen generate`, open `HadCtrl.xcodeproj`, and run the `HadCtrl` scheme. Debug runs in `demo` mode with labelled synthetic data; set `HC_DEMO_USER=head` to see a department head's view.
+- iOS (on a Mac): `brew install xcodegen` (2.43.0), then `xcodegen generate`, open `HadCtrl.xcodeproj`, and run the `HadCtrl` scheme. Debug runs in `demo` mode with labelled synthetic data; set `HC_DEMO_USER=head` to see a department head's view. To run against Supabase, set the scheme's `HC_APP_ENV=production` and provide the key in `Config/Local.xcconfig`.
+- Swift packages: `scripts/generate-project.sh` installs `Config/Package.resolved`. To change a dependency, edit `project.yml`, resolve on a Mac, and commit the new `Package.resolved` with a DECISIONS entry.

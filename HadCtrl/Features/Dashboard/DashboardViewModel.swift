@@ -6,10 +6,8 @@ import Observation
 @MainActor
 @Observable
 final class DashboardViewModel {
-    private(set) var periods: [ReportingPeriod] = []
     private(set) var selectedPeriodID: UUID?
     private(set) var state: LoadState<DashboardSnapshot> = .idle
-    private(set) var periodsError: AppError?
 
     private let repository: DashboardRepository
     private let gate = LatestRequestGate()
@@ -17,23 +15,6 @@ final class DashboardViewModel {
 
     init(repository: DashboardRepository) {
         self.repository = repository
-    }
-
-    func start() async {
-        guard periods.isEmpty else { return }
-        do {
-            periods = try await repository.periods()
-            periodsError = nil
-            if let first = periods.first(where: { $0.state == .open }) ?? periods.first {
-                select(periodID: first.id)
-            } else {
-                state = .loaded(emptySnapshotPlaceholder())
-            }
-        } catch let error as AppError {
-            periodsError = error
-        } catch {
-            periodsError = .network(offline: false)
-        }
     }
 
     func select(periodID: UUID) {
@@ -75,11 +56,5 @@ final class DashboardViewModel {
         case .failure(let error):
             state = .failed(error, previous: nil)
         }
-    }
-
-    private func emptySnapshotPlaceholder() -> DashboardSnapshot {
-        DashboardSnapshot(generatedAt: Date(), periodID: UUID(), organizationID: UUID(), measuredScore: nil, coverage: 0,
-                          verdict: .insufficientData, departmentsUpdated: 0, departmentsTotal: 0, readings: [],
-                          actions: [], departments: [], isDemoData: false)
     }
 }

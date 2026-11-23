@@ -15,6 +15,14 @@ struct MainTabView: View {
     @State private var selection: AppTab = .home
     @State private var paths: [AppTab: NavigationPath] = Dictionary(uniqueKeysWithValues: AppTab.allCases.map { ($0, NavigationPath()) })
     @State private var sheet: SheetRoute?
+    /// One per signed-in session: discarded with this view on sign-out (AC-025).
+    @State private var periodSelection: PeriodSelection
+
+    init(context: UserContext, dependencies: DependencyContainer) {
+        self.context = context
+        self.dependencies = dependencies
+        _periodSelection = State(initialValue: PeriodSelection(repository: dependencies.dashboard))
+    }
 
     var body: some View {
         TabView(selection: $selection) {
@@ -34,6 +42,7 @@ struct MainTabView: View {
                 ReportsView(dependencies: dependencies)
             }
         }
+        .environment(periodSelection)
         .sheet(item: $sheet) { route in
             switch route {
             case .newTask(let dept):
