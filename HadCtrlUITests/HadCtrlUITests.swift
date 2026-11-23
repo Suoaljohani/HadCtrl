@@ -100,7 +100,8 @@ final class HadCtrlUITests: XCTestCase {
         XCTAssertTrue(password.waitForExistence(timeout: 5), "temporary password shown once")
         app.buttons["employee.done"].tap()
         XCTAssertFalse(password.waitForExistence(timeout: 2), "password screen gone after «تم»")
-        XCTAssertTrue(app.anyElement(containing: "موظف جديد").waitForExistence(timeout: 5), "new employee listed")
+        // The employees section is below the departments in a lazy List: scroll to it.
+        app.scrollToHittable(app.anyElement(containing: "موظف جديد"))
     }
 
     func testLargeTextDoesNotHideDecisions() {
