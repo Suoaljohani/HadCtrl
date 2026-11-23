@@ -90,9 +90,9 @@ struct IndicatorRow: View {
                 Spacer()
                 IndicatorOutcomeBadge(outcome: item.outcome.outcome)
             }
-            Text("\(item.departmentName) · \(item.code)").font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
+            Text(verbatim: "\(item.departmentName) · \(item.code)").font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
             HStack(spacing: Spacing.m) {
-                Text(String(localized: "الفعلي: \(item.actual.map { style.format($0) } ?? String(localized: "لم يُحدّث")) \(item.unit)"))
+                Text(String(localized: "الفعلي: \(item.actual.map { "\(style.format($0)) \(item.unit)" } ?? String(localized: "لم يُحدّث"))"))
                 Text(IndicatorText.targetLine(item, style: style))
             }
             .font(.hcCallout).monospacedDigit()
@@ -243,7 +243,7 @@ struct IndicatorDetailView: View {
             Section {
                 VStack(alignment: .leading, spacing: Spacing.xs) {
                     Text(s.title).font(.hcTitle).foregroundStyle(Color.hcInk)
-                    Text("\(s.departmentName) · \(s.code) · \(detail.period.title)").font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
+                    Text(verbatim: "\(s.departmentName) · \(s.code) · \(detail.period.title)").font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
                     HStack {
                         IndicatorOutcomeBadge(outcome: s.outcome.outcome).accessibilityIdentifier("indicatorOutcome")
                         if detail.period.state == .frozen {
@@ -373,7 +373,9 @@ struct IndicatorDetailView: View {
             let pct: String
             if case .success(let a) = IndicatorScoring.actual(of: m.reading, isRatio: true) { pct = style.percent(a) }
             else { pct = "—" }
-            return "\(style.format(n)) ÷ \(style.format(d)) = \(pct)"
+            // Right-to-left marks keep the operators between their numbers in an RTL line.
+            let rlm = "\u{200F}"
+            return "\(rlm)\(style.format(n)) \(rlm)÷ \(style.format(d)) \(rlm)= \(pct)"
         }
         return m.value.map { "\(style.format($0)) \(detail.version?.unit ?? "")" } ?? "—"
     }

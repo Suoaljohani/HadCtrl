@@ -229,7 +229,7 @@ struct AchievementDetailView: View {
             Section {
                 VStack(alignment: .leading, spacing: Spacing.xs) {
                     Text(d.item.title).font(.hcTitle).foregroundStyle(Color.hcInk)
-                    Text("\(d.item.departmentName) · \(d.item.periodTitle)").font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
+                    Text(verbatim: "\(d.item.departmentName) · \(d.item.periodTitle)").font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
                     StatusBadge(text: d.item.status.title, tone: d.item.status.tone)
                         .accessibilityIdentifier("achievementStatusBadge")
                 }

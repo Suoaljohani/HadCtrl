@@ -235,7 +235,7 @@ struct GoalDetailView: View {
             Section {
                 VStack(alignment: .leading, spacing: Spacing.xs) {
                     Text(s.title).font(.hcTitle).foregroundStyle(Color.hcInk)
-                    Text("\(s.departmentName) · \(HCFormat.date(s.startAt)) – \(HCFormat.date(s.dueAt))")
+                    Text(verbatim: "\(s.departmentName) · \(HCFormat.date(s.startAt)) – \(HCFormat.date(s.dueAt))")
                         .font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
                     HStack {
                         StatusBadge(text: s.lifecycle.title, tone: s.lifecycle.tone).accessibilityIdentifier("goalStatusBadge")
@@ -284,7 +284,7 @@ struct GoalDetailView: View {
                     ForEach(g.milestones) { m in
                         VStack(alignment: .leading, spacing: Spacing.xxs) {
                             HStack {
-                                Text("\(m.ordinal). \(m.title)").font(.hcHeadline)
+                                Text(verbatim: "\(m.ordinal). \(m.title)").font(.hcHeadline)
                                 Spacer()
                                 Text(style.percent(m.weight)).font(.hcCaption).monospacedDigit()
                             }

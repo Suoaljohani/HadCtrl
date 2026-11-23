@@ -171,9 +171,9 @@ private struct DashboardHeader: View {
         HStack(alignment: .center, spacing: Spacing.s) {
             InitialsAvatar(name: context.displayName)
             VStack(alignment: .leading, spacing: 2) {
-                Text("\(greeting)، \(context.displayName)")
+                Text(verbatim: "\(greeting)، \(context.displayName)")
                     .font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
-                    .lineLimit(1)
+                    .lineLimit(2)
                 Text(context.organizationName)
                     .font(.hcTitle).foregroundStyle(Color.hcInk)
                     .fixedSize(horizontal: false, vertical: true)
@@ -189,13 +189,17 @@ private struct DashboardHeader: View {
 /// Today's date and the period selector as one quiet control row.
 private struct PeriodBar: View {
     let periods: PeriodSelection
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
-        HStack(spacing: Spacing.s) {
+        let layout = typeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.s))
+            : AnyLayout(HStackLayout(spacing: Spacing.s))
+        layout {
             Label(HCFormat.date(Date()), systemImage: "calendar")
                 .font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
                 .labelStyle(.titleAndIcon)
-            Spacer(minLength: 0)
+            if !typeSize.isAccessibilitySize { Spacer(minLength: 0) }
             if !periods.periods.isEmpty {
                 Menu {
                     ForEach(periods.periods) { period in
@@ -291,10 +295,18 @@ private struct PulseCard: View {
             ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.l))
             : AnyLayout(HStackLayout(alignment: .center, spacing: Spacing.l))
         VStack(alignment: .leading, spacing: Spacing.m) {
-            HStack(alignment: .firstTextBaseline) {
-                Text(String(localized: "النتيجة المقاسة للمؤشرات")).font(.hcHeadline).foregroundStyle(Color.hcInk)
-                Spacer(minLength: Spacing.xs)
-                StatusBadge(text: s.verdict.title, tone: s.verdict.tone)
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .firstTextBaseline) {
+                    Text(String(localized: "النتيجة المقاسة للمؤشرات")).font(.hcHeadline).foregroundStyle(Color.hcInk)
+                        .fixedSize()
+                    Spacer(minLength: Spacing.xs)
+                    StatusBadge(text: s.verdict.title, tone: s.verdict.tone).fixedSize()
+                }
+                VStack(alignment: .leading, spacing: Spacing.xs) {
+                    Text(String(localized: "النتيجة المقاسة للمؤشرات")).font(.hcHeadline).foregroundStyle(Color.hcInk)
+                        .fixedSize(horizontal: false, vertical: true)
+                    StatusBadge(text: s.verdict.title, tone: s.verdict.tone)
+                }
             }
             layout {
                 ScoreRing(fraction: score.map { fraction($0) }, tone: s.verdict.tone == .neutral ? .info : s.verdict.tone, lineWidth: 11) {
@@ -359,7 +371,7 @@ struct ActionRow: View {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(action.title).font(.hcHeadline).foregroundStyle(Color.hcInk)
                         .multilineTextAlignment(.leading)
-                    Text("\(action.departmentName) · \(action.reason)").font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
+                    Text(verbatim: "\(action.departmentName) · \(action.reason)").font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
                     if let due = action.dueAt {
                         Label(String(localized: "الموعد \(HCFormat.date(due))"), systemImage: "clock")
                             .font(.hcCaption.weight(.semibold)).foregroundStyle(tone.color)

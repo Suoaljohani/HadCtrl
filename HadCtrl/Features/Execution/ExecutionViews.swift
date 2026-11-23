@@ -95,7 +95,7 @@ struct TaskRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.xxs) {
             Text(task.title).font(.hcHeadline).foregroundStyle(Color.hcInk)
-            Text("\(task.departmentName) · \(task.assigneeName ?? String(localized: "بلا مسؤول"))")
+            Text(verbatim: "\(task.departmentName) · \(task.assigneeName ?? String(localized: "بلا مسؤول"))")
                 .font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
             HStack(spacing: Spacing.xs) {
                 StatusBadge(text: task.status.title, tone: task.status.tone)

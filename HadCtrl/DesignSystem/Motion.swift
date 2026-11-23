@@ -108,7 +108,7 @@ extension View {
     /// Marks a row as the origin of the detail it opens.
     @ViewBuilder func hcZoomSource(_ id: some Hashable, in namespace: Namespace.ID?) -> some View {
         if #available(iOS 18.0, *), let namespace {
-            matchedTransitionSource(id: id, in: namespace) { $0.clipShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous)) }
+            matchedTransitionSource(id: id, in: namespace)
         } else {
             self
         }

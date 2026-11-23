@@ -45,7 +45,7 @@ struct ReportsView: View {
             Section {
                 Picker(String(localized: "التصفية"), selection: $filter) {
                     ForEach(Filter.allCases) { f in
-                        Text("\(f.title) (\((model.state.value ?? []).filter { departmentID == nil || $0.departmentID == departmentID }.filter(f.matches).count))").tag(f)
+                        Text(verbatim: "\(f.title) (\((model.state.value ?? []).filter { departmentID == nil || $0.departmentID == departmentID }.filter(f.matches).count))").tag(f)
                     }
                 }
             }
@@ -115,7 +115,7 @@ struct ReportRow: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.xxs) {
-            Text("\(report.templateName) — \(report.departmentName)").font(.hcHeadline)
+            Text(verbatim: "\(report.templateName) — \(report.departmentName)").font(.hcHeadline)
             HStack(spacing: Spacing.xs) {
                 StatusBadge(text: report.status.title, tone: report.status.tone)
                 if let onTime = report.submittedOnTime {
@@ -188,7 +188,7 @@ struct ReportDetailView: View {
             Section {
                 VStack(alignment: .leading, spacing: Spacing.xs) {
                     Text(detail.report.templateName).font(.hcTitle).foregroundStyle(Color.hcInk)
-                    Text("\(detail.report.departmentName) · \(detail.report.periodTitle)")
+                    Text(verbatim: "\(detail.report.departmentName) · \(detail.report.periodTitle)")
                         .font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
                     HStack {
                         StatusBadge(text: detail.report.status.title, tone: detail.report.status.tone)

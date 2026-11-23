@@ -101,7 +101,7 @@ struct PersonRow: View {
             }
             if let title = person.jobTitle { Text(title).font(.hcFootnote).foregroundStyle(Color.hcSecondaryText) }
             ForEach(Array(person.assignments.enumerated()), id: \.offset) { _, a in
-                Text("\(a.role == .head ? String(localized: "رئيس") : String(localized: "منسق")) — \(a.departmentName)\(a.isPrimary ? String(localized: " (أساسي)") : "")")
+                Text(verbatim: "\(a.role == .head ? String(localized: "رئيس") : String(localized: "منسق")) — \(a.departmentName)\(a.isPrimary ? String(localized: " (أساسي)") : "")")
                     .font(.hcFootnote)
             }
             if person.orgRoles.contains(.hospitalDirector) { Text(String(localized: "مدير المستشفى")).font(.hcFootnote) }
