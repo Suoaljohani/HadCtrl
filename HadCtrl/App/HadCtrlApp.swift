@@ -12,11 +12,22 @@ struct HadCtrlApp: App {
         _session = State(initialValue: SessionStore(repository: deps.session))
     }
 
+    /// Screenshot runs force an appearance; never honoured in production.
+    private static func forcedScheme(_ env: AppEnvironment) -> ColorScheme? {
+        guard env.usesMockData else { return nil }
+        switch ProcessInfo.processInfo.environment["HC_FORCE_SCHEME"] {
+        case "dark": return .dark
+        case "light": return .light
+        default: return nil
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
             RootView(dependencies: dependencies)
                 .environment(session)
                 .tint(Color.hcPrimary)
+                .preferredColorScheme(Self.forcedScheme(dependencies.environment))
         }
         // iOS-scheduled refresh (D-30): reads the inbox, posts generic local alerts.
         .backgroundTask(.appRefresh(DeviceAlerts.refreshTaskID)) { [dependencies] in

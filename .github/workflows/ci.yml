@@ -94,6 +94,25 @@ jobs:
         run: |
           app=$(find "$RUNNER_TEMP/HadCtrlDerivedData/Build/Products" -name 'HadCtrl.app' -maxdepth 3 | head -1)
           bash scripts/check-no-secrets.sh "$app"
+      - name: Export screenshots for design review
+        if: always()
+        shell: bash
+        run: |
+          # Optional evidence: a failure here is reported but never hides a test result.
+          out="$RUNNER_TEMP/screens"; mkdir -p "$out"
+          if xcrun xcresulttool export attachments --path "$RUNNER_TEMP/HadCtrlTests.xcresult" --output-path "$out"; then
+            ls "$out" | head -100
+          else
+            echo "::warning::screenshot export failed (xcresulttool)"
+          fi
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: HadCtrl-screens-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/screens
+          if-no-files-found: warn
+          retention-days: 14
       - name: Upload test evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
