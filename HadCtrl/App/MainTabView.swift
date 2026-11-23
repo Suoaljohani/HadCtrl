@@ -4,6 +4,7 @@ import SwiftUI
 enum SheetRoute: Identifiable, Hashable {
     case newTask(departmentID: UUID?)
     case settings
+    case inbox
     var id: Self { self }
 }
 
@@ -17,11 +18,14 @@ struct MainTabView: View {
     @State private var sheet: SheetRoute?
     /// One per signed-in session: discarded with this view on sign-out (AC-025).
     @State private var periodSelection: PeriodSelection
+    @State private var inbox: InboxModel
+    @Environment(\.scenePhase) private var scenePhase
 
     init(context: UserContext, dependencies: DependencyContainer) {
         self.context = context
         self.dependencies = dependencies
         _periodSelection = State(initialValue: PeriodSelection(repository: dependencies.dashboard))
+        _inbox = State(initialValue: InboxModel(repository: dependencies.notifications))
     }
 
     var body: some View {
@@ -53,6 +57,19 @@ struct MainTabView: View {
                 }
             case .settings:
                 SettingsView(context: context, dependencies: dependencies)
+            case .inbox:
+                InboxView(model: inbox) { route in open(route) }
+            }
+        }
+        // No APNs (D-28): the unread count is refreshed while the app is open.
+        .task { await inbox.poll() }
+        .onChange(of: scenePhase) { _, phase in
+            switch phase {
+            case .active: Task { await inbox.refreshCount() }
+            case .background:
+                DeviceAlerts.markSeen()        // what was on screen needs no alert
+                DeviceAlerts.scheduleRefresh()
+            default: break
             }
         }
         .onChange(of: session.pendingRoute) { _, route in
@@ -86,6 +103,9 @@ struct MainTabView: View {
                             Label(String(localized: "الإعدادات"), systemImage: "person.crop.circle")
                         }
                         .accessibilityIdentifier("settingsButton")
+                    }
+                    ToolbarItem(placement: .topBarLeading) {
+                        InboxButton(model: inbox) { sheet = .inbox }
                     }
                 }
         }

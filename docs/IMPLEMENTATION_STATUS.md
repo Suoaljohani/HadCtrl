@@ -23,7 +23,8 @@
 ## Not done yet (in order)
 1. **G3 client (in progress):** supabase-swift 2.55.7 added. Session (sign-in, Keychain, restore, sign-out), dashboard (`dashboard_snapshot`), departments, tasks list/detail/create/transition are wired to Supabase. Contract tests decode real RPC output. Packages locked (`Config/Package.resolved`) and build green in CI (run #11). Key configured and director bootstrapped. Pending: a sign-in from the app itself on a simulator or device (needs the director's password, which is never shared with Claude).
 2. **G4–G5 client (built, CI pending):** Reports list/detail (draft, submit, approve/return/waive, review history), indicator detail (readings, entry with explicit not-applicable and correction reasons, approve/return), director definitions (report template + schedule, indicator) and period generation. Server part (migration 001300) applied to the hosted project; nightly pg_cron job active. Department detail tabs for goals/indicators/reports and achievements remain.
-3. **G6:** attachments (Storage policies, prepare/finalize), search, calendar, preferences sync, PDF/CSV export, in-app notification inbox, APNs worker.
+3. **In-app inbox (D-30, built, CI pending):** server producers applied to the hosted project (11 DB checks); bell + inbox screen, open-and-mark-read, mark all, polling, optional background local alerts.
+4. **G6:** attachments (Storage policies, prepare/finalize), search, calendar, preferences sync, PDF/CSV export. APNs sender only if a paid Apple account is added (D-28).
 4. **G7:** accessibility/VoiceOver audit, performance, deep links.
 5. **G8:** signing, IPA export and verification. Blocked on Apple inputs (see SETUP.md).
 

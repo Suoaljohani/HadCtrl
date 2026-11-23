@@ -15,12 +15,16 @@ Environment: Ubuntu 24.04 container, PostgreSQL 16.15, with the Supabase platfor
 | 60_dashboard (coverage/verdict, consistency, cross-department and cross-hospital non-leakage) | 13 | pass |
 | 70_admin (departments, employees, escalation rules) | 36 | pass |
 | 80_definitions (director-only templates, schedules, generation incl. frozen refusal, indicators with §11 rule rejection and atomicity, head submits on a new indicator) | 25 | pass |
+| 85_notifications (reading notifications, own-inbox RLS, mark all read, deadline reminders once per deadline) | 11 | pass |
 | 90_concurrency.sh (two sessions, same request_id) | 3 | pass |
-| **Total** | **244** | **pass, 0 failures** |
+| **Total** | **255** | **pass, 0 failures** |
 
 All checks run as the real `authenticated`/`anon` roles with a JWT `sub`, never as `service_role`.
 
-Limits: PostgreSQL 16 locally vs 17 on the hosted project. Storage (`storage.objects`) policies are not covered yet. ## Hosted project after migration 001300 (2026-11-23)
+Limits: PostgreSQL 16 locally vs 17 on the hosted project. Storage (`storage.objects`) policies are not covered yet. ## Hosted project after migration 001400 (2026-11-23)
+- Applied `notifications_inbox`. Fingerprint `1d9e71d77657fc93815bde37a58a424a` over 73 functions, identical locally and hosted. Anon executes no public function.
+
+## Hosted project after migration 001300 (2026-11-23)
 - Applied `definitions_admin`. Function fingerprint (excluding the local-only test shim `_shim_grant_new_functions`): `812dca3256cd78e6df427f4dcd1ac5c9` over 70 functions, identical locally and hosted.
 - Security advisor: no anon findings; `authenticated_security_definer_function_executable` now lists the 23 documented RPCs (accepted, D-18); leaked-password protection still off (owner setting).
 - `cron.job`: `hadctrl-daily`, `10 21 * * *`, active.

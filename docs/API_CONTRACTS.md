@@ -73,6 +73,11 @@ All director only (system admin and heads get `HC_FORBIDDEN`; another hospital g
 ### Client reads (RLS)
 `report_instances`, `report_template_versions`, `report_templates`, `report_revisions` (drafts only for the department), `report_reviews`, `indicator_definitions`, `indicator_definition_versions`, `indicator_measurements`. The applicable definition version for a period is the latest approved one whose `valid_from` is on or before the period end. A period's result uses only the approved reading; a submitted one is shown as pending.
 
+### Inbox (D-30, migration 001400)
+- Read: `notifications` (RLS: `recipient_id = auth.uid()`), newest first, max 100 per page. Columns `id, event_type, entity_type, entity_id, read_at, created_at`. Event types: task_* (assigned, submitted, returned, completed, due_soon, overdue), report_* (due_soon, overdue, returned, approved, submitted), extension_requested/decided, achievement_decided, decision_needed, measurement_submitted/approved/returned (entity_type `indicator`, entity_id = the measurement).
+- `mark_notification_read(p_notification_id) → timestamptz` (own rows only, else `HC_NOT_FOUND`); `mark_all_notifications_read() → int` (rows changed).
+- Producers: the RPCs above; trigger `indicator_measurements_notify` (submitted → active directors except the submitter; approved/returned → the submitter); `private.deadline_reminders()` from the nightly job (tasks → assignee; reports → the department's active heads; dedupe key includes the deadline date).
+
 ### Indicators (G5)
 - API-06 `submit_measurement(p_definition_version_id, p_period_id, p_request_id, p_value?, p_numerator?, p_denominator?, p_not_applicable_reason?, p_source_note?, p_correction_reason?)`: department head. Type-checked input. One open revision at a time. Replacing an approved value needs a correction reason. A frozen period accepts only corrections.
 - API-07 `decide_measurement(p_measurement_id, p_decision, p_expected_version, p_request_id, p_note?)`: director, not a department member, not the person who entered it. Approval supersedes the previous approved revision.

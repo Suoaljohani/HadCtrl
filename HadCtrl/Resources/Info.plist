@@ -42,6 +42,14 @@
 	<string>$(HC_SUPABASE_URL)</string>
 	<key>HCSupabasePublishableKey</key>
 	<string>$(HC_SUPABASE_PUBLISHABLE_KEY)</string>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>hadctrl.inbox.refresh</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>

@@ -68,6 +68,7 @@ final class SessionStore {
 
     func signOut() async {
         await repository.signOut()
+        await DeviceAlerts.reset()
         pendingRoute = nil
         phase = .signedOut(message: nil)
     }

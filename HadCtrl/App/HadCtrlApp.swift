@@ -18,6 +18,11 @@ struct HadCtrlApp: App {
                 .environment(session)
                 .tint(Color.hcPrimary)
         }
+        // iOS-scheduled refresh (D-30): reads the inbox, posts generic local alerts.
+        .backgroundTask(.appRefresh(DeviceAlerts.refreshTaskID)) { [dependencies] in
+            DeviceAlerts.scheduleRefresh()
+            await DeviceAlerts.deliverNew(using: dependencies.notifications)
+        }
     }
 }
 

@@ -135,6 +135,15 @@ final class HadCtrlUITests: XCTestCase {
         XCTAssertFalse(app.buttons["indicator.approve"].exists)
     }
 
+    /// The bell opens the inbox; tapping an item marks it read and opens the record (D-30).
+    func testInboxOpensRecord() {
+        let app = launch()
+        app.scrollToHittable(app.buttons["inboxButton"].firstMatch).tap()
+        app.scrollToHittable(app.anyElement(containing: "تقرير بانتظار مراجعتك")).tap()
+        app.expectBadge("reportStatusBadge", "مُسلّم")
+        XCTAssertTrue(app.buttons["report.approve"].waitForExistence(timeout: 5) || app.scrollToHittable(app.buttons["report.approve"]).exists)
+    }
+
     func testLargeTextDoesNotHideDecisions() {
         let app = launch(extraArgs: ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXL"])
         XCTAssertTrue(app.staticTexts["تحتاج قرارك"].waitForExistence(timeout: 10))
