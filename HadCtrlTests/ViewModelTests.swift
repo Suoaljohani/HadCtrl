@@ -121,6 +121,7 @@ struct ViewModelTests {
             }
             func signIn(email: String, password: String) async throws -> UserContext { throw AppError.cancelled }
             func signOut() async {}
+            func changePassword(_ newPassword: String) async throws -> UserContext { throw AppError.cancelled }
         }
         let store = SessionStore(repository: Empty())
         await store.restore()

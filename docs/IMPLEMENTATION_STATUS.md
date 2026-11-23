@@ -16,6 +16,7 @@
 - **Hosted Supabase:** all 11 migrations applied and verified against the tested build (TEST_REPORT, D-17).
 
 - **Hosted project bootstrapped (2026-11-23):** hospital (non-demo), first director (an existing profile was kept), current monthly period open. Verified as that user via the real RPCs: `my_context` returns `hospital_director`; `dashboard_snapshot` returns `insufficient_data` (no indicators yet). No departments yet.
+- **In-app administration (D-25):** Settings → «الأقسام والموظفون» (director and system admin): add departments, add employees with a one-time temporary password, forced password change at first sign-in. Server side applied to the hosted project and the `create-employee` function deployed; 36 DB checks; live refusal checks pass. Not yet exercised end-to-end from a real sign-in.
 - **G1 verified in CI (run #11):** simulator build, 42/42 unit tests, 5/5 UI tests.
 
 ## Not done yet (in order)

@@ -67,6 +67,14 @@ Binds a token to the caller only. A token that moves to another account is remov
 - API-13 `freeze_period(p_period_id, p_expected_version, p_reason, p_request_id)`: director. Writes an immutable `period_snapshots` row (approved measurements + report states + md5 hash).
 - `private.indicator_score(...)`: SQL mirror of `IndicatorScoring.score`; parity is tested.
 
+### Administration (D-25)
+- `create_department(p_organization_id, p_code, p_name_ar, p_category, p_request_id, p_name_en?, p_sort_order?)`: director or system admin. The code is upper-cased and must match `^[A-Z0-9][A-Z0-9_-]{0,15}$`, unique per hospital. Idempotent and audited.
+- `prepare_employee(p_organization_id, p_email, p_display_name, p_request_id, p_job_title?, p_org_role?, p_department_id?, p_department_role?, p_is_primary?)`: director or system admin. `org_role` ∈ member | executive_viewer | system_admin (system_admin requires a director caller; hospital_director is always refused). At most one active primary head per department. Writes a pending `account_provisioning` row.
+- Edge Function **`create-employee`** (POST JSON with the same fields plus `request_id`, user bearer token): returns `{user_id, account_created, temporary_password|null, replayed}`. Errors: `{code: HC_*, details, correlation_id}`. A replay never re-issues a password. An existing Auth user with that email is attached, not recreated.
+- Service role only: `provisioning_status`, `find_auth_user_id`, `complete_employee` (profile + `member` org role + optional org/department role, `must_change_password` for new accounts), `fail_provisioning`.
+- `mark_password_changed()`: clears the caller's `must_change_password` after `auth.update(password)`. `my_context.profile.must_change_password` drives the forced change screen.
+- `list_people(p_organization_id)`: director or system admin; people with org and department roles.
+
 ## Planned
 API-01 dashboard_snapshot · API-02 list_departments · API-03 get_department_detail · API-10 decide_achievement · API-11 prepare/finalize_attachment · API-12 search_all.
 

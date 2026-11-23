@@ -12,6 +12,8 @@ final class SessionStore {
         case noActiveMembership
         case configurationError(String)
         case ready(UserContext)
+        /// Account created with a temporary password: must set its own first (D-25).
+        case mustChangePassword(UserContext)
     }
 
     private(set) var phase: Phase = .checking
@@ -32,7 +34,7 @@ final class SessionStore {
         phase = .checking
         do {
             if let ctx = try await repository.restore() {
-                phase = ctx.orgRoles.isEmpty && ctx.departments.isEmpty ? .noActiveMembership : .ready(ctx)
+                phase = Self.phase(for: ctx)
             } else {
                 phase = .signedOut(message: nil)
             }
@@ -46,12 +48,22 @@ final class SessionStore {
     func signIn(email: String, password: String) async {
         do {
             let ctx = try await repository.signIn(email: email, password: password)
-            phase = ctx.orgRoles.isEmpty && ctx.departments.isEmpty ? .noActiveMembership : .ready(ctx)
+            phase = Self.phase(for: ctx)
         } catch let error as AppError {
             apply(error)
         } catch {
             phase = .signedOut(message: AppError.network(offline: false).userMessage)
         }
+    }
+
+    func changePassword(_ newPassword: String) async throws {
+        let ctx = try await repository.changePassword(newPassword)
+        phase = Self.phase(for: ctx)
+    }
+
+    private static func phase(for ctx: UserContext) -> Phase {
+        if ctx.orgRoles.isEmpty && ctx.departments.isEmpty { return .noActiveMembership }
+        return ctx.mustChangePassword ? .mustChangePassword(ctx) : .ready(ctx)
     }
 
     func signOut() async {

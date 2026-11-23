@@ -5,6 +5,9 @@
 - Publishable key `sb_publishable__q7R9…` in `Config/Shared.xcconfig` (supplied and approved by the owner; verified live that it is this project's enabled key and that signed-out calls are refused).
 - Brand: hospital logo and Janna LT in `Brand/` (Janna is bundled in the app under the license the owner confirmed).
 
+## Recommended in the Supabase dashboard
+- **Authentication → Providers → Email → Leaked password protection**: enable it (flagged by the security advisor). It rejects known-breached passwords when employees replace their temporary one.
+
 ## Still needed from the owner
 
 | Input | Where it goes | Blocks |

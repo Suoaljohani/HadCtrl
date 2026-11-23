@@ -8,6 +8,7 @@ struct MyContextDTO: Decodable, Sendable {
     struct Profile: Decodable, Sendable {
         let display_name: String
         let job_title: String?
+        let must_change_password: Bool?
     }
     struct Department: Decodable, Sendable {
         let department_id: UUID
@@ -43,7 +44,8 @@ struct MyContextDTO: Decodable, Sendable {
             departments: org.departments.map {
                 DepartmentScope(id: $0.department_id, nameAr: $0.name_ar, code: $0.code,
                                 roles: Set($0.roles.compactMap(DepartmentRole.init(rawValue:))))
-            })
+            },
+            mustChangePassword: profile?.must_change_password ?? false)
     }
 }
 
@@ -165,4 +167,46 @@ struct DashboardSnapshotDTO: Decodable, Sendable {
 struct RPCErrorDetailDTO: Decodable, Sendable {
     let fields: [String: String]?
     let current_version: Int?
+}
+
+struct CreatedDepartmentDTO: Decodable, Sendable {
+    let department_id: UUID
+    let code: String
+    let name_ar: String
+    let category: String
+}
+
+struct CreatedEmployeeDTO: Decodable, Sendable {
+    let user_id: UUID
+    let account_created: Bool
+    let temporary_password: String?
+}
+
+/// One row of list_people.
+struct PersonDTO: Decodable, Sendable {
+    struct Assignment: Decodable, Sendable {
+        let department_id: UUID
+        let name_ar: String
+        let code: String
+        let role: String
+        let is_primary: Bool
+    }
+    let user_id: UUID
+    let display_name: String
+    let job_title: String?
+    let active: Bool
+    let must_change_password: Bool
+    let org_roles: [String]
+    let departments: [Assignment]
+
+    func toDomain() -> PersonSummary {
+        PersonSummary(id: user_id, displayName: display_name, jobTitle: job_title, isActive: active,
+                      mustChangePassword: must_change_password,
+                      orgRoles: Set(org_roles.compactMap(OrgRole.init(rawValue:))),
+                      assignments: departments.compactMap { a in
+                          DepartmentRole(rawValue: a.role).map {
+                              PersonSummary.Assignment(departmentName: a.name_ar, role: $0, isPrimary: a.is_primary)
+                          }
+                      })
+    }
 }

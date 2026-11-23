@@ -9,7 +9,8 @@ struct MockRepositories: Sendable {
 
     var session: MockSessionRepository { MockSessionRepository(store: store, user: demoUser) }
     var dashboard: MockDashboardRepository { MockDashboardRepository(store: store, clock: clock) }
-    var departments: MockDepartmentsRepository { MockDepartmentsRepository() }
+    var departments: MockDepartmentsRepository { MockDepartmentsRepository(store: store) }
+    var admin: MockAdminRepository { MockAdminRepository(store: store, user: demoUser) }
     var tasks: MockTasksRepository { MockTasksRepository(store: store, user: demoUser) }
     var reports: MockReportsRepository { MockReportsRepository(clock: clock) }
     var indicators: MockIndicatorsRepository { MockIndicatorsRepository() }
@@ -45,6 +46,17 @@ enum MockDirectory {
         }
     }
 
+    static let people: [PersonSummary] = [
+        PersonSummary(id: F.director, displayName: "مدير المستشفى", jobTitle: "مدير المستشفى", isActive: true,
+                      mustChangePassword: false, orgRoles: [.hospitalDirector], assignments: []),
+        PersonSummary(id: F.headLab, displayName: "رئيس المختبر", jobTitle: "رئيس قسم", isActive: true, mustChangePassword: false,
+                      orgRoles: [.member], assignments: [.init(departmentName: "المختبر", role: .head, isPrimary: true)]),
+        PersonSummary(id: F.coordLab, displayName: "منسق المختبر", jobTitle: nil, isActive: true, mustChangePassword: false,
+                      orgRoles: [.member], assignments: [.init(departmentName: "المختبر", role: .coordinator, isPrimary: false)]),
+        PersonSummary(id: F.headTraining, displayName: "رئيس التدريب", jobTitle: "رئيس قسم", isActive: true, mustChangePassword: false,
+                      orgRoles: [.member], assignments: [.init(departmentName: "التدريب", role: .head, isPrimary: true)]),
+    ]
+
     static func name(of department: UUID) -> String {
         departments.first { $0.id == department }?.nameAr ?? "—"
     }
@@ -62,6 +74,7 @@ struct MockSessionRepository: SessionRepository {
         return MockDirectory.context(for: user)
     }
     func signOut() async {}
+    func changePassword(_ newPassword: String) async throws -> UserContext { MockDirectory.context(for: user) }
 }
 
 struct MockDashboardRepository: DashboardRepository {
@@ -129,8 +142,24 @@ struct MockDashboardRepository: DashboardRepository {
 }
 
 struct MockDepartmentsRepository: DepartmentsRepository {
-    func departments() async throws -> [Department] { MockDirectory.departments }
-    func assignees(departmentID: UUID) async throws -> [Assignee] { MockDirectory.assignees[departmentID] ?? [] }
+    let store: MockStore
+    func departments() async throws -> [Department] { await store.departments }
+    func assignees(departmentID: UUID) async throws -> [Assignee] { await store.assignees[departmentID] ?? [] }
+}
+
+struct MockAdminRepository: AdminRepository {
+    let store: MockStore
+    let user: UUID
+    func people() async throws -> [PersonSummary] {
+        try await store.consumeFailure()
+        return await store.people.sorted { $0.displayName < $1.displayName }
+    }
+    func createDepartment(_ draft: NewDepartmentDraft, requestID: UUID) async throws -> Department {
+        try await store.addDepartment(draft, context: MockDirectory.context(for: user))
+    }
+    func createEmployee(_ draft: NewEmployeeDraft, requestID: UUID) async throws -> EmployeeCreationResult {
+        try await store.addEmployee(draft, requestID: requestID, context: MockDirectory.context(for: user))
+    }
 }
 
 struct MockTasksRepository: TasksRepository {

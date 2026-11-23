@@ -35,6 +35,17 @@ struct SupabaseSessionRepository: SessionRepository {
         try? await backend.client.auth.signOut(scope: .local)
     }
 
+    func changePassword(_ newPassword: String) async throws -> UserContext {
+        _ = try await backend.call {
+            try await backend.client.auth.update(user: UserAttributes(password: newPassword))
+        }
+        _ = try await backend.call { try await backend.client.rpc("mark_password_changed").execute() }
+        guard let ctx = try await loadContext() else {
+            throw AppError.server(code: .membershipInactive, fieldErrors: [:], currentVersion: nil, correlationID: nil)
+        }
+        return ctx
+    }
+
     /// Returns nil when the account has no current membership anywhere (AC-002).
     private func loadContext() async throws -> UserContext? {
         let dto: MyContextDTO = try await backend.call {
@@ -262,4 +273,86 @@ struct PendingSliceRepository: ReportsRepository, IndicatorsRepository, Achievem
     func reports(periodID: UUID) async throws -> [ReportItem] { throw error }
     func indicators(periodID: UUID) async throws -> [IndicatorSummary] { throw error }
     func achievements(periodID: UUID) async throws -> [AchievementItem] { throw error }
+}
+
+// MARK: - Administration (D-25)
+
+struct SupabaseAdminRepository: AdminRepository {
+    let backend: SupabaseBackend
+
+    private func organizationID() async throws -> UUID {
+        guard let id = await backend.cache.context?.organizationID else {
+            throw AppError.server(code: .authRequired, fieldErrors: [:], currentVersion: nil, correlationID: nil)
+        }
+        return id
+    }
+
+    func people() async throws -> [PersonSummary] {
+        struct Params: Encodable, Sendable { let p_organization_id: UUID }
+        let org = try await organizationID()
+        let rows: [PersonDTO] = try await backend.call {
+            try await backend.client.rpc("list_people", params: Params(p_organization_id: org)).execute().value
+        }
+        return rows.map { $0.toDomain() }
+    }
+
+    func createDepartment(_ draft: NewDepartmentDraft, requestID: UUID) async throws -> Department {
+        struct Params: Encodable, Sendable {
+            let p_organization_id: UUID, p_code: String, p_name_ar: String, p_category: String, p_request_id: UUID
+        }
+        let org = try await organizationID()
+        let params = Params(p_organization_id: org, p_code: draft.code.trimmingCharacters(in: .whitespaces).uppercased(),
+                            p_name_ar: draft.nameAr.trimmingCharacters(in: .whitespacesAndNewlines),
+                            p_category: draft.category.rawValue, p_request_id: requestID)
+        let result: CreatedDepartmentDTO = try await backend.call {
+            try await backend.client.rpc("create_department", params: params).execute().value
+        }
+        await backend.cache.invalidateDepartments()
+        return Department(id: result.department_id, code: result.code, nameAr: result.name_ar,
+                          category: DepartmentCategory(rawValue: result.category) ?? draft.category,
+                          headName: nil, headVisible: true, isArchived: false)
+    }
+
+    func createEmployee(_ draft: NewEmployeeDraft, requestID: UUID) async throws -> EmployeeCreationResult {
+        struct Payload: Encodable, Sendable {
+            let organization_id: UUID, email: String, display_name: String, job_title: String?
+            let org_role: String, department_id: UUID?, department_role: String?, is_primary: Bool, request_id: UUID
+        }
+        let org = try await organizationID()
+        let payload = Payload(
+            organization_id: org, email: draft.email.trimmingCharacters(in: .whitespaces).lowercased(),
+            display_name: draft.displayName.trimmingCharacters(in: .whitespacesAndNewlines),
+            job_title: draft.jobTitle.isEmpty ? nil : draft.jobTitle, org_role: draft.orgRole.rawValue,
+            department_id: draft.departmentID, department_role: draft.departmentID == nil ? nil : draft.departmentRole.rawValue,
+            is_primary: draft.effectivePrimary, request_id: requestID)
+        do {
+            let result: CreatedEmployeeDTO = try await backend.client.functions.invoke(
+                "create-employee", options: FunctionInvokeOptions(body: payload))
+            await backend.cache.invalidateDepartments()   // head names may have changed
+            return EmployeeCreationResult(userID: result.user_id, accountCreated: result.account_created,
+                                          temporaryPassword: result.temporary_password)
+        } catch let FunctionsError.httpError(_, data) {
+            throw FunctionErrorMapper.map(data)
+        } catch {
+            throw SupabaseErrorMapper.map(error)
+        }
+    }
+}
+
+/// Edge Function error bodies: `{"code":"HC_…","details":{…},"correlation_id":"…"}`.
+enum FunctionErrorMapper {
+    private struct Body: Decodable {
+        let code: String
+        let details: RPCErrorDetailDTO?
+        let correlation_id: String?
+    }
+
+    static func map(_ data: Data) -> AppError {
+        guard let body = try? JSONDecoder().decode(Body.self, from: data),
+              let code = HCErrorCode(rawValue: body.code) else {
+            return .server(code: .serverError, fieldErrors: [:], currentVersion: nil, correlationID: nil)
+        }
+        return .server(code: code, fieldErrors: body.details?.fields ?? [:], currentVersion: body.details?.current_version,
+                       correlationID: body.correlation_id)
+    }
 }

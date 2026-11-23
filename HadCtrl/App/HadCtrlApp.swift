@@ -41,6 +41,8 @@ struct RootView: View {
                           message: AppError.configuration(detail).userMessage)
             case .ready(let ctx):
                 MainTabView(context: ctx, dependencies: dependencies)
+            case .mustChangePassword:
+                ChangePasswordView()
             }
         }
         .task { await session.restore() }

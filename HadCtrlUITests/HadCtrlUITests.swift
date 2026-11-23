@@ -73,6 +73,36 @@ final class HadCtrlUITests: XCTestCase {
         XCTAssertFalse(app.buttons["action.approve"].exists, "assignee cannot approve own submission")
     }
 
+    /// Director creates a department and an employee from Settings (D-25, mock backend).
+    func testDirectorCreatesDepartmentAndEmployee() {
+        let app = launch()
+        app.scrollToHittable(app.buttons["settingsButton"].firstMatch).tap()
+        app.scrollToHittable(app.buttons["settings.admin"]).tap()
+
+        app.scrollToHittable(app.buttons["admin.addDepartment"]).tap()
+        let name = app.textFields["department.name"]
+        XCTAssertTrue(name.waitForExistence(timeout: 5))
+        name.tap(); name.typeText("الأشعة")
+        let code = app.textFields["department.code"]
+        code.tap(); code.typeText("RAD")
+        app.buttons["department.save"].tap()
+        XCTAssertTrue(app.anyElement(containing: "الأشعة").waitForExistence(timeout: 5), "new department listed")
+
+        app.scrollToHittable(app.buttons["admin.addEmployee"]).tap()
+        let email = app.textFields["employee.email"]
+        XCTAssertTrue(email.waitForExistence(timeout: 5))
+        email.tap(); email.typeText("new.employee@hospital.sa")
+        let person = app.textFields["employee.name"]
+        person.tap(); person.typeText("موظف جديد")
+        app.buttons["employee.save"].tap()
+
+        let password = app.descendants(matching: .any)["employee.tempPassword"]
+        XCTAssertTrue(password.waitForExistence(timeout: 5), "temporary password shown once")
+        app.buttons["employee.done"].tap()
+        XCTAssertFalse(password.waitForExistence(timeout: 2), "password screen gone after «تم»")
+        XCTAssertTrue(app.anyElement(containing: "موظف جديد").waitForExistence(timeout: 5), "new employee listed")
+    }
+
     func testLargeTextDoesNotHideDecisions() {
         let app = launch(extraArgs: ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXL"])
         XCTAssertTrue(app.staticTexts["تحتاج قرارك"].waitForExistence(timeout: 10))
@@ -117,6 +147,10 @@ private extension XCUIApplication {
         let start = coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: contentUp ? 0.6 : 0.4))
         let end = coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: contentUp ? 0.4 : 0.6))
         start.press(forDuration: 0.05, thenDragTo: end)
+    }
+
+    func anyElement(containing text: String) -> XCUIElement {
+        descendants(matching: .any).matching(NSPredicate(format: "label CONTAINS %@", text)).firstMatch
     }
 
     /// Asserts the task detail status badge shows exactly `title`. The badge is

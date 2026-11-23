@@ -8,6 +8,8 @@ protocol SessionRepository: Sendable {
     func restore() async throws -> UserContext?
     func signIn(email: String, password: String) async throws -> UserContext
     func signOut() async
+    /// Replaces a temporary password, then returns the refreshed context.
+    func changePassword(_ newPassword: String) async throws -> UserContext
 }
 
 protocol DashboardRepository: Sendable {

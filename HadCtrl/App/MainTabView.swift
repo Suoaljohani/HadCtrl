@@ -52,7 +52,7 @@ struct MainTabView: View {
                     paths[.execution, default: NavigationPath()].append(AppRoute.task(created.id))
                 }
             case .settings:
-                SettingsView(context: context, environment: dependencies.environment)
+                SettingsView(context: context, dependencies: dependencies)
             }
         }
         .onChange(of: session.pendingRoute) { _, route in

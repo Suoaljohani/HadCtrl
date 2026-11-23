@@ -1,9 +1,10 @@
 -- Test harness + synthetic fixtures (two hospitals, every role, edge cases).
 -- Runs as the database owner; individual tests then switch to the real
--- "authenticated"/"anon" roles with a JWT "sub" claim — never service_role.
+-- "authenticated"/"anon" roles with a JWT "sub" claim. service_role is used only to
+-- simulate the create-employee Edge Function's server-side steps (70_admin).
 
 create schema if not exists test;
-grant usage on schema test to anon, authenticated;
+grant usage on schema test to anon, authenticated, service_role;
 
 create or replace function test.login(p_user uuid) returns void
 language plpgsql as $$
@@ -63,7 +64,7 @@ begin
   raise exception 'FAIL %: expected error %, but statement succeeded', p_label, p_expected;
 end $$;
 
-grant execute on all functions in schema test to anon, authenticated;
+grant execute on all functions in schema test to anon, authenticated, service_role;
 
 -- ---------------------------------------------------------------------------
 -- Fixed identities

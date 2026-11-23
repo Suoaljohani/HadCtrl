@@ -31,8 +31,12 @@ struct UserContext: Sendable, Equatable {
     let isDemo: Bool
     let orgRoles: Set<OrgRole>
     let departments: [DepartmentScope]
+    /// Set for accounts created with a temporary password (D-25).
+    var mustChangePassword: Bool = false
 
     var isDirector: Bool { orgRoles.contains(.hospitalDirector) }
+    /// May create departments and employee accounts (server re-checks).
+    var canManageOrganization: Bool { isDirector || orgRoles.contains(.systemAdmin) }
     var headedDepartments: [DepartmentScope] { departments.filter { $0.roles.contains(.head) } }
     var canCreateAssignments: Bool { isDirector || !headedDepartments.isEmpty }
 }

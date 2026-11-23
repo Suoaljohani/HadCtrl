@@ -56,6 +56,7 @@ struct DependencyContainer: Sendable {
     let reports: ReportsRepository
     let indicators: IndicatorsRepository
     let achievements: AchievementsRepository
+    let admin: AdminRepository
     /// Exposed for UI tests that need to shape mock behaviour.
     let mockStore: MockStore?
 
@@ -69,7 +70,7 @@ struct DependencyContainer: Sendable {
             return DependencyContainer(environment: environment, clock: clock, session: mocks.session,
                                        dashboard: mocks.dashboard, departments: mocks.departments, tasks: mocks.tasks,
                                        reports: mocks.reports, indicators: mocks.indicators,
-                                       achievements: mocks.achievements, mockStore: store)
+                                       achievements: mocks.achievements, admin: mocks.admin, mockStore: store)
         case .production:
             switch BackendConfiguration.fromBundle() {
             case .failure(let error):
@@ -78,7 +79,7 @@ struct DependencyContainer: Sendable {
                 return DependencyContainer(environment: environment, clock: clock, session: unavailable,
                                            dashboard: unavailable, departments: unavailable, tasks: unavailable,
                                            reports: unavailable, indicators: unavailable, achievements: unavailable,
-                                           mockStore: nil)
+                                           admin: unavailable, mockStore: nil)
             case .success(let config):
                 let backend = SupabaseBackend(client: SupabaseClientFactory.make(config), cache: SessionCache(),
                                               calendar: .riyadh)
@@ -89,7 +90,7 @@ struct DependencyContainer: Sendable {
                                            departments: SupabaseDepartmentsRepository(backend: backend),
                                            tasks: SupabaseTasksRepository(backend: backend, clock: clock),
                                            reports: pending, indicators: pending, achievements: pending,
-                                           mockStore: nil)
+                                           admin: SupabaseAdminRepository(backend: backend), mockStore: nil)
             }
         }
     }
@@ -98,11 +99,15 @@ struct DependencyContainer: Sendable {
 /// Used when the backend configuration is missing or invalid: every call
 /// surfaces the configuration error instead of showing demo data.
 struct UnavailableBackend: SessionRepository, DashboardRepository, DepartmentsRepository, TasksRepository,
-                           ReportsRepository, IndicatorsRepository, AchievementsRepository {
+                           ReportsRepository, IndicatorsRepository, AchievementsRepository, AdminRepository {
     let error: AppError
     func restore() async throws -> UserContext? { throw error }
     func signIn(email: String, password: String) async throws -> UserContext { throw error }
     func signOut() async {}
+    func changePassword(_ newPassword: String) async throws -> UserContext { throw error }
+    func people() async throws -> [PersonSummary] { throw error }
+    func createDepartment(_ draft: NewDepartmentDraft, requestID: UUID) async throws -> Department { throw error }
+    func createEmployee(_ draft: NewEmployeeDraft, requestID: UUID) async throws -> EmployeeCreationResult { throw error }
     func periods() async throws -> [ReportingPeriod] { throw error }
     func snapshot(periodID: UUID) async throws -> DashboardSnapshot { throw error }
     func departments() async throws -> [Department] { throw error }

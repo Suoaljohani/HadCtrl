@@ -64,7 +64,8 @@ struct AccessDeniedView: View {
 
 struct SettingsView: View {
     let context: UserContext
-    let environment: AppEnvironment
+    let dependencies: DependencyContainer
+    private var environment: AppEnvironment { dependencies.environment }
     @Environment(SessionStore.self) private var session
     @Environment(\.dismiss) private var dismiss
 
@@ -77,6 +78,16 @@ struct SettingsView: View {
                     if context.isDirector { Text(String(localized: "مدير المستشفى")) }
                     ForEach(context.departments) { d in
                         Text(String(localized: "\(d.roles.contains(.head) ? String(localized: "رئيس قسم") : String(localized: "منسق")) — \(d.nameAr)"))
+                    }
+                }
+                if context.canManageOrganization {
+                    Section(String(localized: "الإدارة")) {
+                        NavigationLink {
+                            AdminHubView(context: context, dependencies: dependencies)
+                        } label: {
+                            Label(String(localized: "الأقسام والموظفون"), systemImage: "person.2.badge.gearshape")
+                        }
+                        .accessibilityIdentifier("settings.admin")
                     }
                 }
                 Section(String(localized: "البيئة")) {

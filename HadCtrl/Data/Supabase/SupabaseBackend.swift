@@ -87,6 +87,7 @@ actor SessionCache {
 
     func clear() { departments = nil; names = [:]; context = nil }
     func set(context: UserContext?) { self.context = context }
+    func invalidateDepartments() { departments = nil }
     func cachedDepartments() -> [UUID: Department]? { departments }
     func store(departments list: [Department]) { departments = Dictionary(uniqueKeysWithValues: list.map { ($0.id, $0) }) }
     func names(for ids: Set<UUID>) -> (known: [UUID: String], missing: Set<UUID>) {

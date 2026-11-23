@@ -26,6 +26,11 @@ actor MockStore {
     /// Artificial per-period latency, used by tests to deliver responses out of order.
     var latency: [UUID: Duration] = [:]
     var failNextRequest: AppError?
+    /// Mutable directory so in-app administration is testable in demo/UI-test mode.
+    private(set) var departments: [Department] = MockDirectory.departments
+    private(set) var assignees: [UUID: [Assignee]] = MockDirectory.assignees
+    private(set) var people: [PersonSummary] = MockDirectory.people
+    private var provisioned: [UUID: EmployeeCreationResult] = [:]
 
     init(clock: HCClock) {
         self.clock = clock
@@ -113,5 +118,66 @@ actor MockStore {
         task.version += 1
         tasks[taskID] = task
         return task
+    }
+
+    // MARK: administration (mirrors create_department / prepare_employee rules)
+
+    func addDepartment(_ draft: NewDepartmentDraft, context: UserContext) throws -> Department {
+        try consumeFailure()
+        guard context.canManageOrganization else {
+            throw AppError.server(code: .forbidden, fieldErrors: [:], currentVersion: nil, correlationID: nil)
+        }
+        var errors = Dictionary(uniqueKeysWithValues: draft.validate().map { ($0.key.rawValue, $0.value) })
+        let code = draft.code.trimmingCharacters(in: .whitespaces).uppercased()
+        if departments.contains(where: { $0.code == code }) { errors["code"] = String(localized: "الرمز مستخدم") }
+        guard errors.isEmpty else {
+            throw AppError.server(code: .validationFailed, fieldErrors: errors, currentVersion: nil, correlationID: nil)
+        }
+        let dept = Department(id: UUID(), code: code, nameAr: draft.nameAr.trimmingCharacters(in: .whitespacesAndNewlines),
+                              category: draft.category, headName: nil, isArchived: false)
+        departments.append(dept)
+        assignees[dept.id] = []
+        return dept
+    }
+
+    func addEmployee(_ draft: NewEmployeeDraft, requestID: UUID, context: UserContext) throws -> EmployeeCreationResult {
+        try consumeFailure()
+        if let prior = provisioned[requestID] {
+            return EmployeeCreationResult(userID: prior.userID, accountCreated: false, temporaryPassword: nil)
+        }
+        guard context.canManageOrganization else {
+            throw AppError.server(code: .forbidden, fieldErrors: [:], currentVersion: nil, correlationID: nil)
+        }
+        if draft.orgRole == .systemAdmin && !context.isDirector {
+            throw AppError.server(code: .forbidden, fieldErrors: [:], currentVersion: nil, correlationID: nil)
+        }
+        var errors = Dictionary(uniqueKeysWithValues: draft.validate().map { ($0.key.rawValue, $0.value) })
+        if draft.effectivePrimary, let dept = draft.departmentID,
+           departments.first(where: { $0.id == dept })?.headName != nil {
+            errors["is_primary"] = String(localized: "للقسم رئيس أساسي نشط")
+        }
+        guard errors.isEmpty else {
+            throw AppError.server(code: .validationFailed, fieldErrors: errors, currentVersion: nil, correlationID: nil)
+        }
+        let id = UUID()
+        let name = draft.displayName.trimmingCharacters(in: .whitespacesAndNewlines)
+        var assignments: [PersonSummary.Assignment] = []
+        if let deptID = draft.departmentID, let index = departments.firstIndex(where: { $0.id == deptID }) {
+            let d = departments[index]
+            assignments.append(.init(departmentName: d.nameAr, role: draft.departmentRole, isPrimary: draft.effectivePrimary))
+            assignees[deptID, default: []].append(Assignee(id: id, name: name, role: draft.departmentRole))
+            if draft.effectivePrimary {
+                departments[index] = Department(id: d.id, code: d.code, nameAr: d.nameAr, category: d.category,
+                                                headName: name, isArchived: d.isArchived)
+            }
+        }
+        var roles: Set<OrgRole> = [.member]
+        if let extra = OrgRole(rawValue: draft.orgRole.rawValue) { roles.insert(extra) }
+        people.append(PersonSummary(id: id, displayName: name, jobTitle: draft.jobTitle.isEmpty ? nil : draft.jobTitle,
+                                    isActive: true, mustChangePassword: true, orgRoles: roles, assignments: assignments))
+        // Deterministic in tests; real passwords are generated on the server.
+        let result = EmployeeCreationResult(userID: id, accountCreated: true, temporaryPassword: "Demo-Temp-7xQ4")
+        provisioned[requestID] = result
+        return result
     }
 }
