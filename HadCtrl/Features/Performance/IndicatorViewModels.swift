@@ -62,7 +62,7 @@ final class IndicatorDetailViewModel {
         let perms = detail.permissions(for: user)
         switch draft.parse(isRatio: version.isRatio, needsCorrectionReason: perms.needsCorrectionReason) {
         case .failure(let errors):
-            fieldErrors = errors
+            fieldErrors = errors.fields
             return
         case .success(let reading):
             fieldErrors = [:]

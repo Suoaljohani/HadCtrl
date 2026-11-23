@@ -135,7 +135,7 @@ struct ReportsIndicatorsTests {
     // MARK: indicators
 
     private func errors(_ d: MeasurementDraft, ratio: Bool, correction: Bool = false) -> [MeasurementDraft.Field: String] {
-        if case .failure(let e) = d.parse(isRatio: ratio, needsCorrectionReason: correction) { return e }
+        if case .failure(let e) = d.parse(isRatio: ratio, needsCorrectionReason: correction) { return e.fields }
         return [:]
     }
 

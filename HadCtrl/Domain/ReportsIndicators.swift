@@ -281,8 +281,12 @@ struct MeasurementDraft: Sendable, Equatable {
         case correctionReason = "correction_reason"
     }
 
+    struct FieldErrors: Error, Equatable {
+        let fields: [Field: String]
+    }
+
     /// Parsed reading, or field errors. Values are never coerced to zero.
-    func parse(isRatio: Bool, needsCorrectionReason: Bool) -> Result<Reading, [Field: String]> {
+    func parse(isRatio: Bool, needsCorrectionReason: Bool) -> Result<Reading, FieldErrors> {
         var e: [Field: String] = [:]
         var reading = Reading()
         let invalid = String(localized: "رقم غير صالح")
@@ -305,7 +309,7 @@ struct MeasurementDraft: Sendable, Equatable {
         if needsCorrectionReason && correctionReason.trimmingCharacters(in: .whitespacesAndNewlines).count < 3 {
             e[.correctionReason] = String(localized: "سبب التصحيح مطلوب لاستبدال قيمة معتمدة")
         }
-        return e.isEmpty ? .success(reading) : .failure(e)
+        return e.isEmpty ? .success(reading) : .failure(FieldErrors(fields: e))
     }
 }
 
