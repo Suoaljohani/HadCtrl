@@ -10,7 +10,9 @@ permissions:
   contents: read
 concurrency:
   group: hadctrl-ci-${{ github.ref }}
-  cancel-in-progress: true
+  # Pushes queue behind a running job so every pushed commit gets a result;
+  # superseded pull_request runs are still cancelled.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   database:
