@@ -7,20 +7,20 @@
 - Apple signing inputs: none supplied.
 
 ## Done
-- **G2 database (local):** 7 migrations covering all tables DB-01..DB-30, RLS on every table, SELECT-only client grants, definer RPCs for the task slice, audit and notification outbox. 97 assertions plus a real two-session concurrency test, all from the real client roles.
+- **G2 database:** 11 migrations covering all tables DB-01..DB-30, RLS on every table, SELECT-only client grants, explicit function grants, audit and notification outbox. 183 assertions including a real two-session concurrency test, all from the real client roles; green locally and in CI.
 - **G3 server slice:** create, acknowledge, start, block, submit, return, approve, cancel, reassign; extension request and decision; idempotency; version conflicts; revoked-access checks.
 - **G1 app (CI-verified project generation; build/test result in BUILD_REPORT):** XcodeGen project, shared HadCtrl scheme, five-tab shell, director dashboard, execution (tasks + achievements), departments, performance, reports, sign-in/access-denied/settings, design tokens with dark mode, Janna LT, app icon, Arabic string catalog with English entries.
 - **Domain rules + tests:** scoring for all three directions and the zero-event rule, ratio-of-sums aggregation, latest/sum/weighted mean, coverage verdicts, number parsing, Riyadh deadlines, latest-request gate.
-
+- **G4 server:** report scheduler, drafts, submit/return/approve, waiver, compliance.
+- **G5 server:** measurement submit/decide, corrections after freeze, `freeze_period` snapshots, SQL scoring with parity to Swift, `dashboard_snapshot`.
 - **Hosted Supabase:** all 11 migrations applied and verified against the tested build (TEST_REPORT, D-17).
 
 ## Not done yet (in order)
-2. **G3 client:** add supabase-swift (pinned, Package.resolved from CI), Supabase repositories, sign-in, Keychain session.
-3. **G4 reports:** scheduler (Supabase Cron), `submit_report`/`decide_report`, waiver, compliance, plus tests AC-015..019.
-4. **G5 indicators:** `submit_measurement`/`decide_measurement`, corrections, `freeze_period` + snapshots, server-side scoring, `dashboard_snapshot`.
-5. **G6:** attachments (Storage policies, prepare/finalize), search, calendar, preferences sync, PDF/CSV export, in-app notification inbox, APNs worker.
-6. **G7:** accessibility/VoiceOver audit, performance, deep links.
-7. **G8:** signing, IPA export and verification. Blocked on Apple inputs (see SETUP.md).
+1. **Fix the failing iOS CI build/test step** (run #2) so G1 is verified.
+2. **G3–G5 client:** add supabase-swift (pinned, Package.resolved from CI), Supabase repositories, sign-in with Keychain session, and report/indicator screens wired to the RPCs. Schedule `generate_report_instances` with Supabase Cron.
+3. **G6:** attachments (Storage policies, prepare/finalize), search, calendar, preferences sync, PDF/CSV export, in-app notification inbox, APNs worker.
+4. **G7:** accessibility/VoiceOver audit, performance, deep links.
+5. **G8:** signing, IPA export and verification. Blocked on Apple inputs (see SETUP.md).
 
 ## Known shortcuts to remove
 - Performance, Reports and Achievements screens request the mock November period id directly. They will follow the dashboard's selected period once periods come from the server.
