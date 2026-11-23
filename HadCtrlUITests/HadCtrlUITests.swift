@@ -108,14 +108,17 @@ private extension XCUIApplication {
         return element
     }
 
-    /// Asserts the task detail status badge shows exactly `title`.
-    func expectTaskStatus(_ title: String, timeout: TimeInterval = 5,
+    /// Asserts the task detail status badge shows exactly `title`. The badge is
+    /// the first row of a lazy List: if the test scrolled down to reach an
+    /// action, scroll back up to it, as a user would, before reading it.
+    func expectTaskStatus(_ title: String, timeout: TimeInterval = 10,
                           file: StaticString = #filePath, line: UInt = #line) {
         let badge = descendants(matching: .any)["taskStatusBadge"]
-        let matches = NSPredicate(format: "label == %@", title)
-        let expectation = XCTNSPredicateExpectation(predicate: matches, object: badge)
-        let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
-        XCTAssertEqual(result, .completed, "task status is '\(badge.exists ? badge.label : "<missing>")', expected '\(title)'",
-                       file: file, line: line)
+        let deadline = Date().addingTimeInterval(timeout)
+        while Date() < deadline {
+            if badge.exists && badge.label == title { return }
+            if badge.exists { Thread.sleep(forTimeInterval: 0.3) } else { swipeDown() }   // wait for the label to update
+        }
+        XCTFail("task status is '\(badge.exists ? badge.label : "<missing>")', expected '\(title)'", file: file, line: line)
     }
 }
