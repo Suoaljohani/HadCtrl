@@ -138,6 +138,7 @@ struct ReportDetailView: View {
     @State private var model: ReportDetailViewModel
     @State private var noteSheet: NoteIntent?
     @State private var note = ""
+    @FocusState private var focusedField: String?
 
     enum NoteIntent: String, Identifiable { case returnReport, waive
         var id: String { rawValue } }
@@ -257,6 +258,13 @@ struct ReportDetailView: View {
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
         .scrollDismissesKeyboard(.immediately)
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button(String(localized: "تم")) { focusedField = nil }
+                    .accessibilityIdentifier("keyboard.done")
+            }
+        }
     }
 
     @ViewBuilder private func editor(_ detail: ReportDetail, canSubmit: Bool) -> some View {
@@ -267,6 +275,7 @@ struct ReportDetailView: View {
                     TextField(field.label, text: Binding(get: { model.content[field.key] ?? "" },
                                                          set: { model.content[field.key] = $0 }), axis: .vertical)
                         .lineLimit(2...8)
+                        .focused($focusedField, equals: field.key)
                         .accessibilityIdentifier("reportField.\(field.key)")
                     if let error = model.fieldErrors[field.key] {
                         Text(error).font(.hcFootnote).foregroundStyle(Color.hcCritical)

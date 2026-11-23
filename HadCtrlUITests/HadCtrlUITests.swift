@@ -112,9 +112,10 @@ final class HadCtrlUITests: XCTestCase {
         app.expectBadge("reportStatusBadge", "لم يُسلّم")
         app.textInput("reportField.f1").tap()
         app.textInput("reportField.f1").typeText("اكتمل توثيق العينات")
+        app.dismissKeyboard()
         app.scrollToHittable(app.textInput("reportField.f3")).tap()
         app.textInput("reportField.f3").typeText("مراجعة إجراءات الاستلام")
-        app.swipeDown()   // the list dismisses the keyboard on scroll
+        app.dismissKeyboard()
         app.scrollToHittable(app.buttons["report.submit"]).tap()
         app.expectBadge("reportStatusBadge", "مُسلّم")
         XCTAssertFalse(app.buttons["report.submit"].exists, "a submitted report is frozen")
@@ -192,6 +193,14 @@ private extension XCUIApplication {
 
     func anyElement(containing text: String) -> XCUIElement {
         descendants(matching: .any).matching(NSPredicate(format: "label CONTAINS %@", text)).firstMatch
+    }
+
+    /// Taps the keyboard's «تم» button so later scrolling is not done on the keyboard.
+    func dismissKeyboard(file: StaticString = #filePath, line: UInt = #line) {
+        let done = buttons["keyboard.done"]
+        XCTAssertTrue(done.waitForExistence(timeout: 5), "keyboard «تم» button missing", file: file, line: line)
+        done.tap()
+        XCTAssertTrue(keyboards.firstMatch.waitForNonExistence(timeout: 5), "keyboard still visible", file: file, line: line)
     }
 
     /// A list row by accessibility identifier, whatever element type SwiftUI gives it.
