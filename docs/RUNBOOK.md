@@ -14,6 +14,9 @@ Scripts: `supabase/admin/`. Run them in the Supabase dashboard → **SQL Editor*
 
 There is deliberately no "first user becomes director" function in the app. Roles come only from these server-side rows.
 
+## 2b. Reports and indicators (D-29)
+In the app, as the director: Settings → «الأقسام والموظفون» → «قالب تقرير دوري جديد» (fields, departments, due day) and «مؤشر أداء جديد». Then Reports tab → «توليد تقارير الفترة» (or «فتح الفترة الحالية» if no period exists). The nightly job `hadctrl-daily` does the same for the current month; check it with `select * from cron.job_run_details order by start_time desc limit 5;`.
+
 ## 3. Revoking access
 Set `department_memberships.active = false` (or `organization_memberships`, or `profiles.active`). Every RPC and policy re-checks this on each call, so a still-valid token loses access immediately (AC-032). Reassign open tasks with `transition_task(..., 'reassign', ...)`. Do not delete history.
 

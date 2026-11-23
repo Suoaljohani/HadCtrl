@@ -12,6 +12,7 @@
 - **G1 app (CI-verified project generation; build/test result in BUILD_REPORT):** XcodeGen project, shared HadCtrl scheme, five-tab shell, director dashboard, execution (tasks + achievements), departments, performance, reports, sign-in/access-denied/settings, design tokens with dark mode, Janna LT, app icon, Arabic string catalog with English entries.
 - **Domain rules + tests:** scoring for all three directions and the zero-event rule, ratio-of-sums aggregation, latest/sum/weighted mean, coverage verdicts, number parsing, Riyadh deadlines, latest-request gate.
 - **G4 server:** report scheduler, drafts, submit/return/approve, waiver, compliance.
+- **Definitions server (D-29):** director-only report templates, schedules, period generation and indicators; pg_cron `hadctrl-daily`. 25 DB checks.
 - **G5 server:** measurement submit/decide, corrections after freeze, `freeze_period` snapshots, SQL scoring with parity to Swift, `dashboard_snapshot`.
 - **Hosted Supabase:** all 11 migrations applied and verified against the tested build (TEST_REPORT, D-17).
 
@@ -21,7 +22,7 @@
 
 ## Not done yet (in order)
 1. **G3 client (in progress):** supabase-swift 2.55.7 added. Session (sign-in, Keychain, restore, sign-out), dashboard (`dashboard_snapshot`), departments, tasks list/detail/create/transition are wired to Supabase. Contract tests decode real RPC output. Packages locked (`Config/Package.resolved`) and build green in CI (run #11). Key configured and director bootstrapped. Pending: a sign-in from the app itself on a simulator or device (needs the director's password, which is never shared with Claude).
-2. **G4–G5 client:** report and indicator screens wired to their RPCs; schedule `generate_report_instances` with Supabase Cron.
+2. **G4–G5 client (built, CI pending):** Reports list/detail (draft, submit, approve/return/waive, review history), indicator detail (readings, entry with explicit not-applicable and correction reasons, approve/return), director definitions (report template + schedule, indicator) and period generation. Server part (migration 001300) applied to the hosted project; nightly pg_cron job active. Department detail tabs for goals/indicators/reports and achievements remain.
 3. **G6:** attachments (Storage policies, prepare/finalize), search, calendar, preferences sync, PDF/CSV export, in-app notification inbox, APNs worker.
 4. **G7:** accessibility/VoiceOver audit, performance, deep links.
 5. **G8:** signing, IPA export and verification. Blocked on Apple inputs (see SETUP.md).

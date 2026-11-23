@@ -13,12 +13,19 @@ Environment: Ubuntu 24.04 container, PostgreSQL 16.15, with the Supabase platfor
 | 40_reports_rpc (scheduler idempotency, drafts, submit, return, resubmit, stale approval, waiver, compliance) | 38 | pass |
 | 50_measurements_rpc (SQL scoring parity, input rules, approval, freeze, correction after freeze) | 31 | pass |
 | 60_dashboard (coverage/verdict, consistency, cross-department and cross-hospital non-leakage) | 13 | pass |
+| 70_admin (departments, employees, escalation rules) | 36 | pass |
+| 80_definitions (director-only templates, schedules, generation incl. frozen refusal, indicators with §11 rule rejection and atomicity, head submits on a new indicator) | 25 | pass |
 | 90_concurrency.sh (two sessions, same request_id) | 3 | pass |
-| **Total** | **183** | **pass, 0 failures** |
+| **Total** | **244** | **pass, 0 failures** |
 
 All checks run as the real `authenticated`/`anon` roles with a JWT `sub`, never as `service_role`.
 
-Limits: PostgreSQL 16 locally vs 17 on the hosted project. Storage (`storage.objects`) policies are not covered yet. ## Hosted project (HadCtrl, `vffusttzqmerfofqianz`), 2026-11-23
+Limits: PostgreSQL 16 locally vs 17 on the hosted project. Storage (`storage.objects`) policies are not covered yet. ## Hosted project after migration 001300 (2026-11-23)
+- Applied `definitions_admin`. Function fingerprint (excluding the local-only test shim `_shim_grant_new_functions`): `812dca3256cd78e6df427f4dcd1ac5c9` over 70 functions, identical locally and hosted.
+- Security advisor: no anon findings; `authenticated_security_definer_function_executable` now lists the 23 documented RPCs (accepted, D-18); leaked-password protection still off (owner setting).
+- `cron.job`: `hadctrl-daily`, `10 21 * * *`, active.
+
+## Hosted project (HadCtrl, `vffusttzqmerfofqianz`), 2026-11-23
 - 11 migrations applied in order (`supabase_migrations.schema_migrations` = 11). Nothing destructive; the project held no data.
 - Structure matches the tested database: 38 tables, all with RLS; 40 policies; an md5 fingerprint over every `public`/`private` function body is identical locally and hosted (`f9dde17efc18b737ebb14af6be619fc9`).
 - Grants: anon can execute 0 functions and holds 0 table privileges. Authenticated can call exactly the 16 documented RPCs.

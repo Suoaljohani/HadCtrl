@@ -61,6 +61,18 @@ Binds a token to the caller only. A token that moves to another account is remov
 - `waive_report(p_report_id, p_reason, p_expected_version, p_request_id)`: director.
 - `report_compliance(p_period_id)`: `security invoker`, counted from rows the caller can read; waived reports are excluded from `required`.
 
+### Definitions from the app (D-29, migration 001300)
+All director only (system admin and heads get `HC_FORBIDDEN`; another hospital gets `HC_NOT_FOUND`), idempotent by `p_request_id`, audited.
+- `create_report_template(p_organization_id, p_name_ar, p_frequency, p_fields, p_request_id)`: `p_fields` = `[{key, label, required}]`, 1–30 items, keys `^[a-z][a-z0-9_]{0,39}$` and unique (the app sends `f1…fn`). Creates the template and version 1 (`field_schema = {"fields": …}`, `required_fields` derived). Returns `{template_id, template_version_id, name_ar, frequency}`.
+- `schedule_report(p_template_id, p_department_ids, p_due_day, p_request_id)`: due on day 1–28 of the next period at 23:59 hospital time, active from the current month. Archived or foreign departments are rejected. Returns `{template_id, scheduled, active_from}`.
+- `ensure_current_period(p_organization_id)`: creates the current monthly period (open) if missing. Returns `{period_id}`.
+- `generate_reports_for_period(p_period_id)`: runs the scheduler for one period; refused for a frozen period (`HC_PERIOD_FROZEN`). Returns `{created, skipped_existing}`.
+- `create_indicator(p_organization_id, p_department_id, p_code, p_title, p_measurement_type, p_unit, p_direction, p_aggregation, p_frequency, p_data_source, p_request_id, p_target?, p_range_min?, p_range_max?, p_numerator_description?, p_denominator_description?, p_weight?, p_zero_event_rule?, p_description?)`: definition and version 1, approved by the director and valid from the current month. Field errors under `fields`; any §11 rule violation (target 0 for higher-is-better, ratio without numerator/denominator descriptions, bad range, zero-event misuse) is `{"fields":{"definition":"inconsistent_rule"}}`. Returns `{definition_id, definition_version_id, code}`.
+- Supabase Cron job `hadctrl-daily` (21:10 UTC = 00:10 Riyadh) runs `private.daily_maintenance()`: ensures the current month and generates its reports for every active hospital.
+
+### Client reads (RLS)
+`report_instances`, `report_template_versions`, `report_templates`, `report_revisions` (drafts only for the department), `report_reviews`, `indicator_definitions`, `indicator_definition_versions`, `indicator_measurements`. The applicable definition version for a period is the latest approved one whose `valid_from` is on or before the period end. A period's result uses only the approved reading; a submitted one is shown as pending.
+
 ### Indicators (G5)
 - API-06 `submit_measurement(p_definition_version_id, p_period_id, p_request_id, p_value?, p_numerator?, p_denominator?, p_not_applicable_reason?, p_source_note?, p_correction_reason?)`: department head. Type-checked input. One open revision at a time. Replacing an approved value needs a correction reason. A frozen period accepts only corrections.
 - API-07 `decide_measurement(p_measurement_id, p_decision, p_expected_version, p_request_id, p_note?)`: director, not a department member, not the person who entered it. Approval supersedes the previous approved revision.
