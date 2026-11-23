@@ -200,6 +200,17 @@ final class HadCtrlUITests: XCTestCase {
         XCTAssertTrue(app.row("achievementRow.00000000-0000-0000-0000-000000000401").waitForExistence(timeout: 10))
     }
 
+    /// Evidence on an approved achievement is visible to the department but can no longer be added or removed (§26).
+    func testApprovedAchievementEvidenceIsReadOnly() {
+        let app = launch(user: "head")
+        app.tabBars.firstMatch.buttons["التنفيذ"].tap()
+        app.segmentedControls.buttons["المنجزات"].tap()
+        app.scrollToHittable(app.row("achievementRow.00000000-0000-0000-0000-000000000401")).tap()
+        app.expectBadge("achievementStatusBadge", "معتمد")
+        XCTAssertTrue(app.scrollToHittable(app.anyElement(containing: "قراءة LAB.TAT المعتمدة")).exists, "existing evidence is listed")
+        XCTAssertFalse(app.buttons["attachment.addFile"].exists, "no new evidence on an approved record")
+    }
+
     func testLargeTextDoesNotHideDecisions() {
         let app = launch(extraArgs: ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXL"])
         XCTAssertTrue(app.staticTexts["تحتاج قرارك"].waitForExistence(timeout: 10))

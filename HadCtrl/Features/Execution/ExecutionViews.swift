@@ -178,6 +178,11 @@ struct TaskDetailView: View {
                     LabeledContent(String(localized: "أول رفع"), value: HCFormat.dateTime(first))
                 }
             }
+            AttachmentsSection(target: .task(task.id),
+                               canEdit: ![.completed, .cancelled, .draft].contains(task.status)
+                                   && (task.assigneeID == context.userID || context.departments.contains { $0.id == task.departmentID }),
+                               repository: dependencies.attachments)
+                .id(task.id)
             if let error = model.actionError {
                 Section { Label(error.userMessage, systemImage: "exclamationmark.triangle").foregroundStyle(Color.hcCritical) }
                     .accessibilityIdentifier("actionError")

@@ -59,6 +59,7 @@ struct DependencyContainer: Sendable {
     let admin: AdminRepository
     let notifications: NotificationsRepository
     let goals: GoalsRepository
+    let attachments: AttachmentsRepository
     /// Exposed for UI tests that need to shape mock behaviour.
     let mockStore: MockStore?
 
@@ -73,7 +74,8 @@ struct DependencyContainer: Sendable {
                                        dashboard: mocks.dashboard, departments: mocks.departments, tasks: mocks.tasks,
                                        reports: mocks.reports, indicators: mocks.indicators,
                                        achievements: mocks.achievements, admin: mocks.admin,
-                                       notifications: mocks.notifications, goals: mocks.goals, mockStore: store)
+                                       notifications: mocks.notifications, goals: mocks.goals,
+                                       attachments: mocks.attachments, mockStore: store)
         case .production:
             switch BackendConfiguration.fromBundle() {
             case .failure(let error):
@@ -82,7 +84,8 @@ struct DependencyContainer: Sendable {
                 return DependencyContainer(environment: environment, clock: clock, session: unavailable,
                                            dashboard: unavailable, departments: unavailable, tasks: unavailable,
                                            reports: unavailable, indicators: unavailable, achievements: unavailable,
-                                           admin: unavailable, notifications: unavailable, goals: unavailable, mockStore: nil)
+                                           admin: unavailable, notifications: unavailable, goals: unavailable,
+                                           attachments: unavailable, mockStore: nil)
             case .success(let config):
                 let backend = SupabaseBackend(client: SupabaseClientFactory.make(config), cache: SessionCache(),
                                               calendar: .riyadh)
@@ -96,7 +99,8 @@ struct DependencyContainer: Sendable {
                                            achievements: SupabaseAchievementsRepository(backend: backend),
                                            admin: SupabaseAdminRepository(backend: backend),
                                            notifications: SupabaseNotificationsRepository(backend: backend),
-                                           goals: SupabaseGoalsRepository(backend: backend), mockStore: nil)
+                                           goals: SupabaseGoalsRepository(backend: backend),
+                                           attachments: SupabaseAttachmentsRepository(backend: backend), mockStore: nil)
             }
         }
     }
@@ -106,7 +110,7 @@ struct DependencyContainer: Sendable {
 /// surfaces the configuration error instead of showing demo data.
 struct UnavailableBackend: SessionRepository, DashboardRepository, DepartmentsRepository, TasksRepository,
                            ReportsRepository, IndicatorsRepository, AchievementsRepository, AdminRepository,
-                           NotificationsRepository, GoalsRepository {
+                           NotificationsRepository, GoalsRepository, AttachmentsRepository {
     let error: AppError
     func restore() async throws -> UserContext? { throw error }
     func signIn(email: String, password: String) async throws -> UserContext { throw error }
@@ -146,6 +150,10 @@ struct UnavailableBackend: SessionRepository, DashboardRepository, DepartmentsRe
     func decide(id: UUID, decision: AchievementDecision, expectedVersion: Int, note: String?, requestID: UUID) async throws { throw error }
     func linkableTasks(departmentID: UUID) async throws -> [TaskItem] { throw error }
     func inbox() async throws -> [InboxItem] { throw error }
+    func attachments(for target: AttachmentTarget) async throws -> [Attachment] { throw error }
+    func upload(_ data: Data, fileName: String, mimeType: String, to target: AttachmentTarget, requestID: UUID) async throws -> Attachment { throw error }
+    func signedURL(for attachment: Attachment) async throws -> URL { throw error }
+    func remove(_ attachment: Attachment, requestID: UUID) async throws { throw error }
     func goals(departmentID: UUID?, asOf: Date) async throws -> [GoalSummary] { throw error }
     func goal(id: UUID, asOf: Date) async throws -> GoalDetail { throw error }
     func create(_ draft: NewGoalDraft, requestID: UUID) async throws -> UUID { throw error }

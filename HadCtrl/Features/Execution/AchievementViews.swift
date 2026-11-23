@@ -247,6 +247,9 @@ struct AchievementDetailView: View {
                     }
                 }
             }
+            AttachmentsSection(target: .achievement(d.item.id), canEdit: perms.canEdit, repository: dependencies.attachments,
+                               note: perms.canEdit ? String(localized: "الشاهد يثبت الأثر؛ لا تُرفق صور أشخاص أو نشاط لا تثبت النتيجة.") : nil)
+                .id("\(d.item.id)-\(perms.canEdit)")
             if let error = model.actionError {
                 Section { Label(error.userMessage, systemImage: "exclamationmark.triangle").foregroundStyle(Color.hcCritical) }
                     .accessibilityIdentifier("actionError")

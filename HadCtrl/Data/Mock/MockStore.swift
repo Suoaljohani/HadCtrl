@@ -28,6 +28,8 @@ actor MockStore {
     let achievementStore: MockAchievementStore
     /// Goals (§09).
     let goalStore: MockGoalStore
+    /// Evidence files (§26).
+    let attachmentStore: MockAttachmentStore
     private(set) var tasks: [UUID: TaskItem] = [:]
     private var idempotency: [UUID: (hash: Int, taskID: UUID)] = [:]
     private var actor: UUID = Fixture.director
@@ -46,6 +48,7 @@ actor MockStore {
         self.inbox = MockInboxStore(clock: clock)
         self.achievementStore = MockAchievementStore(clock: clock)
         self.goalStore = MockGoalStore(clock: clock)
+        self.attachmentStore = MockAttachmentStore()
         let now = clock.now()
         let day: TimeInterval = 86_400
         func t(_ n: Int, _ title: String, _ dept: UUID, _ deptName: String, _ status: TaskStatus, _ assignee: UUID, _ name: String, due: TimeInterval, priority: Priority = .normal) -> TaskItem {

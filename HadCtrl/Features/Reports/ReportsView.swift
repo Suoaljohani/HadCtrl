@@ -293,6 +293,15 @@ struct ReportDetailView: View {
         } footer: {
             Text(String(localized: "الحقول المعلّمة بـ * إلزامية. المسودة لا تُعد تسليمًا حتى تُرسل."))
         }
+        if let draft = detail.openDraft {
+            AttachmentsSection(target: .reportRevision(draft.id), canEdit: true, repository: dependencies.attachments,
+                               note: String(localized: "تُرسل الشواهد مع التقرير، ولا تُحذف بعد الإرسال."))
+                .id(draft.id)
+        } else {
+            Section(String(localized: "الشواهد والمرفقات")) {
+                Text(String(localized: "احفظ المسودة أولًا لإرفاق الشواهد.")).foregroundStyle(Color.hcSecondaryText)
+            }
+        }
         Section {
             Button(String(localized: "حفظ مسودة")) { Task { await model.saveDraft() } }
                 .disabled(model.isWorking || !model.hasUnsavedChanges)
@@ -320,6 +329,10 @@ struct ReportDetailView: View {
             } else {
                 Text(String(localized: "لم يُرسل محتوى بعد")).foregroundStyle(Color.hcSecondaryText)
             }
+        }
+        if let revision = detail.latestSubmitted {
+            AttachmentsSection(target: .reportRevision(revision.id), canEdit: false, repository: dependencies.attachments)
+                .id(revision.id)
         }
     }
 }

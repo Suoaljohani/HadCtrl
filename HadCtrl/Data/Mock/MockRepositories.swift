@@ -15,6 +15,7 @@ struct MockRepositories: Sendable {
     var reports: MockReportsRepository { MockReportsRepository(store: store, user: demoUser) }
     var indicators: MockIndicatorsRepository { MockIndicatorsRepository(store: store, user: demoUser, periods: dashboard) }
     var achievements: MockAchievementsRepository { MockAchievementsRepository(store: store, user: demoUser) }
+    var attachments: MockAttachmentsRepository { MockAttachmentsRepository(store: store, user: demoUser) }
     var goals: MockGoalsRepository { MockGoalsRepository(store: store, user: demoUser) }
     var notifications: MockNotificationsRepository { MockNotificationsRepository(store: store, user: demoUser) }
 }

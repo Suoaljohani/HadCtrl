@@ -18,8 +18,9 @@ Environment: Ubuntu 24.04 container, PostgreSQL 16.15, with the Supabase platfor
 | 85_notifications (reading notifications, own-inbox RLS, mark all read, deadline reminders once per deadline) | 11 | pass |
 | 87_achievements (draft/submit/return/approve, roles, visibility, history immutability, notifications) | 23 | pass |
 | 88_goals (create rules, director lifecycle, completion request/refusal, milestones, visibility, cross-hospital) | 25 | pass |
+| 89_attachments (reservation rules, Storage INSERT/SELECT policies, size/type verification, visibility follows the record, no evidence change after submission, limits, expiry) | 21 | pass |
 | 90_concurrency.sh (two sessions, same request_id) | 3 | pass |
-| **Total** | **303** | **pass, 0 failures** |
+| **Total** | **324** | **pass, 0 failures** |
 
 All checks run as the real `authenticated`/`anon` roles with a JWT `sub`, never as `service_role`.
 
