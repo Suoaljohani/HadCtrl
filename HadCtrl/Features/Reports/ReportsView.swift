@@ -126,7 +126,8 @@ struct ReportRow: View {
             }
         }
         .accessibilityElement(children: .combine)
-        .accessibilityIdentifier("reportRow.\(report.departmentName)")
+        // Identifier by id: interpolated Arabic labels carry bidi isolation marks.
+        .accessibilityIdentifier("reportRow.\(report.id.uuidString)")
     }
 }
 

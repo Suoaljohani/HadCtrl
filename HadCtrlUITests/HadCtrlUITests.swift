@@ -108,7 +108,7 @@ final class HadCtrlUITests: XCTestCase {
     func testHeadSubmitsMonthlyReport() {
         let app = launch(user: "head")
         app.tabBars.firstMatch.buttons["التقارير"].tap()
-        app.scrollToHittable(app.anyElement(containing: "التقرير الشهري — المختبر")).tap()
+        app.scrollToHittable(app.row("reportRow.00000000-0000-0000-0000-000000000201")).tap()
         app.expectBadge("reportStatusBadge", "لم يُسلّم")
         app.textInput("reportField.f1").tap()
         app.textInput("reportField.f1").typeText("اكتمل توثيق العينات")
@@ -124,12 +124,12 @@ final class HadCtrlUITests: XCTestCase {
     func testDirectorApprovesReportAndReading() {
         let app = launch()
         app.tabBars.firstMatch.buttons["التقارير"].tap()
-        app.scrollToHittable(app.anyElement(containing: "التقرير الشهري — التدريب")).tap()
+        app.scrollToHittable(app.row("reportRow.00000000-0000-0000-0000-000000000202")).tap()
         app.scrollToHittable(app.buttons["report.approve"]).tap()
         app.expectBadge("reportStatusBadge", "معتمد")
 
         app.tabBars.firstMatch.buttons["الأداء"].tap()
-        app.scrollToHittable(app.anyElement(containing: "اكتمال توثيق العينات")).tap()
+        app.scrollToHittable(app.row("indicatorRow.LAB.DOC")).tap()
         app.scrollToHittable(app.buttons["indicator.approve"]).tap()
         XCTAssertTrue(app.descendants(matching: .any)["indicator.confirmation"].waitForExistence(timeout: 10))
         XCTAssertFalse(app.buttons["indicator.approve"].exists)
@@ -192,6 +192,11 @@ private extension XCUIApplication {
 
     func anyElement(containing text: String) -> XCUIElement {
         descendants(matching: .any).matching(NSPredicate(format: "label CONTAINS %@", text)).firstMatch
+    }
+
+    /// A list row by accessibility identifier, whatever element type SwiftUI gives it.
+    func row(_ id: String) -> XCUIElement {
+        descendants(matching: .any).matching(identifier: id).firstMatch
     }
 
     /// Multi-line text fields are text views; single-line ones are text fields.
