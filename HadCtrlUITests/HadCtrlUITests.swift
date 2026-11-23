@@ -69,7 +69,7 @@ final class HadCtrlUITests: XCTestCase {
         let submitted = app.staticTexts["تحديث إجراءات استلام العينات"]
         XCTAssertTrue(submitted.waitForExistence(timeout: 5))
         submitted.tap()
-        XCTAssertTrue(app.otherElements["taskStatus"].waitForExistence(timeout: 5) || app.staticTexts["مرفوعة للاعتماد"].exists)
+        app.expectTaskStatus("مرفوعة للاعتماد")
         XCTAssertFalse(app.buttons["action.approve"].exists, "assignee cannot approve own submission")
     }
 
@@ -81,15 +81,25 @@ final class HadCtrlUITests: XCTestCase {
 }
 
 private extension XCUIApplication {
-    /// Waits for `element` to exist (content may still be loading), then scrolls
-    /// toward it until it is hittable, as a user would.
+    /// Finds `element` the way a user would: gives the screen time to load, and
+    /// scrolls to reveal rows that lazy lists only create once they are near the
+    /// viewport. Then scrolls toward the element until it is hittable.
     @discardableResult
-    func scrollToHittable(_ element: XCUIElement, loadTimeout: TimeInterval = 15, maxSwipes: Int = 8,
-                          file: StaticString = #filePath, line: UInt = #line) -> XCUIElement {
-        XCTAssertTrue(element.waitForExistence(timeout: loadTimeout), "\(element) never appeared", file: file, line: line)
+    func scrollToHittable(_ element: XCUIElement, loadTimeout: TimeInterval = 15, settle: TimeInterval = 3,
+                          maxSwipes: Int = 8, file: StaticString = #filePath, line: UInt = #line) -> XCUIElement {
+        let deadline = Date().addingTimeInterval(loadTimeout)
+        let startScanning = Date().addingTimeInterval(settle)   // don't swipe while content is still loading
         var swipes = 0
-        while element.exists && !element.isHittable && swipes < maxSwipes {
-            // Scroll in the element's direction instead of blindly upward.
+        while !element.exists && Date() < deadline {
+            if Date() >= startScanning && swipes < maxSwipes {
+                swipeUp()
+                swipes += 1
+            } else {
+                _ = element.waitForExistence(timeout: 0.5)
+            }
+        }
+        XCTAssertTrue(element.exists, "\(element) never appeared (after \(swipes) swipes)", file: file, line: line)
+        while element.exists && !element.isHittable && swipes < maxSwipes * 2 {
             if element.frame.minY < frame.midY { swipeDown() } else { swipeUp() }
             swipes += 1
         }

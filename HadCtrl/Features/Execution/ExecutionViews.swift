@@ -155,7 +155,6 @@ struct TaskDetailView: View {
                             StatusBadge(text: String(localized: "متأخرة"), tone: .critical, symbol: "clock")
                         }
                     }
-                    .accessibilityIdentifier("taskStatus")
                     if !task.details.isEmpty { Text(task.details).font(.hcBody) }
                 }
             }
