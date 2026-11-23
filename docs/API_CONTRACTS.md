@@ -53,7 +53,21 @@ Own notifications only. Reading completes nothing.
 ### API-14 `register_device(p_device_id, p_token, p_environment) → uuid`
 Binds a token to the caller only. A token that moves to another account is removed from its old binding.
 
-## Planned (schema exists, RPC pending)
-API-01 dashboard_snapshot · API-02 list_departments · API-03 get_department_detail · API-06 submit_measurement · API-07 decide_measurement · API-08 submit_report · API-09 decide_report · API-10 decide_achievement · API-11 prepare/finalize_attachment · API-12 search_all · API-13 freeze_period.
+### Reports (G4)
+- `generate_report_instances(p_period_id)`: **server-only** (not granted to clients; run from Supabase Cron). Idempotent; returns `{created, skipped_existing}`. Due rules: `day_of_next_period` (clamped) and `end_of_period`, in hospital time.
+- `save_report_draft(p_report_id, p_content, p_request_id, p_expected_revision_version?)`: department members. Creates or updates the single open draft revision.
+- API-08 `submit_report(p_report_id, p_draft_revision_id, p_expected_version, p_request_id)`: department head (a coordinator needs a `submit_reports` delegation). Checks required fields and required evidence. Sets `first_submitted_at` once.
+- API-09 `decide_report(p_report_id, p_revision_id, p_decision, p_expected_version, p_request_id, p_note?)`: director or `approve_reports` delegate who is not a member of that department. The revision must be the latest. Approval freezes `snapshot_data`.
+- `waive_report(p_report_id, p_reason, p_expected_version, p_request_id)`: director.
+- `report_compliance(p_period_id)`: `security invoker`, counted from rows the caller can read; waived reports are excluded from `required`.
+
+### Indicators (G5)
+- API-06 `submit_measurement(p_definition_version_id, p_period_id, p_request_id, p_value?, p_numerator?, p_denominator?, p_not_applicable_reason?, p_source_note?, p_correction_reason?)`: department head. Type-checked input. One open revision at a time. Replacing an approved value needs a correction reason. A frozen period accepts only corrections.
+- API-07 `decide_measurement(p_measurement_id, p_decision, p_expected_version, p_request_id, p_note?)`: director, not a department member, not the person who entered it. Approval supersedes the previous approved revision.
+- API-13 `freeze_period(p_period_id, p_expected_version, p_reason, p_request_id)`: director. Writes an immutable `period_snapshots` row (approved measurements + report states + md5 hash).
+- `private.indicator_score(...)`: SQL mirror of `IndicatorScoring.score`; parity is tested.
+
+## Planned
+API-01 dashboard_snapshot · API-02 list_departments · API-03 get_department_detail · API-10 decide_achievement · API-11 prepare/finalize_attachment · API-12 search_all.
 
 Until these exist, clients read lists through RLS-protected `SELECT`s. Every client-facing table grants SELECT only (plus own preferences and own display name).

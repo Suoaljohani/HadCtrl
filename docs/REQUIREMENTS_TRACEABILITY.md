@@ -22,9 +22,12 @@ DB tests: `scripts/db-test.sh` (local Postgres, real `anon`/`authenticated` role
 | AC-012 | Concurrent edit | verified | `30_tasks_rpc` "stale expected_version rejected"; `ViewModelTests.lifecycle` |
 | AC-013 | Extension request | verified (server) | `30_tasks_rpc` extensions block |
 | AC-014 | Submitted ≠ completed | verified | `30_tasks_rpc` "submitted task is not counted as completed"; `ViewModelTests.lifecycle` |
-| AC-015 | Submit before due, approve after | verified (client rule) | `HospitalCalendarTests.overdue`; server report RPC planned (G4) |
-| AC-016..019 | Report return/approve/schedule/waiver | partial | schema + constraints (`report_instances` unique, frozen revision trigger); RPCs planned (G4) |
-| AC-020 | Correction after freeze | partial | `indicator_measurements` revisions, one-approved index, immutable `period_snapshots`; RPCs planned (G5) |
+| AC-015 | Submit before due, approve after | verified | `40_reports_rpc` "still on time although approved after the due date"; `HospitalCalendarTests.overdue` |
+| AC-016 | Returned report keeps first submission + revision + notes | verified (server) | `40_reports_rpc` return/resubmit block |
+| AC-017 | Approving a stale revision | verified (server) | `40_reports_rpc` "approving a stale revision is a conflict" |
+| AC-018 | Scheduler re-run | verified (server) | `40_reports_rpc` "second scheduler run creates nothing" |
+| AC-019 | Waived report | verified (server) | `40_reports_rpc` waiver + compliance block |
+| AC-020 | Correction after freeze | verified (server) | `50_measurements_rpc` "frozen snapshot unchanged by the correction" |
 | AC-021 | Other org's file | partial | `can_read_attachment` + typed links; storage policies + prepare/finalize planned (G6) |
 | AC-022 | Required evidence upload fails | planned | G6 |
 | AC-023 | Session expiry while saving | planned | needs SDK session handling |
@@ -57,6 +60,8 @@ DB tests: `scripts/db-test.sh` (local Postgres, real `anon`/`authenticated` role
 | Gate | Status |
 |---|---|
 | G1 project | CI run pending — see `docs/BUILD_REPORT.md` |
-| G2 database | local: verified (97 assertions); CI database job pending |
+| G2 database | local: verified (166 assertions + concurrency); CI database job: see BUILD_REPORT |
 | G3 assignments | server: verified; client: mock-backed, SDK wiring pending |
-| G4–G8 | planned |
+| G4 reports | server: verified locally (38 assertions); client wiring pending |
+| G5 indicators | server: verified locally (31 assertions, Swift/SQL scoring parity); `dashboard_snapshot` pending |
+| G6–G8 | planned |
