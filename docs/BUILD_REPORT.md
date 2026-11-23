@@ -35,3 +35,8 @@ Update this table after each run. A signed IPA (G7) needs the Apple inputs liste
 - Artifact `HadCtrl-UNSIGNED-build10`, IPA SHA-256 `7eba27a633989682d73f2af186c69acb064edf23ffc043cc00af95e137e7f994` (matches SHA256SUMS.txt).
 - Verified after download: no `_CodeSignature` (unsigned), `CFBundleVersion` 10, `HCDefaultAppEnvironment` production, `HCSupabaseURL` https://vffusttzqmerfofqianz.supabase.co, publishable key only; `UIBackgroundModes` fetch + `BGTaskSchedulerPermittedIdentifiers` for the inbox refresh (D-30).
 - Includes: reports and indicators screens (G4–G5 client), director definitions, in-app inbox. Must be re-signed by the owner (docs/INSTALL.md).
+
+## Unsigned device build 13 (commit ad4e130), 2026-11-23
+- CI run #28 on the same commit: green (database; simulator build; unit and UI tests incl. 5 achievement unit tests and 2 achievement UI tests).
+- IPA SHA-256 `7aef57dd700e442826973f1643b2abda8c6d91eb72e0e3b6c3464b400766cd45` (matches SHA256SUMS.txt). Unsigned (no `_CodeSignature`), `CFBundleVersion` 13, production backend, publishable key only.
+- Adds achievements (list, detail, director decision, add/edit). Hosted migration 001500 applied by the owner and verified.

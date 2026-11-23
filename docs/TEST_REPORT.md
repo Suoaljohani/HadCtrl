@@ -22,7 +22,12 @@ Environment: Ubuntu 24.04 container, PostgreSQL 16.15, with the Supabase platfor
 
 All checks run as the real `authenticated`/`anon` roles with a JWT `sub`, never as `service_role`.
 
-Limits: PostgreSQL 16 locally vs 17 on the hosted project. Storage (`storage.objects`) policies are not covered yet. ## Hosted project after migration 001400 (2026-11-23)
+Limits: PostgreSQL 16 locally vs 17 on the hosted project. Storage (`storage.objects`) policies are not covered yet. ## Hosted project after migration 001500 (2026-11-23)
+- The MCP apply timed out three times waiting for an approval prompt, so the owner ran `20261123001500_achievements.sql` in the SQL Editor. It is therefore **not listed** in `supabase_migrations.schema_migrations`.
+- Verified afterwards: `achievement_reviews` exists with RLS and one policy, SELECT-only for clients; anon executes no public function. The pasted text had Windows line endings; with `chr(13)` removed, every function body is identical to the tested build: fingerprint `508cd108f4650d817cb5c88bf67fd987` over 77 functions, same as local.
+- Security advisor: only accepted findings (27 documented RPCs, D-18; leaked-password protection off).
+
+## Hosted project after migration 001400 (2026-11-23)
 - Applied `notifications_inbox`. Fingerprint `1d9e71d77657fc93815bde37a58a424a` over 73 functions, identical locally and hosted. Anon executes no public function.
 
 ## Hosted project after migration 001300 (2026-11-23)
