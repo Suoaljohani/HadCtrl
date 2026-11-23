@@ -44,6 +44,24 @@ extension TaskStatus {
     }
 }
 
+extension TaskStatus {
+    /// Position on the assigned → completed track; nil for draft and cancelled.
+    var lifecycleStep: Int? {
+        switch self {
+        case .assigned: return 0
+        case .acknowledged: return 1
+        case .inProgress, .blocked, .returned: return 2
+        case .submitted: return 3
+        case .completed: return 4
+        case .draft, .cancelled: return nil
+        }
+    }
+    static var lifecycleTitles: [String] {
+        [String(localized: "مسندة"), String(localized: "مستلمة"), String(localized: "قيد التنفيذ"),
+         String(localized: "مرفوعة"), String(localized: "مكتملة")]
+    }
+}
+
 extension TaskTransition {
     var title: String {
         switch self {
@@ -91,6 +109,22 @@ extension ReportStatus {
         case .waived: return .neutral
         default: return .info
         }
+    }
+}
+
+extension ReportStatus {
+    /// Position on the draft → approved track; nil when exempted.
+    var lifecycleStep: Int? {
+        switch self {
+        case .notSubmitted, .returned: return 0
+        case .submitted: return 1
+        case .underReview: return 2
+        case .approved: return 3
+        case .waived: return nil
+        }
+    }
+    static var lifecycleTitles: [String] {
+        [String(localized: "إعداد"), String(localized: "مُسلّم"), String(localized: "مراجعة"), String(localized: "معتمد")]
     }
 }
 

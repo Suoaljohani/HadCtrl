@@ -166,6 +166,10 @@ struct TaskDetailView: View {
                             StatusBadge(text: String(localized: "متأخرة"), tone: .critical, symbol: "clock")
                         }
                     }
+                    if let step = task.status.lifecycleStep {
+                        LifecycleTrack(steps: TaskStatus.lifecycleTitles, current: step, tone: task.status.tone)
+                            .padding(.vertical, Spacing.xxs)
+                    }
                     if !task.details.isEmpty { Text(task.details).font(.hcBody) }
                 }
             }

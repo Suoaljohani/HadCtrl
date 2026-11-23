@@ -308,3 +308,50 @@ struct MetricTile: View {
         return String(localized: "\(title)، \(numerator)")
     }
 }
+
+/// Where a record is in its lifecycle: dots joined by a line that fills to the
+/// current step. The step name is also spoken and shown, never colour alone.
+struct LifecycleTrack: View {
+    let steps: [String]
+    let current: Int
+    var tone: StatusTone = .info
+    @Environment(\.hcMotionEnabled) private var motion
+    @State private var shown = 0.0
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Spacing.xs) {
+            GeometryReader { geo in
+                let count = max(steps.count - 1, 1)
+                let step = geo.size.width / CGFloat(count)
+                ZStack(alignment: .leading) {
+                    Capsule().fill(Color.hcSeparator).frame(height: 3)
+                    Capsule().fill(tone.color).frame(width: step * CGFloat(shown), height: 3)
+                    ForEach(steps.indices, id: \.self) { i in
+                        Circle()
+                            .fill(i <= current ? tone.color : Color.hcSurface)
+                            .overlay(Circle().strokeBorder(i <= current ? tone.color : Color.hcSeparator, lineWidth: 2))
+                            .frame(width: i == current ? 14 : 10, height: i == current ? 14 : 10)
+                            .position(x: CGFloat(i) * step, y: 7)
+                    }
+                }
+                .frame(height: 14)
+            }
+            .frame(height: 14)
+            .padding(.horizontal, 7)
+            HStack {
+                Text(steps.first ?? "").font(.hcCaption).foregroundStyle(Color.hcSecondaryText)
+                Spacer()
+                Text(steps.last ?? "").font(.hcCaption).foregroundStyle(Color.hcSecondaryText)
+            }
+        }
+        .onAppear { animate() }
+        .onChange(of: current) { _, _ in animate() }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(String(localized: "المرحلة \(current + 1) من \(steps.count): \(steps[min(max(current, 0), steps.count - 1)])"))
+    }
+
+    private func animate() {
+        let target = Double(min(max(current, 0), steps.count - 1))
+        if motion { withAnimation(HCMotion.fill) { shown = target } } else { shown = target }
+    }
+}

@@ -5,6 +5,19 @@ import Observation
 // director's decision, and the department's add/edit form.
 
 extension AchievementItem.Status {
+    /// Position on the draft → published track; nil when rejected or archived.
+    var lifecycleStep: Int? {
+        switch self {
+        case .draft, .returned: return 0
+        case .submitted: return 1
+        case .approved: return 2
+        case .rejected, .archived: return nil
+        }
+    }
+    static var lifecycleTitles: [String] {
+        [String(localized: "توثيق"), String(localized: "بانتظار الاعتماد"), String(localized: "معتمد ومنشور")]
+    }
+
     var title: String {
         switch self {
         case .draft: return String(localized: "مسودة")
@@ -234,6 +247,10 @@ struct AchievementDetailView: View {
                     Text(verbatim: "\(d.item.departmentName) · \(d.item.periodTitle)").font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
                     StatusBadge(text: d.item.status.title, tone: d.item.status.tone)
                         .accessibilityIdentifier("achievementStatusBadge")
+                    if let step = d.item.status.lifecycleStep {
+                        LifecycleTrack(steps: AchievementItem.Status.lifecycleTitles, current: step, tone: d.item.status.tone)
+                            .padding(.vertical, Spacing.xxs)
+                    }
                 }
             }
             Section(String(localized: "الأثر")) {

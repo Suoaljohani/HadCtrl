@@ -43,6 +43,22 @@ extension GoalProgress.Track {
     }
 }
 
+extension GoalLifecycle {
+    /// Position on the draft → completed track; nil when cancelled or archived.
+    var lifecycleStep: Int? {
+        switch self {
+        case .draft: return 0
+        case .active: return 1
+        case .completionPending: return 2
+        case .completed: return 3
+        case .cancelled, .archived: return nil
+        }
+    }
+    static var lifecycleTitles: [String] {
+        [String(localized: "تعريف"), String(localized: "نشط"), String(localized: "طلب إقفال"), String(localized: "مكتمل")]
+    }
+}
+
 enum GoalText {
     static func progressLine(_ p: GoalProgress, unit: String, style: NumberStyle = NumberStyle()) -> String {
         let actual = p.actual.map { style.format($0) } ?? String(localized: "لم يُحدّث")
@@ -244,6 +260,10 @@ struct GoalDetailView: View {
                         if s.lifecycle == .active || s.lifecycle == .completionPending {
                             StatusBadge(text: s.progress.track.title, tone: s.progress.track.tone)
                         }
+                    }
+                    if let step = s.lifecycle.lifecycleStep {
+                        LifecycleTrack(steps: GoalLifecycle.lifecycleTitles, current: step, tone: s.lifecycle.tone)
+                            .padding(.vertical, Spacing.xxs)
                     }
                 }
                 if !g.description.isEmpty { Text(g.description) }

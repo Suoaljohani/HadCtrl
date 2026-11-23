@@ -200,6 +200,10 @@ struct ReportDetailView: View {
                                         tone: onTime ? .good : .warning)
                         }
                     }
+                    if let step = detail.report.status.lifecycleStep {
+                        LifecycleTrack(steps: ReportStatus.lifecycleTitles, current: step, tone: detail.report.status.tone)
+                            .padding(.vertical, Spacing.xxs)
+                    }
                 }
                 LabeledContent(String(localized: "الاستحقاق"), value: HCFormat.dateTime(detail.report.dueAt))
                 // Compliance uses the first submission, never the approval time (AC-015).
