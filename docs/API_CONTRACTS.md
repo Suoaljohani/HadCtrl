@@ -114,6 +114,23 @@ All director only (system admin and heads get `HC_FORBIDDEN`; another hospital g
 - `mark_password_changed()`: clears the caller's `must_change_password` after `auth.update(password)`. `my_context.profile.must_change_password` drives the forced change screen.
 - `list_people(p_organization_id)`: director or system admin; people with org and department roles.
 
+### API-16 `prepare_signature(p_entity_type, p_entity_id, p_purpose, p_request_id) → {id, bucket, path}` (migration 001800, D-37)
+- `p_entity_type` ∈ task, report, measurement, achievement, goal; `p_purpose` ∈ approve, activate, complete.
+- The caller must be able to see the record (`HC_NOT_FOUND` otherwise) and be an active member of its organization.
+- Reserves `org/type/record/<signature>.png` in the private `hadctrl-signatures` bucket for 15 minutes. Idempotent per request id.
+
+### API-17 `finalize_signature(p_signature_id, p_request_id) → {id, signed_at, path}`
+- Only the signer; the stored object must be `image/png`, 1 byte to 512 KB (`HC_ATTACHMENT_INCOMPLETE` otherwise).
+- Seals the row (`lifecycle = signed`) and writes audit `signature_recorded`. Sealed rows cannot be updated or deleted (`HC_IMMUTABLE`).
+- Reading: `approval_signatures` rows and images are visible to the signer and to anyone who can see the record.
+
+### API-18 `unregister_device(p_device_id) → integer` (D-36)
+- Invalidates the caller's own registration for this installation (sign-out). Returns rows changed; idempotent.
+
+### Edge Function `push-sender` (D-36)
+- POST with header `x-push-sender-secret`; sends pending `apns` outbox rows via token-based APNs; returns `{sent, cancelled, retried, failed}`.
+- 503 `HC_APNS_NOT_CONFIGURED` when APNs secrets are missing; nothing is sent or marked.
+
 ## Planned
 API-01 dashboard_snapshot · API-02 list_departments · API-03 get_department_detail · API-10 decide_achievement · API-11 prepare/finalize_attachment · API-12 search_all.
 

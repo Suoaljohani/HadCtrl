@@ -86,6 +86,14 @@ final class PushCenter {
         if status == .enabled { UIApplication.shared.registerForRemoteNotifications() }
     }
 
+    /// Before sign-out (while the session is still valid): stop pushes to this device.
+    /// Best effort — a server without migration 001800 simply keeps the binding,
+    /// and the next user who signs in on this device takes the token over.
+    func unregisterFromServer() async {
+        guard let repository, isRegisteredOnServer else { return }
+        try? await repository.unregisterDevice(deviceID: Self.deviceID)
+    }
+
     func detach() {
         repository = nil
         isRegisteredOnServer = false

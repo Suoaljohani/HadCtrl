@@ -76,6 +76,7 @@ struct TaskListView: View {
             case .loaded(let items), .loading(let items?):
                 ForEach(items) { task in
                     HCLink(AppRoute.task(task.id)) { TaskRow(task: task, now: dependencies.clock.now()) }
+                        .hcScrollReveal()
                 }
             }
         }
@@ -115,6 +116,7 @@ struct TaskRow: View {
 struct TaskDetailView: View {
     let context: UserContext
     let dependencies: DependencyContainer
+    @Environment(\.hcSignatureGate) private var signatures
     @State private var model: TaskDetailViewModel
     @State private var noteFor: TaskTransition?
     @State private var note = ""
@@ -191,12 +193,19 @@ struct TaskDetailView: View {
             if let confirmation = model.lastConfirmation {
                 Section { Label(confirmation, systemImage: "checkmark.circle").foregroundStyle(Color.hcGood) }
             }
+            SignaturesSection(entity: .task(task.id), repository: dependencies.signatures, refreshKey: task.version)
             let actions = task.availableTransitions(for: context)
             if !actions.isEmpty {
                 Section(String(localized: "الإجراءات")) {
                     ForEach(actions, id: \.self) { transition in
                         Button {
                             if transition.requiresNote { note = ""; noteFor = transition }
+                            else if transition == .approve {
+                                hcSigned(signatures, .task(task.id), purpose: .approve,
+                                         title: String(localized: "اعتماد المهمة: \(task.title)")) {
+                                    await model.perform(transition, note: nil)
+                                }
+                            }
                             else { Task { await model.perform(transition, note: nil) } }
                         } label: {
                             Text(transition.title).frame(maxWidth: .infinity, alignment: .leading)

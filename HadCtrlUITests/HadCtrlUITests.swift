@@ -38,7 +38,10 @@ final class HadCtrlUITests: XCTestCase {
         app.scrollToHittable(app.buttons["reading.awaitingDirector"]).tap()
         app.scrollToHittable(app.staticTexts["تحديث إجراءات استلام العينات"]).tap()
         app.scrollToHittable(app.buttons["action.approve"]).tap()
+        app.sign()
         app.expectTaskStatus("مكتملة")
+        XCTAssertTrue(app.scrollToHittable(app.descendants(matching: .any)["signatureRow"]).exists,
+                      "the handwritten signature is shown with the decision")
         XCTAssertTrue(app.buttons["action.approve"].waitForNonExistence(timeout: 5),
                       "approved task offers no further approval")
     }
@@ -127,11 +130,13 @@ final class HadCtrlUITests: XCTestCase {
         app.tabBars.firstMatch.buttons["التقارير"].tap()
         app.scrollToHittable(app.row("reportRow.00000000-0000-0000-0000-000000000202")).tap()
         app.scrollToHittable(app.buttons["report.approve"]).tap()
+        app.sign()
         app.expectBadge("reportStatusBadge", "معتمد")
 
         app.tabBars.firstMatch.buttons["الأداء"].tap()
         app.scrollToHittable(app.row("indicatorRow.LAB.DOC")).tap()
         app.scrollToHittable(app.buttons["indicator.approve"]).tap()
+        app.sign()
         XCTAssertTrue(app.descendants(matching: .any)["indicator.confirmation"].waitForExistence(timeout: 10))
         XCTAssertFalse(app.buttons["indicator.approve"].exists)
     }
@@ -170,6 +175,7 @@ final class HadCtrlUITests: XCTestCase {
         app.segmentedControls.buttons["المنجزات"].tap()
         app.scrollToHittable(app.row("achievementRow.00000000-0000-0000-0000-000000000402")).tap()
         app.scrollToHittable(app.buttons["achievement.approve"]).tap()
+        app.sign()
         app.expectBadge("achievementStatusBadge", "معتمد")
     }
 
@@ -181,6 +187,7 @@ final class HadCtrlUITests: XCTestCase {
         app.scrollToHittable(app.row("goalRow.00000000-0000-0000-0000-000000000603")).tap()
         app.expectBadge("goalStatusBadge", "مسودة بانتظار الاعتماد")
         app.scrollToHittable(app.buttons["goal.activate"]).tap()
+        app.sign()
         app.expectBadge("goalStatusBadge", "نشط")
     }
 
@@ -219,6 +226,21 @@ final class HadCtrlUITests: XCTestCase {
 }
 
 private extension XCUIApplication {
+    /// Draws a signature on the pad and confirms it (D-37).
+    func sign(file: StaticString = #filePath, line: UInt = #line) {
+        let pad = descendants(matching: .any)["signature.pad"]
+        XCTAssertTrue(pad.waitForExistence(timeout: 10), "the signature pad is shown before a decision", file: file, line: line)
+        let confirm = buttons["signature.confirm"]
+        XCTAssertFalse(confirm.isEnabled, "an empty signature cannot be confirmed", file: file, line: line)
+        pad.coordinate(withNormalizedOffset: CGVector(dx: 0.15, dy: 0.55))
+            .press(forDuration: 0.05, thenDragTo: pad.coordinate(withNormalizedOffset: CGVector(dx: 0.85, dy: 0.35)))
+        pad.coordinate(withNormalizedOffset: CGVector(dx: 0.25, dy: 0.7))
+            .press(forDuration: 0.05, thenDragTo: pad.coordinate(withNormalizedOffset: CGVector(dx: 0.75, dy: 0.65)))
+        XCTAssertTrue(confirm.isEnabled, "a drawn signature can be confirmed", file: file, line: line)
+        confirm.tap()
+        XCTAssertTrue(pad.waitForNonExistence(timeout: 10), "the signature sheet closes once sealed", file: file, line: line)
+    }
+
     /// Finds `element` the way a user would: gives the screen time to load, and
     /// scrolls to reveal rows that lazy lists only create once they are near the
     /// viewport. Then scrolls toward the element until it is hittable.

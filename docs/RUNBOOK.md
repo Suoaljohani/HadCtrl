@@ -17,6 +17,25 @@ There is deliberately no "first user becomes director" function in the app. Role
 ## 2b. Reports and indicators (D-29)
 In the app, as the director: Settings → «الأقسام والموظفون» → «قالب تقرير دوري جديد» (fields, departments, due day) and «مؤشر أداء جديد». Then Reports tab → «توليد تقارير الفترة» (or «فتح الفترة الحالية» if no period exists). The nightly job `hadctrl-daily` does the same for the current month; check it with `select * from cron.job_run_details order by start_time desc limit 5;`.
 
+## 2c. Signatures, device unregistration (migration 001800) and APNs push
+
+1. Apply `supabase/migrations/20261123001800_signatures.sql` in the SQL Editor (non-destructive: new table, bucket, policies, three RPCs, `daily_maintenance` gains signature expiry). Verify with the function fingerprint query (§1) and the security advisor. Until it is applied the app keeps approving without a signature step and Settings says signatures await the server update.
+2. Push (needs a paid Apple Developer account):
+   - Create an APNs auth key (.p8) in Certificates, Identifiers & Profiles; enable Push Notifications on the app id; regenerate the provisioning profile.
+   - In Supabase → Edge Functions → Secrets set `APNS_KEY_P8` (file contents), `APNS_KEY_ID`, `APNS_TEAM_ID`, `APNS_TOPIC` (bundle id) and a random `PUSH_SENDER_SECRET`. Never commit them.
+   - Deploy `supabase/functions/push-sender` with `verify_jwt = false` (the function checks its own secret).
+   - Schedule it every minute (SQL Editor; store the secret in Vault first: `select vault.create_secret('<secret>', 'push_sender_secret');`):
+     ```sql
+     select cron.schedule('hadctrl-push', '* * * * *', $$
+       select net.http_post(
+         url := 'https://<project-ref>.supabase.co/functions/v1/push-sender',
+         headers := jsonb_build_object('x-push-sender-secret',
+           (select decrypted_secret from vault.decrypted_secrets where name = 'push_sender_secret')),
+         body := '{}'::jsonb);
+     $$);
+     ```
+   - Sign the IPA with `HC_ENABLE_PUSH=1` so the push entitlement is included.
+
 ## 3. Revoking access
 Set `department_memberships.active = false` (or `organization_memberships`, or `profiles.active`). Every RPC and policy re-checks this on each call, so a still-valid token loses access immediately (AC-032). Reassign open tasks with `transition_task(..., 'reassign', ...)`. Do not delete history.
 

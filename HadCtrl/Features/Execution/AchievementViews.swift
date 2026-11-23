@@ -69,6 +69,7 @@ struct AchievementsListView: View {
             case .loaded(let items), .loading(let items?):
                 ForEach(items) { a in
                     HCLink(AppRoute.achievement(a.id)) { AchievementRow(item: a) }
+                        .hcScrollReveal()
                 }
             }
         }
@@ -180,6 +181,7 @@ final class AchievementDetailViewModel {
 struct AchievementDetailView: View {
     let context: UserContext
     let dependencies: DependencyContainer
+    @Environment(\.hcSignatureGate) private var signatures
     @State private var model: AchievementDetailViewModel
     @State private var editing = false
     @State private var noteFor: AchievementDecision?
@@ -248,6 +250,7 @@ struct AchievementDetailView: View {
                     }
                 }
             }
+            SignaturesSection(entity: .achievement(d.item.id), repository: dependencies.signatures, refreshKey: d.item.version)
             AttachmentsSection(target: .achievement(d.item.id), canEdit: perms.canEdit, repository: dependencies.attachments,
                                note: perms.canEdit ? String(localized: "الشاهد يثبت الأثر؛ لا تُرفق صور أشخاص أو نشاط لا تثبت النتيجة.") : nil)
                 .id("\(d.item.id)-\(perms.canEdit)")
@@ -276,7 +279,12 @@ struct AchievementDetailView: View {
             }
             if perms.canDecide {
                 Section(String(localized: "قرار المدير")) {
-                    Button(String(localized: "اعتماد ونشر")) { Task { await model.decide(.approved, note: nil) } }
+                    Button(String(localized: "اعتماد ونشر")) {
+                        hcSigned(signatures, .achievement(d.item.id), purpose: .approve,
+                                 title: String(localized: "اعتماد المنجز: \(d.item.title)")) {
+                            await model.decide(.approved, note: nil)
+                        }
+                    }
                         .disabled(model.isWorking)
                         .accessibilityIdentifier("achievement.approve")
                     Button(String(localized: "إعادة لطلب توضيح أو شاهد")) { note = ""; noteFor = .returned }

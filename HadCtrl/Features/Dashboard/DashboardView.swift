@@ -1,14 +1,21 @@
 import SwiftUI
 
-/// Director command center (spec §06): decisions first, then pulse, six
-/// readings, departments. Every number opens the list it was counted from.
+/// Director command center (spec §06): decisions first by default, then pulse,
+/// six readings, departments — in the order the director chose (D-35). Every
+/// number opens the list it was counted from.
+///
+/// Scroll story (DESIGN_DIRECTION §2): the hospital photo sits behind a parallax
+/// hero that stretches on pull-down and drifts slower than the content; the
+/// content rises over it as a sheet, and each card settles in as it enters.
 struct DashboardView: View {
     let context: UserContext
     let dependencies: DependencyContainer
     let open: (AppRoute) -> Void
     let present: (SheetRoute) -> Void
     @State private var model: DashboardViewModel
+    @State private var customizing = false
     @Environment(PeriodSelection.self) private var periods
+    @Environment(AppPreferences.self) private var preferences
     @Environment(\.hcMotionEnabled) private var motion
 
     init(context: UserContext, dependencies: DependencyContainer, open: @escaping (AppRoute) -> Void, present: @escaping (SheetRoute) -> Void) {
@@ -36,16 +43,26 @@ struct DashboardView: View {
         ScrollView {
             // Eager stack: the dashboard is bounded (≤3 actions, 6 readings, departments),
             // and every item must exist for VoiceOver and UI tests, not only once scrolled into view.
-            VStack(alignment: .leading, spacing: Spacing.l) {
-                DashboardHeader(context: context)
-                if dependencies.environment.usesMockData { DemoDataBanner() }
-                content
+            VStack(spacing: 0) {
+                DashboardHero(context: context, periods: periods)
+                VStack(alignment: .leading, spacing: Spacing.l) {
+                    if dependencies.environment.usesMockData { DemoDataBanner() }
+                    content
+                }
+                .padding(.horizontal, Spacing.m)
+                .padding(.top, Spacing.l)
+                .padding(.bottom, Spacing.xxl)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.hcBackground,
+                            in: UnevenRoundedRectangle(topLeadingRadius: Radius.largeCard, topTrailingRadius: Radius.largeCard,
+                                                       style: .continuous))
+                .padding(.top, -Radius.largeCard)
+                .animation(motion ? HCMotion.smooth : nil, value: phase)
+                .animation(motion ? HCMotion.smooth : nil, value: preferences.dashboard)
             }
-            .padding(.horizontal, Spacing.m)
-            .padding(.bottom, Spacing.xxl)
-            .animation(motion ? HCMotion.smooth : nil, value: phase)
         }
-        .background(DashboardBackdrop())
+        .ignoresSafeArea(.container, edges: .top)
+        .background(Color.hcBackground)
         .refreshable { await model.refresh() }
         .navigationTitle(String(localized: "الرئيسية"))
         .navigationBarTitleDisplayMode(.inline)
@@ -59,6 +76,13 @@ struct DashboardView: View {
                 }
             }
         }
+        .sheet(isPresented: $customizing) {
+            NavigationStack {
+                DashboardCustomizeView()
+                    .toolbar { ToolbarItem(placement: .confirmationAction) { Button(String(localized: "تم")) { customizing = false } } }
+            }
+            .presentationDetents([.medium, .large])
+        }
         .task { await periods.loadIfNeeded() }
         .onChange(of: periods.selectedID, initial: true) { _, id in
             if let id, id != model.selectedPeriodID { model.select(periodID: id) }
@@ -66,7 +90,6 @@ struct DashboardView: View {
     }
 
     @ViewBuilder private var content: some View {
-        PeriodBar(periods: periods)
         if let error = periods.error {
             StateView(kind: .error, title: String(localized: "تعذر تحميل الفترات"), message: error.userMessage) {
                 Task { await periods.reload() }
@@ -101,64 +124,86 @@ struct DashboardView: View {
             Text(String(localized: "آخر تحديث \(HCFormat.dateTime(s.generatedAt))"))
                 .font(.hcCaption).foregroundStyle(Color.hcSecondaryText)
                 .accessibilityIdentifier("generatedAt")
+            Spacer(minLength: 0)
+            if context.isDirector {
+                Button { customizing = true } label: {
+                    Label(String(localized: "تخصيص"), systemImage: "slider.horizontal.3")
+                        .font(.hcCaption.weight(.semibold))
+                }
+                .buttonStyle(.bordered).controlSize(.small).buttonBorderShape(.capsule)
+                .accessibilityIdentifier("dashboard.customize")
+            }
         }
         .hcEntrance(0)
 
-        // 1. Needs your decision
-        VStack(alignment: .leading, spacing: Spacing.s) {
-            SectionHeader(title: String(localized: "تحتاج قرارك"),
-                          trailing: s.topActions.isEmpty ? nil : String(localized: "\(s.topActions.count) بنود"),
-                          symbol: "bell.badge")
-            if s.topActions.isEmpty {
-                HCCard {
-                    HStack(spacing: Spacing.s) {
-                        IconBadge(symbol: "checkmark.seal.fill", tone: .good)
-                        Text(String(localized: "لا توجد إجراءات معلقة الآن.")).font(.hcCallout).foregroundStyle(Color.hcInk)
+        ForEach(Array(preferences.dashboard.visible.enumerated()), id: \.element) { index, module in
+            moduleView(module, s)
+                .hcEntrance(index + 1)
+                .transition(.opacity.combined(with: .move(edge: .bottom)))
+        }
+    }
+
+    @ViewBuilder private func moduleView(_ module: DashboardModule, _ s: DashboardSnapshot) -> some View {
+        switch module {
+        case .decisions:
+            VStack(alignment: .leading, spacing: Spacing.s) {
+                SectionHeader(title: String(localized: "تحتاج قرارك"),
+                              trailing: s.topActions.isEmpty ? nil : String(localized: "\(s.topActions.count) بنود"),
+                              symbol: "bell.badge")
+                if s.topActions.isEmpty {
+                    HCCard {
+                        HStack(spacing: Spacing.s) {
+                            IconBadge(symbol: "checkmark.seal.fill", tone: .good)
+                            Text(String(localized: "لا توجد إجراءات معلقة الآن.")).font(.hcCallout).foregroundStyle(Color.hcInk)
+                        }
+                    }
+                    .hcScrollReveal()
+                } else {
+                    ForEach(s.topActions) { action in
+                        Button { open(action.route) } label: { ActionRow(action: action) }
+                            .buttonStyle(.hcCard)
+                            .hcZoomSourceInEnvironment(action.route)
+                            .hcScrollReveal()
                     }
                 }
-            } else {
-                ForEach(Array(s.topActions.enumerated()), id: \.element.id) { index, action in
-                    Button { open(action.route) } label: { ActionRow(action: action) }
-                        .buttonStyle(.hcCard)
-                        .hcZoomSourceInEnvironment(action.route)
-                        .hcEntrance(1 + index)
-                }
             }
-        }
-        .accessibilityElement(children: .contain)
-        .accessibilityIdentifier("decisionsSection")
-        .hcEntrance(1)
-
-        // 2. Pulse: measured result AND coverage, never one without the other (§11).
-        PulseCard(snapshot: s)
-            .hcEntrance(2)
-
-        // 3. Six readings
-        VStack(alignment: .leading, spacing: Spacing.s) {
-            SectionHeader(title: String(localized: "قراءات الفترة"), symbol: "square.grid.2x2")
-            ReadingsGrid(readings: s.readings, open: open)
-        }
-        .hcEntrance(3)
-
-        // 4. Departments (vertical cards, no wide table on iPhone)
-        VStack(alignment: .leading, spacing: Spacing.s) {
-            SectionHeader(title: String(localized: "الأقسام"), trailing: String(localized: "\(s.departments.count) أقسام"),
-                          symbol: "building.2")
-            ForEach(Array(s.departments.enumerated()), id: \.element.id) { index, pulse in
-                let route = AppRoute.department(pulse.department.id)
-                Button { open(route) } label: { DepartmentPulseCard(pulse: pulse) }
-                    .buttonStyle(.hcCard)
-                    .hcZoomSourceInEnvironment(route)
-                    .hcEntrance(4 + index)
+            .accessibilityElement(children: .contain)
+            .accessibilityIdentifier("decisionsSection")
+        case .pulse:
+            // Measured result AND coverage, never one without the other (§11).
+            PulseCard(snapshot: s).hcScrollReveal()
+        case .readings:
+            VStack(alignment: .leading, spacing: Spacing.s) {
+                SectionHeader(title: String(localized: "قراءات الفترة"), symbol: "square.grid.2x2")
+                ReadingsGrid(readings: s.readings, compact: preferences.dashboard.compactReadings, open: open)
+            }
+        case .departments:
+            // Vertical cards, no wide table on iPhone.
+            VStack(alignment: .leading, spacing: Spacing.s) {
+                SectionHeader(title: String(localized: "الأقسام"), trailing: String(localized: "\(s.departments.count) أقسام"),
+                              symbol: "building.2")
+                ForEach(s.departments) { pulse in
+                    let route = AppRoute.department(pulse.department.id)
+                    Button { open(route) } label: { DepartmentPulseCard(pulse: pulse) }
+                        .buttonStyle(.hcCard)
+                        .hcZoomSourceInEnvironment(route)
+                        .hcScrollReveal()
+                }
             }
         }
     }
 }
 
-// MARK: - Header
+// MARK: - Hero
 
-private struct DashboardHeader: View {
+/// The hospital photo with greeting, organization and period. The photo drifts at
+/// a third of the scroll speed and stretches on pull-down; plain brand colour
+/// under Reduce Transparency, static under reduced motion.
+private struct DashboardHero: View {
     let context: UserContext
+    let periods: PeriodSelection
+    @Environment(\.hcMotionEnabled) private var motion
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
 
     private var greeting: String {
         var calendar = Calendar(identifier: .gregorian)
@@ -168,25 +213,61 @@ private struct DashboardHeader: View {
     }
 
     var body: some View {
-        HStack(alignment: .center, spacing: Spacing.s) {
-            InitialsAvatar(name: context.displayName)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(verbatim: "\(greeting)، \(context.displayName)")
-                    .font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
-                    .lineLimit(2)
-                Text(context.organizationName)
-                    .font(.hcTitle).foregroundStyle(Color.hcInk)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .accessibilityAddTraits(.isHeader)
+        VStack(alignment: .leading, spacing: Spacing.s) {
+            HStack(alignment: .center, spacing: Spacing.s) {
+                InitialsAvatar(name: context.displayName, size: 46)
+                    .background(Circle().fill(Color.hcSurface))
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(verbatim: "\(greeting)، \(context.displayName)")
+                        .font(.hcFootnote).foregroundStyle(.white.opacity(0.9))
+                        .lineLimit(2)
+                    Text(context.organizationName)
+                        .font(.hcTitle).foregroundStyle(.white)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityAddTraits(.isHeader)
+                }
+                Spacer(minLength: 0)
             }
-            Spacer(minLength: 0)
+            .accessibilityElement(children: .combine)
+            PeriodBar(periods: periods)
         }
-        .padding(.top, Spacing.xs)
-        .accessibilityElement(children: .combine)
+        .shadow(color: .black.opacity(0.25), radius: 8, y: 2)
+        .padding(.horizontal, Spacing.m)
+        .padding(.top, 130)
+        .padding(.bottom, Spacing.l + Radius.largeCard)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(alignment: .bottom) { backdrop }
+    }
+
+    @ViewBuilder private var backdrop: some View {
+        let animate = motion
+        ZStack {
+            Color.hcInk
+            if !reduceTransparency {
+                Image("HCHeroBuilding")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                    .clipped()
+                    .accessibilityHidden(true)
+                    .visualEffect { content, proxy in
+                        let minY = proxy.frame(in: .scrollView).minY
+                        let pull = max(minY, 0)
+                        return content
+                            .scaleEffect(animate ? 1 + pull / 320 : 1, anchor: .bottom)
+                            .offset(y: animate ? (minY > 0 ? -minY / 2 : -minY * 0.35) : 0)
+                    }
+                LinearGradient(stops: [.init(color: Color.hcInk.opacity(0.10), location: 0),
+                                       .init(color: Color.hcInk.opacity(0.25), location: 0.35),
+                                       .init(color: Color.hcInk.opacity(0.85), location: 1)],
+                               startPoint: .top, endPoint: .bottom)
+            }
+            ChevronMotif(spacing: 54).stroke(Color.white.opacity(0.05), lineWidth: 1)
+        }
     }
 }
 
-/// Today's date and the period selector as one quiet control row.
+/// Today's date and the period selector as one control row on the hero.
 private struct PeriodBar: View {
     let periods: PeriodSelection
     @Environment(\.dynamicTypeSize) private var typeSize
@@ -197,7 +278,7 @@ private struct PeriodBar: View {
             : AnyLayout(HStackLayout(spacing: Spacing.s))
         layout {
             Label(HCFormat.date(Date()), systemImage: "calendar")
-                .font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
+                .font(.hcFootnote).foregroundStyle(.white.opacity(0.9))
                 .labelStyle(.titleAndIcon)
             if !typeSize.isAccessibilitySize { Spacer(minLength: 0) }
             if !periods.periods.isEmpty {
@@ -213,37 +294,21 @@ private struct PeriodBar: View {
                     }
                 } label: {
                     HStack(spacing: Spacing.xxs) {
+                        Image(systemName: "calendar.badge.clock").accessibilityHidden(true)
                         Text(periods.selected?.title ?? String(localized: "الفترة"))
                         Image(systemName: "chevron.down").font(.caption2.weight(.bold)).accessibilityHidden(true)
                     }
                     .font(.hcFootnote.weight(.semibold))
-                    .foregroundStyle(Color.hcPrimary)
+                    .foregroundStyle(.white)
                     .padding(.horizontal, Spacing.s)
-                    .padding(.vertical, Spacing.xs - 1)
-                    .background(Color.hcPrimary.opacity(0.1), in: Capsule())
+                    .padding(.vertical, Spacing.xs)
+                    .hcGlassCapsule()
                     .contentShape(Capsule())
                 }
                 .accessibilityLabel(String(localized: "الفترة: \(periods.selected?.title ?? "")"))
                 .accessibilityIdentifier("periodPicker")
             }
         }
-    }
-}
-
-/// Background with a faint brand wash behind the header; plain under Reduce Transparency.
-private struct DashboardBackdrop: View {
-    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
-
-    var body: some View {
-        ZStack(alignment: .top) {
-            Color.hcBackground
-            if !reduceTransparency {
-                LinearGradient(colors: [Color.hcHighlight.opacity(0.35), Color.hcBackground.opacity(0)],
-                               startPoint: .top, endPoint: .bottom)
-                    .frame(height: 320)
-            }
-        }
-        .ignoresSafeArea()
     }
 }
 
@@ -468,6 +533,7 @@ extension DashboardReading.Metric {
 /// Built eagerly so every tile is in the accessibility tree.
 struct ReadingsGrid: View {
     let readings: [DashboardReading]
+    var compact = false
     let open: (AppRoute) -> Void
     @Environment(\.dynamicTypeSize) private var typeSize
 
@@ -482,7 +548,7 @@ struct ReadingsGrid: View {
                 HStack(alignment: .top, spacing: Spacing.s) {
                     ForEach(row) { r in
                         let tile = MetricTile(title: r.metric.title, numerator: r.numerator, denominator: r.denominator,
-                                              tone: r.metric.tone, symbol: r.metric.symbol)
+                                              tone: r.metric.tone, symbol: r.metric.symbol, compact: compact)
                         Button { open(r.route) } label: { tile }
                             .buttonStyle(.hcCard)
                             .hcZoomSourceInEnvironment(r.route)
@@ -493,6 +559,7 @@ struct ReadingsGrid: View {
                         Color.clear.frame(maxWidth: .infinity).accessibilityHidden(true)
                     }
                 }
+                .hcScrollReveal()
             }
         }
     }

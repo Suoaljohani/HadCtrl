@@ -162,3 +162,46 @@ private struct OutcomeFeedback: ViewModifier {
             .sensoryFeedback(.error, trigger: error) { _, new in haptics && new != nil }
     }
 }
+
+// MARK: - Scroll-driven reveal (DESIGN_DIRECTION §2)
+
+extension View {
+    /// Cards settle in as they enter the scroll view and recede slightly as they
+    /// leave: opacity, scale and a small lift only (no layout work while scrolling).
+    func hcScrollReveal() -> some View { modifier(ScrollReveal()) }
+
+    /// A capsule on the control layer: Liquid Glass on iOS 26, material before.
+    func hcGlassCapsule() -> some View { modifier(GlassCapsule()) }
+}
+
+private struct ScrollReveal: ViewModifier {
+    @Environment(\.hcMotionEnabled) private var motion
+
+    func body(content: Content) -> some View {
+        if motion {
+            content.scrollTransition(.interactive, axis: .vertical) { view, phase in
+                view
+                    .opacity(1 - abs(phase.value) * 0.45)
+                    .scaleEffect(1 - abs(phase.value) * 0.06, anchor: phase.value < 0 ? .bottom : .top)
+                    .offset(y: phase.value * 10)
+            }
+        } else {
+            content
+        }
+    }
+}
+
+private struct GlassCapsule: ViewModifier {
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+
+    func body(content: Content) -> some View {
+        if reduceTransparency {
+            content.background(Color.hcInk.opacity(0.85), in: Capsule())
+        } else if #available(iOS 26.0, *) {
+            content.glassEffect(.regular, in: Capsule())
+        } else {
+            content.background(.ultraThinMaterial, in: Capsule())
+                .environment(\.colorScheme, .dark)
+        }
+    }
+}

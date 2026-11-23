@@ -22,6 +22,7 @@ struct MainTabView: View {
     /// One per signed-in session: discarded with this view on sign-out (AC-025).
     @State private var periodSelection: PeriodSelection
     @State private var inbox: InboxModel
+    @State private var signatureGate: SignatureGate
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.hcMotionEnabled) private var motion
     /// Rows and details in a tab share this namespace for the zoom transition.
@@ -36,6 +37,7 @@ struct MainTabView: View {
         _selection = State(initialValue: startTab)
         _periodSelection = State(initialValue: PeriodSelection(repository: dependencies.dashboard))
         _inbox = State(initialValue: InboxModel(repository: dependencies.notifications))
+        _signatureGate = State(initialValue: SignatureGate(repository: dependencies.signatures))
     }
 
     var body: some View {
@@ -58,6 +60,11 @@ struct MainTabView: View {
         }
         .environment(periodSelection)
         .environment(\.hcZoomNamespace, zoom)
+        .environment(\.hcSignatureGate, signatureGate)
+        .sheet(item: Binding(get: { signatureGate.current }, set: { signatureGate.current = $0 })) { request in
+            SignatureSheet(request: request, gate: signatureGate, signerName: context.displayName)
+                .presentationDetents([.large])
+        }
         .sensoryFeedback(.selection, trigger: selection) { _, _ in haptics }
         .sheet(item: $sheet) { route in
             switch route {

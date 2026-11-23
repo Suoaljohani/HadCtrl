@@ -57,7 +57,21 @@ final class ScreenshotTour: XCTestCase {
 
         tab(app, "التنفيذ"); shot(app, "\(prefix)-10-tasks")
         let task = app.staticTexts["تحديث إجراءات استلام العينات"]
-        if task.waitForExistence(timeout: 8) { task.tap(); shot(app, "\(prefix)-11-task-detail"); back(app) }
+        if task.waitForExistence(timeout: 8) {
+            task.tap(); shot(app, "\(prefix)-11-task-detail")
+            let approve = app.buttons["action.approve"]
+            if approve.waitForExistence(timeout: 3) {
+                approve.tap()
+                let pad = app.descendants(matching: .any)["signature.pad"]
+                if pad.waitForExistence(timeout: 5) {
+                    pad.coordinate(withNormalizedOffset: CGVector(dx: 0.15, dy: 0.6))
+                        .press(forDuration: 0.05, thenDragTo: pad.coordinate(withNormalizedOffset: CGVector(dx: 0.85, dy: 0.3)))
+                    shot(app, "\(prefix)-11b-signature")
+                    app.buttons["signature.cancel"].tap()
+                }
+            }
+            back(app)
+        }
         app.segmentedControls.buttons["المنجزات"].tap(); shot(app, "\(prefix)-12-achievements")
         tapFirst(app, prefix: "achievementRow."); shot(app, "\(prefix)-13-achievement-detail"); back(app)
 
@@ -65,6 +79,14 @@ final class ScreenshotTour: XCTestCase {
         tapFirst(app, prefix: "reportRow."); shot(app, "\(prefix)-15-report-detail"); back(app)
 
         tab(app, "الرئيسية")
+        let settings = app.buttons["settingsButton"].firstMatch
+        if settings.waitForExistence(timeout: 5) {
+            settings.tap(); shot(app, "\(prefix)-17-settings")
+            app.swipeUp(); shot(app, "\(prefix)-18-settings-more")
+            app.swipeUp(); shot(app, "\(prefix)-19-settings-bottom")
+            let done = app.navigationBars.buttons["تم"]
+            if done.exists { done.tap() }
+        }
         let bell = app.buttons["inboxButton"].firstMatch
         if bell.waitForExistence(timeout: 5) { bell.tap(); shot(app, "\(prefix)-16-inbox") }
     }

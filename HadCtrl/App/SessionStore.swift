@@ -67,6 +67,7 @@ final class SessionStore {
     }
 
     func signOut() async {
+        await PushCenter.shared.unregisterFromServer()
         await repository.signOut()
         await DeviceAlerts.reset()
         PushCenter.shared.detach()

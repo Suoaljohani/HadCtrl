@@ -62,4 +62,6 @@ protocol NotificationsRepository: Sendable {
     @discardableResult func markAllRead() async throws -> Int
     /// Binds this device's APNs token to the signed-in user (API-14, D-36).
     func registerDevice(deviceID: UUID, token: String, environment: String) async throws
+    /// Stops pushes to this installation (sign-out). Needs migration 001800.
+    func unregisterDevice(deviceID: UUID) async throws
 }

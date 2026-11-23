@@ -176,6 +176,13 @@ struct SupabaseNotificationsRepository: NotificationsRepository {
         }
     }
 
+    func unregisterDevice(deviceID: UUID) async throws {
+        struct Params: Encodable, Sendable { let p_device_id: UUID }
+        _ = try await backend.call {
+            try await backend.client.rpc("unregister_device", params: Params(p_device_id: deviceID)).execute()
+        }
+    }
+
     private func ids(_ rows: [NotificationRowDTO], _ entity: String) -> [String] {
         Array(Set(rows.filter { $0.entity_type == entity }.map(\.entity_id))).map(\.uuidString)
     }

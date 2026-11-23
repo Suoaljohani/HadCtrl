@@ -60,6 +60,7 @@ struct DependencyContainer: Sendable {
     let notifications: NotificationsRepository
     let goals: GoalsRepository
     let attachments: AttachmentsRepository
+    let signatures: SignaturesRepository
     /// Exposed for UI tests that need to shape mock behaviour.
     let mockStore: MockStore?
 
@@ -75,7 +76,8 @@ struct DependencyContainer: Sendable {
                                        reports: mocks.reports, indicators: mocks.indicators,
                                        achievements: mocks.achievements, admin: mocks.admin,
                                        notifications: mocks.notifications, goals: mocks.goals,
-                                       attachments: mocks.attachments, mockStore: store)
+                                       attachments: mocks.attachments,
+                                       signatures: MockSignaturesRepository(store: store, user: user), mockStore: store)
         case .production:
             switch BackendConfiguration.fromBundle() {
             case .failure(let error):
@@ -85,7 +87,7 @@ struct DependencyContainer: Sendable {
                                            dashboard: unavailable, departments: unavailable, tasks: unavailable,
                                            reports: unavailable, indicators: unavailable, achievements: unavailable,
                                            admin: unavailable, notifications: unavailable, goals: unavailable,
-                                           attachments: unavailable, mockStore: nil)
+                                           attachments: unavailable, signatures: unavailable, mockStore: nil)
             case .success(let config):
                 let backend = SupabaseBackend(client: SupabaseClientFactory.make(config), cache: SessionCache(),
                                               calendar: .riyadh)
@@ -100,7 +102,8 @@ struct DependencyContainer: Sendable {
                                            admin: SupabaseAdminRepository(backend: backend),
                                            notifications: SupabaseNotificationsRepository(backend: backend),
                                            goals: SupabaseGoalsRepository(backend: backend),
-                                           attachments: SupabaseAttachmentsRepository(backend: backend), mockStore: nil)
+                                           attachments: SupabaseAttachmentsRepository(backend: backend),
+                                           signatures: SupabaseSignaturesRepository(backend: backend), mockStore: nil)
             }
         }
     }
@@ -110,7 +113,7 @@ struct DependencyContainer: Sendable {
 /// surfaces the configuration error instead of showing demo data.
 struct UnavailableBackend: SessionRepository, DashboardRepository, DepartmentsRepository, TasksRepository,
                            ReportsRepository, IndicatorsRepository, AchievementsRepository, AdminRepository,
-                           NotificationsRepository, GoalsRepository, AttachmentsRepository {
+                           NotificationsRepository, GoalsRepository, AttachmentsRepository, SignaturesRepository {
     let error: AppError
     func restore() async throws -> UserContext? { throw error }
     func signIn(email: String, password: String) async throws -> UserContext { throw error }
@@ -163,4 +166,9 @@ struct UnavailableBackend: SessionRepository, DashboardRepository, DepartmentsRe
     func unreadCount() async throws -> Int { throw error }
     func markRead(id: UUID) async throws { throw error }
     func markAllRead() async throws -> Int { throw error }
+    func registerDevice(deviceID: UUID, token: String, environment: String) async throws { throw error }
+    func unregisterDevice(deviceID: UUID) async throws { throw error }
+    func isAvailable() async -> Bool { false }
+    func sign(_ png: Data, entity: SignatureEntity, purpose: SignaturePurpose, requestID: UUID) async throws { throw error }
+    func signatures(for entity: SignatureEntity) async throws -> [SignatureRecord] { throw error }
 }

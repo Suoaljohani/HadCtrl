@@ -72,6 +72,7 @@ struct ReportsView: View {
                 }
                 ForEach(shown) { report in
                     HCLink(AppRoute.report(report.id)) { ReportRow(report: report) }
+                        .hcScrollReveal()
                 }
             }
         }
@@ -138,6 +139,7 @@ struct ReportRow: View {
 struct ReportDetailView: View {
     let context: UserContext
     let dependencies: DependencyContainer
+    @Environment(\.hcSignatureGate) private var signatures
     @State private var model: ReportDetailViewModel
     @State private var noteSheet: NoteIntent?
     @State private var note = ""
@@ -223,10 +225,17 @@ struct ReportDetailView: View {
                 submitted(detail)
             }
 
+            SignaturesSection(entity: .report(detail.report.id), repository: dependencies.signatures,
+                              refreshKey: detail.report.status.rawValue.hashValue)
             if perms.canDecide || perms.canWaive {
                 Section(String(localized: "قرار المدير")) {
                     if perms.canDecide {
-                        Button(String(localized: "اعتماد التقرير")) { Task { await model.decide(.approved, note: nil) } }
+                        Button(String(localized: "اعتماد التقرير")) {
+                            hcSigned(signatures, .report(detail.report.id), purpose: .approve,
+                                     title: String(localized: "اعتماد التقرير: \(detail.report.templateName)")) {
+                                await model.decide(.approved, note: nil)
+                            }
+                        }
                             .disabled(model.isWorking)
                             .accessibilityIdentifier("report.approve")
                         Button(String(localized: "إعادة للاستكمال")) { note = ""; noteSheet = .returnReport }

@@ -79,6 +79,7 @@ struct GoalsListView: View {
             case .loaded(let items), .loading(let items?):
                 ForEach(items) { g in
                     HCLink(AppRoute.goal(g.id)) { GoalRow(goal: g) }
+                        .hcScrollReveal()
                 }
             }
         }
@@ -190,6 +191,7 @@ extension GoalDecision: Identifiable { var id: String { rawValue } }
 struct GoalDetailView: View {
     let context: UserContext
     let dependencies: DependencyContainer
+    @Environment(\.hcSignatureGate) private var signatures
     @Environment(PeriodSelection.self) private var periods
     @State private var model: GoalDetailViewModel
     @State private var noteFor: GoalDecision?
@@ -335,16 +337,28 @@ struct GoalDetailView: View {
                     Text(String(localized: "يقرر المدير الإقفال وفق تعريف الهدف؛ اكتمال المهام وحده لا يكفي."))
                 }
             }
+            SignaturesSection(entity: .goal(model.goalID), repository: dependencies.signatures,
+                              refreshKey: model.confirmation?.hashValue ?? 0)
             if p.canActivate || p.canDecideCompletion || p.canCancel {
                 Section(String(localized: "قرار المدير")) {
                     if p.canActivate {
-                        Button(String(localized: "اعتماد التعريف وتفعيل الهدف")) { Task { await model.decide(.activate, note: nil) } }
+                        Button(String(localized: "اعتماد التعريف وتفعيل الهدف")) {
+                            hcSigned(signatures, .goal(model.goalID), purpose: .activate,
+                                     title: String(localized: "اعتماد الهدف وتفعيله")) {
+                                await model.decide(.activate, note: nil)
+                            }
+                        }
                             .disabled(model.isWorking).accessibilityIdentifier("goal.activate")
                         Button(String(localized: "إعادة للقسم مع ملاحظة")) { note = ""; noteFor = .return }
                             .disabled(model.isWorking).accessibilityIdentifier("goal.return")
                     }
                     if p.canDecideCompletion {
-                        Button(String(localized: "إقفال الهدف كمكتمل")) { Task { await model.decide(.complete, note: nil) } }
+                        Button(String(localized: "إقفال الهدف كمكتمل")) {
+                            hcSigned(signatures, .goal(model.goalID), purpose: .complete,
+                                     title: String(localized: "إقفال الهدف كمكتمل")) {
+                                await model.decide(.complete, note: nil)
+                            }
+                        }
                             .disabled(model.isWorking).accessibilityIdentifier("goal.complete")
                         Button(String(localized: "رفض الإقفال")) { note = ""; noteFor = .rejectCompletion }
                             .disabled(model.isWorking).accessibilityIdentifier("goal.rejectCompletion")

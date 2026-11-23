@@ -266,6 +266,7 @@ struct MetricTile: View {
     let denominator: Int?
     var tone: StatusTone = .info
     var symbol: String?
+    var compact = false
     var style = NumberStyle()
     @Environment(\.colorScheme) private var scheme
 
@@ -294,10 +295,10 @@ struct MetricTile: View {
                         .font(.hcFootnote).monospacedDigit().foregroundStyle(Color.hcSecondaryText)
                 }
             }
-            if denominator != nil { ProgressTrack(fraction: fraction, tone: tone, height: 4) }
+            if denominator != nil && !compact { ProgressTrack(fraction: fraction, tone: tone, height: 4) }
         }
-        .padding(Spacing.s + 2)
-        .frame(maxWidth: .infinity, minHeight: 120, alignment: .topLeading)
+        .padding(compact ? Spacing.s : Spacing.s + 2)
+        .frame(maxWidth: .infinity, minHeight: compact ? 92 : 120, alignment: .topLeading)
         .hcSurface(radius: Radius.row, scheme: scheme)
     }
 

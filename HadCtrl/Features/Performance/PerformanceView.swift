@@ -62,6 +62,7 @@ struct IndicatorsListView: View {
                 ForEach(items) { item in
                     if let periodID = periods.selectedID {
                         HCLink(AppRoute.indicator(item.id, periodID: periodID)) { IndicatorRow(item: item) }
+                        .hcScrollReveal()
                     } else {
                         IndicatorRow(item: item)
                     }
@@ -198,6 +199,7 @@ extension MeasurementStatus {
 struct IndicatorDetailView: View {
     let context: UserContext
     let dependencies: DependencyContainer
+    @Environment(\.hcSignatureGate) private var signatures
     @State private var model: IndicatorDetailViewModel
     @State private var returning = false
     @State private var note = ""
@@ -268,7 +270,12 @@ struct IndicatorDetailView: View {
             if let pending = detail.pending, perms.canDecide {
                 Section(String(localized: "قراءة بانتظار اعتمادك")) {
                     Text(readingText(pending, detail)).font(.hcHeadline).monospacedDigit()
-                    Button(String(localized: "اعتماد القراءة")) { Task { await model.decide(approve: true, note: nil) } }
+                    Button(String(localized: "اعتماد القراءة")) {
+                        hcSigned(signatures, .measurement(pending.id), purpose: .approve,
+                                 title: String(localized: "اعتماد قراءة المؤشر")) {
+                            await model.decide(approve: true, note: nil)
+                        }
+                    }
                         .disabled(model.isWorking)
                         .accessibilityIdentifier("indicator.approve")
                     Button(String(localized: "إعادة للقسم")) { note = ""; returning = true }

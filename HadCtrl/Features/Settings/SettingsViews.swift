@@ -33,6 +33,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var lockError: String?
     @State private var confirmSignOut = false
+    @State private var signaturesAvailable: Bool?
     private let push = PushCenter.shared
 
     var body: some View {
@@ -163,6 +164,18 @@ struct SettingsView: View {
             }
             .disabled(!AppLock.canLock)
             .accessibilityIdentifier("settings.appLock")
+            HStack {
+                SettingsRow(symbol: "signature", tint: .indigo, title: String(localized: "التوقيع اليدوي على الاعتمادات"),
+                            subtitle: signaturesAvailable == false
+                                ? String(localized: "بانتظار تحديث الخادم (ترحيل التوقيعات)؛ تُعتمد القرارات حاليًا دون توقيع")
+                                : String(localized: "يُطلب توقيعك بإصبعك قبل كل اعتماد ويُحفظ مع القرار"))
+                Spacer(minLength: 0)
+                if signaturesAvailable == true {
+                    Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.hcGood).accessibilityHidden(true)
+                }
+            }
+            .accessibilityElement(children: .combine)
+            .task { signaturesAvailable = await dependencies.signatures.isAvailable() }
             if preferences.appLock {
                 Picker(selection: prefs.lockGrace) {
                     Text(String(localized: "فورًا")).tag(0)
