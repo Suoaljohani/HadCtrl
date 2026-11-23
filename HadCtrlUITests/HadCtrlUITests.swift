@@ -99,13 +99,24 @@ private extension XCUIApplication {
             }
         }
         XCTAssertTrue(element.exists, "\(element) never appeared (after \(swipes) swipes)", file: file, line: line)
-        while element.exists && !element.isHittable && swipes < maxSwipes * 2 {
-            if element.frame.minY < frame.midY { swipeDown() } else { swipeUp() }
-            swipes += 1
+        // Bring it into the tappable area with short drags; full swipes overshoot
+        // elements that sit just under the navigation bar or the floating tab bar.
+        var nudges = 0
+        while element.exists && !element.isHittable && nudges < 20 {
+            nudge(contentUp: element.frame.midY > frame.midY)
+            nudges += 1
         }
+        swipes += nudges
         XCTAssertTrue(element.exists && element.isHittable, "\(element) not reachable after \(swipes) swipes",
                       file: file, line: line)
         return element
+    }
+
+    /// Scrolls by about a fifth of the screen. `contentUp` reveals content below.
+    func nudge(contentUp: Bool) {
+        let start = coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: contentUp ? 0.6 : 0.4))
+        let end = coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: contentUp ? 0.4 : 0.6))
+        start.press(forDuration: 0.05, thenDragTo: end)
     }
 
     /// Asserts the task detail status badge shows exactly `title`. The badge is

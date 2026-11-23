@@ -19,5 +19,6 @@
 | #7 | a52fafc | pass | same CI script bug |
 | #8 | 33b5dd5 | pass | **G3 with supabase-swift compiles**; locked resolution; unit 42/42 pass (incl. 6 Supabase contract tests); UI 3/5 (container id overrode the badge id; lazy List hid the 2nd action on iPhone SE) |
 | #9 | 5b974e2 | pass | build OK; unit 42/42; UI 4/5 (approve flow passes; return flow passes but the badge had scrolled out of the lazy List before the check) |
+| #10 | feb050b | pass | build OK; unit 42/42; UI 4/5: return flow passes; approve flow's tile existed but full swipes overshot it under the bars (16 swipes) |
 
 Update this table after each run. A signed IPA (G7) needs the Apple inputs listed in SETUP.md.
