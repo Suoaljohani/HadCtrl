@@ -218,7 +218,8 @@ private struct DashboardHero: View {
                 InitialsAvatar(name: context.displayName, size: 46)
                     .background(Circle().fill(Color.hcSurface))
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(verbatim: "\(greeting)، \(context.displayName)")
+                    // Verbatim keeps the line right-to-left in Arabic; the separator follows the UI language.
+                    Text(verbatim: greeting + (Bundle.main.preferredLocalizations.first == "en" ? ", " : "، ") + context.displayName)
                         .font(.hcFootnote).foregroundStyle(.white.opacity(0.9))
                         .lineLimit(2)
                     Text(context.organizationName)
@@ -436,7 +437,9 @@ struct ActionRow: View {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(action.title).font(.hcHeadline).foregroundStyle(Color.hcInk)
                         .multilineTextAlignment(.leading)
-                    Text(verbatim: "\(action.departmentName) · \(action.reason)").font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
+                    Text(action.reason).font(.hcFootnote).foregroundStyle(Color.hcSecondaryText)
+                    Label(action.departmentName, systemImage: "building.2")
+                        .font(.hcCaption).foregroundStyle(Color.hcSecondaryText)
                     if let due = action.dueAt {
                         Label(String(localized: "الموعد \(HCFormat.date(due))"), systemImage: "clock")
                             .font(.hcCaption.weight(.semibold)).foregroundStyle(tone.color)

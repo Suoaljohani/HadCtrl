@@ -361,9 +361,12 @@ private struct AppearancePicker: View {
                             .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
                                 .strokeBorder(selection == mode ? Color.hcPrimary : Color.hcSeparator,
                                               lineWidth: selection == mode ? 2.5 : 1))
-                        Label(mode.title, systemImage: mode.symbol)
-                            .font(.hcCaption.weight(selection == mode ? .bold : .regular))
-                            .foregroundStyle(selection == mode ? Color.hcPrimary : Color.hcSecondaryText)
+                        HStack(spacing: 4) {
+                            Image(systemName: mode.symbol).accessibilityHidden(true)
+                            Text(mode.title).lineLimit(1).minimumScaleFactor(0.75)
+                        }
+                        .font(.hcCaption.weight(selection == mode ? .bold : .regular))
+                        .foregroundStyle(selection == mode ? Color.hcPrimary : Color.hcSecondaryText)
                     }
                 }
                 .buttonStyle(.plain)

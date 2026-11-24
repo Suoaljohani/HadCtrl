@@ -67,7 +67,8 @@ final class ScreenshotTour: XCTestCase {
         if task.waitForExistence(timeout: 8) {
             task.tap(); shot(app, "\(prefix)-11-task-detail")
             let approve = app.buttons["action.approve"]
-            if approve.waitForExistence(timeout: 3) {
+            for _ in 0..<4 where approve.exists && !approve.isHittable { app.swipeUp() }
+            if approve.waitForExistence(timeout: 3) && approve.isHittable {
                 approve.tap()
                 let pad = app.descendants(matching: .any)["signature.pad"]
                 if pad.waitForExistence(timeout: 5) {

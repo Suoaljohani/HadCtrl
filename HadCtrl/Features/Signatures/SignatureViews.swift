@@ -248,7 +248,15 @@ struct SignaturesSection: View {
 
     var body: some View {
         Group {
-            if !records.isEmpty {
+            if records.isEmpty {
+                // An invisible row so the load below runs even while there is nothing to show
+                // (an empty section never appears, and its .task would never start).
+                Color.clear.frame(height: 0)
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                    .accessibilityHidden(true)
+            } else {
                 Section(String(localized: "التوقيعات")) {
                     ForEach(records) { r in
                         HStack(alignment: .center, spacing: Spacing.s) {
