@@ -19,8 +19,9 @@ Environment: Ubuntu 24.04 container, PostgreSQL 16.15, with the Supabase platfor
 | 87_achievements (draft/submit/return/approve, roles, visibility, history immutability, notifications) | 23 | pass |
 | 88_goals (create rules, director lifecycle, completion request/refusal, milestones, visibility, cross-hospital) | 25 | pass |
 | 89_attachments (reservation rules, Storage INSERT/SELECT policies, size/type verification, visibility follows the record, no evidence change after submission, limits, expiry) | 21 | pass |
+| 91_signatures (reservation, replay, purpose validation, Storage policies, PNG verification, signer-only seal, audit, immutability of sealed rows, visibility follows the record, expiry; unregister_device) | 23 | pass |
 | 90_concurrency.sh (two sessions, same request_id) | 3 | pass |
-| **Total** | **324** | **pass, 0 failures** |
+| **Total** | **347** | **pass, 0 failures** |
 
 All checks run as the real `authenticated`/`anon` roles with a JWT `sub`, never as `service_role`.
 
@@ -64,3 +65,11 @@ Limits:
 - Simulator only, on the iOS 26.2 runtime. The deployment target is iOS 17, and no iOS 17 runtime exists on the image, so running on 17 is not yet verified (§31).
 - UI tests run against mock repositories. The Supabase client is covered by contract tests on captured server output, not by a live end-to-end run: that needs the publishable key and a bootstrapped director.
 - One green run. The UI tests needed several runner-specific fixes (runs #2–#10); watch the next runs for flakiness before treating them as stable.
+
+
+## Overnight build 2026-11-24 (preferences, lock, push, signatures, dashboard hero, English)
+- Database: 347 assertions pass locally and in CI (adds `91_signatures`, `05_grants` now lists `prepare_signature`, `finalize_signature`, `unregister_device`).
+- iOS unit tests: 93 tests in 17 suites. New: `PreferencesTests` (defaults, persistence, dashboard layout rules, language applies next launch, demo signature, signature path), dashboard per-period cache tests. One test assertion was wrong (read `AppleLanguages` through the global-domain fallback) and was corrected to read the app's own domain.
+- UI tests: 19 pass, including signing on the pad before approving a task, report, reading, achievement and goal, and the signature appearing on the task after approval.
+- Screenshot tour: light, dark, head, accessibility-large text and **English** (94 screens) reviewed; fixes from the review are in the same branch.
+- Not verifiable here: Face ID on a device (simulator has no enrolled biometrics; the Settings row correctly falls back to "device passcode"), real APNs delivery (needs a paid account and APNs key), signatures on the hosted project (needs migration 001800 applied).

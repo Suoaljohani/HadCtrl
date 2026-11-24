@@ -20,6 +20,14 @@
 - **In-app administration (D-25):** Settings → «الأقسام والموظفون» (director and system admin): add departments, add employees with a one-time temporary password, forced password change at first sign-in. Server side applied to the hosted project and the `create-employee` function deployed; 36 DB checks; live refusal checks pass. Not yet exercised end-to-end from a real sign-in.
 - **G1 verified in CI (run #11):** simulator build, 42/42 unit tests, 5/5 UI tests.
 
+### Overnight 2026-11-24
+- Role-aware Settings with personal preferences (appearance, language, digits, motion, haptics, start tab, dashboard layout, default department) — D-35.
+- Face ID / Touch ID app lock — D-35.
+- APNs push: client registration and routing, `push-sender` Edge Function, optional push entitlement — D-36 (delivery needs a paid account + APNs key).
+- Handwritten signatures on approvals with migration 001800 — D-37 (hosted needs the migration applied).
+- English interface (631 strings) — D-38.
+- Dashboard hero with the hospital photo, parallax, director-ordered modules, scroll reveal; lifecycle tracks on detail screens; five researched design directions (DESIGN_DIRECTION.md).
+
 ## Not done yet (in order)
 1. **G3 client (in progress):** supabase-swift 2.55.7 added. Session (sign-in, Keychain, restore, sign-out), dashboard (`dashboard_snapshot`), departments, tasks list/detail/create/transition are wired to Supabase. Contract tests decode real RPC output. Packages locked (`Config/Package.resolved`) and build green in CI (run #11). Key configured and director bootstrapped. Pending: a sign-in from the app itself on a simulator or device (needs the director's password, which is never shared with Claude).
 2. **G4–G5 client (built, CI pending):** Reports list/detail (draft, submit, approve/return/waive, review history), indicator detail (readings, entry with explicit not-applicable and correction reasons, approve/return), director definitions (report template + schedule, indicator) and period generation. Server part (migration 001300) applied to the hosted project; nightly pg_cron job active. Department detail tabs for goals/indicators/reports and achievements remain.
