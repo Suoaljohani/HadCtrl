@@ -218,6 +218,35 @@ final class HadCtrlUITests: XCTestCase {
         XCTAssertFalse(app.buttons["attachment.addFile"].exists, "no new evidence on an approved record")
     }
 
+    /// Global search (§17): normalized match, grouped results, opens the shared route.
+    func testSearchOpensTask() {
+        let app = launch()
+        app.scrollToHittable(app.buttons["searchButton"].firstMatch).tap()
+        let field = app.searchFields.firstMatch
+        XCTAssertTrue(field.waitForExistence(timeout: 10))
+        field.tap()
+        field.typeText("اجراءات")   // no hamza: must still match «إجراءات»
+        let hit = app.anyElement(containing: "تحديث إجراءات استلام العينات")
+        XCTAssertTrue(hit.waitForExistence(timeout: 10), "normalized search finds the task")
+        hit.tap()
+        app.expectTaskStatus("مرفوعة للاعتماد")
+    }
+
+    /// Export (§19): the director builds PDF and CSV for the period.
+    func testDirectorExportsSummary() {
+        let app = launch()
+        app.scrollToHittable(app.buttons["dashboard.tools"].firstMatch).tap()
+        let export = app.buttons["dashboard.export"]
+        XCTAssertTrue(export.waitForExistence(timeout: 5))
+        export.tap()
+        let build = app.buttons["export.build"]
+        XCTAssertTrue(build.waitForExistence(timeout: 10))
+        build.tap()
+        XCTAssertTrue(app.buttons["export.share"].waitForExistence(timeout: 20), "files are ready to share")
+        XCTAssertTrue(app.anyElement(containing: ".pdf").exists)
+        XCTAssertTrue(app.anyElement(containing: ".csv").exists)
+    }
+
     func testLargeTextDoesNotHideDecisions() {
         let app = launch(extraArgs: ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXL"])
         XCTAssertTrue(app.staticTexts["تحتاج قرارك"].waitForExistence(timeout: 10))

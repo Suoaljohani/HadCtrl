@@ -21,7 +21,8 @@ Environment: Ubuntu 24.04 container, PostgreSQL 16.15, with the Supabase platfor
 | 89_attachments (reservation rules, Storage INSERT/SELECT policies, size/type verification, visibility follows the record, no evidence change after submission, limits, expiry) | 21 | pass |
 | 91_signatures (reservation, replay, purpose validation, Storage policies, PNG verification, signer-only seal, audit, immutability of sealed rows, visibility follows the record, expiry; unregister_device) | 23 | pass |
 | 90_concurrency.sh (two sessions, same request_id) | 3 | pass |
-| **Total** | **347** | **pass, 0 failures** |
+| 92_search (normalization, categories, wildcard escaping, department and hospital isolation, anonymous refusal) | 9 | pass |
+| **Total** | **356** | **pass, 0 failures** |
 
 All checks run as the real `authenticated`/`anon` roles with a JWT `sub`, never as `service_role`.
 

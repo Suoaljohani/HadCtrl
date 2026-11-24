@@ -131,6 +131,11 @@ All director only (system admin and heads get `HC_FORBIDDEN`; another hospital g
 - POST with header `x-push-sender-secret`; sends pending `apns` outbox rows via token-based APNs; returns `{sent, cancelled, retried, failed}`.
 - 503 `HC_APNS_NOT_CONFIGURED` when APNs secrets are missing; nothing is sent or marked.
 
+### API-19 `search_records(p_query, p_period_id?, p_limit?) → {departments, goals, tasks, reports, achievements, indicators}` (migration 001900, D-39)
+- Each item: `{id, title, subtitle, status, department_id?, period_id?}`; at most `p_limit` (1–25, default 8) per group.
+- Query 2–80 characters after normalization (`HC_VALIDATION_FAILED` otherwise); anonymous callers `HC_AUTH_REQUIRED`.
+- Visibility is decided on the server with the RLS helpers; another hospital's or another department's private records are never returned.
+
 ## Planned
 API-01 dashboard_snapshot · API-02 list_departments · API-03 get_department_detail · API-10 decide_achievement · API-11 prepare/finalize_attachment · API-12 search_all.
 

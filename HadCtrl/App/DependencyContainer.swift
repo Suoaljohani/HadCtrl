@@ -61,6 +61,7 @@ struct DependencyContainer: Sendable {
     let goals: GoalsRepository
     let attachments: AttachmentsRepository
     let signatures: SignaturesRepository
+    let search: SearchRepository
     /// Exposed for UI tests that need to shape mock behaviour.
     let mockStore: MockStore?
 
@@ -77,7 +78,12 @@ struct DependencyContainer: Sendable {
                                        achievements: mocks.achievements, admin: mocks.admin,
                                        notifications: mocks.notifications, goals: mocks.goals,
                                        attachments: mocks.attachments,
-                                       signatures: MockSignaturesRepository(store: store, user: user), mockStore: store)
+                                       signatures: MockSignaturesRepository(store: store, user: user),
+                                       search: CompositeSearchRepository(departments: mocks.departments, tasks: mocks.tasks,
+                                                                         goals: mocks.goals, reports: mocks.reports,
+                                                                         achievements: mocks.achievements, indicators: mocks.indicators,
+                                                                         clock: clock),
+                                       mockStore: store)
         case .production:
             switch BackendConfiguration.fromBundle() {
             case .failure(let error):
@@ -87,7 +93,7 @@ struct DependencyContainer: Sendable {
                                            dashboard: unavailable, departments: unavailable, tasks: unavailable,
                                            reports: unavailable, indicators: unavailable, achievements: unavailable,
                                            admin: unavailable, notifications: unavailable, goals: unavailable,
-                                           attachments: unavailable, signatures: unavailable, mockStore: nil)
+                                           attachments: unavailable, signatures: unavailable, search: unavailable, mockStore: nil)
             case .success(let config):
                 let backend = SupabaseBackend(client: SupabaseClientFactory.make(config), cache: SessionCache(),
                                               calendar: .riyadh)
@@ -103,7 +109,15 @@ struct DependencyContainer: Sendable {
                                            notifications: SupabaseNotificationsRepository(backend: backend),
                                            goals: SupabaseGoalsRepository(backend: backend),
                                            attachments: SupabaseAttachmentsRepository(backend: backend),
-                                           signatures: SupabaseSignaturesRepository(backend: backend), mockStore: nil)
+                                           signatures: SupabaseSignaturesRepository(backend: backend),
+                                           search: SupabaseSearchRepository(backend: backend, fallback: CompositeSearchRepository(
+                                               departments: SupabaseDepartmentsRepository(backend: backend),
+                                               tasks: SupabaseTasksRepository(backend: backend, clock: clock),
+                                               goals: SupabaseGoalsRepository(backend: backend),
+                                               reports: SupabaseReportsRepository(backend: backend),
+                                               achievements: SupabaseAchievementsRepository(backend: backend),
+                                               indicators: SupabaseIndicatorsRepository(backend: backend), clock: clock)),
+                                           mockStore: nil)
             }
         }
     }
@@ -113,7 +127,8 @@ struct DependencyContainer: Sendable {
 /// surfaces the configuration error instead of showing demo data.
 struct UnavailableBackend: SessionRepository, DashboardRepository, DepartmentsRepository, TasksRepository,
                            ReportsRepository, IndicatorsRepository, AchievementsRepository, AdminRepository,
-                           NotificationsRepository, GoalsRepository, AttachmentsRepository, SignaturesRepository {
+                           NotificationsRepository, GoalsRepository, AttachmentsRepository, SignaturesRepository,
+                           SearchRepository {
     let error: AppError
     func restore() async throws -> UserContext? { throw error }
     func signIn(email: String, password: String) async throws -> UserContext { throw error }
@@ -171,4 +186,5 @@ struct UnavailableBackend: SessionRepository, DashboardRepository, DepartmentsRe
     func isAvailable() async -> Bool { false }
     func sign(_ png: Data, entity: SignatureEntity, purpose: SignaturePurpose, requestID: UUID) async throws { throw error }
     func signatures(for entity: SignatureEntity) async throws -> [SignatureRecord] { throw error }
+    func search(_ query: String, periodID: UUID?, routePeriodID: UUID?) async throws -> SearchResults { throw error }
 }

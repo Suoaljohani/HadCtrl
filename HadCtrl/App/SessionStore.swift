@@ -72,6 +72,8 @@ final class SessionStore {
         await DeviceAlerts.reset()
         PushCenter.shared.detach()
         AttachmentPreviewCache.clear()
+        SearchHistory.clear()
+        ExportFiles.clear()
         pendingRoute = nil
         phase = .signedOut(message: nil)
     }

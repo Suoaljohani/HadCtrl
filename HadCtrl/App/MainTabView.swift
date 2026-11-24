@@ -5,6 +5,7 @@ enum SheetRoute: Identifiable, Hashable {
     case newTask(departmentID: UUID?)
     case settings
     case inbox
+    case search
     var id: Self { self }
 }
 
@@ -78,6 +79,10 @@ struct MainTabView: View {
                 SettingsView(context: context, dependencies: dependencies, lock: lock)
             case .inbox:
                 InboxView(model: inbox) { route in open(route) }
+            case .search:
+                SearchView(repository: dependencies.search, periodID: { [periodSelection] in periodSelection.selectedID }) { route in
+                    open(route)
+                }
             }
         }
         // No APNs (D-28): the unread count is refreshed while the app is open.
@@ -142,6 +147,12 @@ struct MainTabView: View {
                     }
                     ToolbarItem(placement: .topBarLeading) {
                         InboxButton(model: inbox) { sheet = .inbox }
+                    }
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button { sheet = .search } label: {
+                            Label(String(localized: "البحث"), systemImage: "magnifyingglass")
+                        }
+                        .accessibilityIdentifier("searchButton")
                     }
                 }
         }

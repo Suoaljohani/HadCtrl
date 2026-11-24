@@ -14,6 +14,7 @@ struct DashboardView: View {
     let present: (SheetRoute) -> Void
     @State private var model: DashboardViewModel
     @State private var customizing = false
+    @State private var exporting = false
     @Environment(PeriodSelection.self) private var periods
     @Environment(AppPreferences.self) private var preferences
     @Environment(\.hcMotionEnabled) private var motion
@@ -67,6 +68,22 @@ struct DashboardView: View {
         .navigationTitle(String(localized: "الرئيسية"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            if context.isDirector {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        Button { exporting = true } label: {
+                            Label(String(localized: "تصدير ملخص (PDF / CSV)"), systemImage: "square.and.arrow.up")
+                        }
+                        .accessibilityIdentifier("dashboard.export")
+                        Button { customizing = true } label: {
+                            Label(String(localized: "تخصيص لوحة القيادة"), systemImage: "slider.horizontal.3")
+                        }
+                    } label: {
+                        Label(String(localized: "أدوات"), systemImage: "ellipsis.circle")
+                    }
+                    .accessibilityIdentifier("dashboard.tools")
+                }
+            }
             if context.canCreateAssignments {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { present(.newTask(departmentID: nil)) } label: {
@@ -75,6 +92,10 @@ struct DashboardView: View {
                     .accessibilityIdentifier("newTaskButton")
                 }
             }
+        }
+        .sheet(isPresented: $exporting) {
+            ExportSheet(context: context, dependencies: dependencies, periodID: periods.selectedID,
+                        periodTitle: periods.selected?.title ?? "")
         }
         .sheet(isPresented: $customizing) {
             NavigationStack {
