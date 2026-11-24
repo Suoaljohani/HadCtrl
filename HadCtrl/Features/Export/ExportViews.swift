@@ -215,6 +215,15 @@ struct ExportSheet: View {
                     }
                     .disabled(working || periodID == nil || (!includePDF && !includeCSV))
                     .accessibilityIdentifier("export.build")
+                    if !files.isEmpty {
+                        Label(String(localized: "الملفات جاهزة: \(files.count)"), systemImage: "checkmark.circle.fill")
+                            .foregroundStyle(Color.hcGood)
+                            .accessibilityIdentifier("export.done")
+                    } else if periodID == nil {
+                        Text(String(localized: "اختر فترة من الرئيسية أولًا")).font(.hcFootnote)
+                            .foregroundStyle(Color.hcWarning)
+                            .accessibilityIdentifier("export.noPeriod")
+                    }
                 }
                 if let error {
                     Section {

@@ -92,6 +92,16 @@
         }
       }
     },
+    "أدوات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tools"
+          }
+        }
+      }
+    },
     "أرقام لاتينية": {
       "localizations": {
         "en": {
@@ -752,6 +762,16 @@
         }
       }
     },
+    "إنشاء الملفات": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create files"
+          }
+        }
+      }
+    },
     "إيقاف الحركات الزخرفية داخل التطبيق": {
       "localizations": {
         "en": {
@@ -798,6 +818,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose department"
+          }
+        }
+      }
+    },
+    "اختر فترة من الرئيسية أولًا": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a period on Home first"
           }
         }
       }
@@ -1172,6 +1202,16 @@
         }
       }
     },
+    "اكتب حرفين على الأقل": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type at least two characters"
+          }
+        }
+      }
+    },
     "اكتب عنوان الهدف": {
       "localizations": {
         "en": {
@@ -1498,6 +1538,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Haptics"
+          }
+        }
+      }
+    },
+    "البحث": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search"
           }
         }
       }
@@ -2002,6 +2052,16 @@
         }
       }
     },
+    "الصيغة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Format"
+          }
+        }
+      }
+    },
     "العرض": {
       "localizations": {
         "en": {
@@ -2502,6 +2562,26 @@
         }
       }
     },
+    "الملفات الجاهزة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready files"
+          }
+        }
+      }
+    },
+    "الملفات جاهزة: %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Files ready: %lld"
+          }
+        }
+      }
+    },
     "المنجز": {
       "localizations": {
         "en": {
@@ -2628,6 +2708,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Revision %1$lld — submitted %2$@"
+          }
+        }
+      }
+    },
+    "النطاق": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scope"
           }
         }
       }
@@ -3102,6 +3192,26 @@
         }
       }
     },
+    "تصدير ملخص": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export summary"
+          }
+        }
+      }
+    },
+    "تصدير ملخص (PDF / CSV)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export summary (PDF / CSV)"
+          }
+        }
+      }
+    },
     "تظهر مرة واحدة فقط ولا تُحفظ. سلّمها للموظف بطريقة آمنة؛ سيُطلب منه تغييرها عند أول دخول.": {
       "localizations": {
         "en": {
@@ -3148,6 +3258,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Could not reach the server. Try again."
+          }
+        }
+      }
+    },
+    "تعذر البحث": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search failed"
           }
         }
       }
@@ -4482,6 +4602,16 @@
         }
       }
     },
+    "عمليات البحث الأخيرة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recent searches"
+          }
+        }
+      }
+    },
     "عند الاعتماد والإرجاع وتبديل التبويب": {
       "localizations": {
         "en": {
@@ -4782,6 +4912,16 @@
         }
       }
     },
+    "كل الأقسام": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All departments"
+          }
+        }
+      }
+    },
     "كلمة المرور": {
       "localizations": {
         "en": {
@@ -5058,6 +5198,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "No overall verdict"
+          }
+        }
+      }
+    },
+    "لا نتائج مطابقة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No matching results"
           }
         }
       }
@@ -5672,6 +5822,16 @@
         }
       }
     },
+    "مشاركة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share"
+          }
+        }
+      }
+    },
     "مشاهد تنفيذي": {
       "localizations": {
         "en": {
@@ -5738,6 +5898,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Returned to the department"
+          }
+        }
+      }
+    },
+    "معاينة": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preview"
           }
         }
       }
