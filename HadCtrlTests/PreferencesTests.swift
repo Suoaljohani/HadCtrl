@@ -49,7 +49,8 @@ struct PreferencesTests {
 
     @Test("choosing English applies on the next launch and defaults to Latin digits")
     func languageNeedsRestart() {
-        let d = freshDefaults()
+        let name = "hc.tests.\(UUID().uuidString)"
+        let d = UserDefaults(suiteName: name)!
         let p = AppPreferences(defaults: d)
         #expect(p.languageNeedsRestart == false)
         p.language = .en
@@ -57,7 +58,8 @@ struct PreferencesTests {
         #expect(d.stringArray(forKey: "AppleLanguages") == ["en"])
         #expect(p.latinDigits)
         p.language = .system
-        #expect(d.object(forKey: "AppleLanguages") == nil)
+        // Reading the key also searches the global domain; check this app's own value.
+        #expect(d.persistentDomain(forName: name)?["AppleLanguages"] == nil)
     }
 
     @Test("a demo signature is recorded against its record and listed")
