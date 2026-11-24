@@ -218,6 +218,7 @@ struct ExportSheet: View {
                     if !files.isEmpty {
                         Label(String(localized: "الملفات جاهزة: \(files.count)"), systemImage: "checkmark.circle.fill")
                             .foregroundStyle(Color.hcGood)
+                            .accessibilityElement(children: .combine)
                             .accessibilityIdentifier("export.done")
                     } else if periodID == nil {
                         Text(String(localized: "اختر فترة من الرئيسية أولًا")).font(.hcFootnote)
