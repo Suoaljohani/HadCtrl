@@ -242,9 +242,13 @@ final class HadCtrlUITests: XCTestCase {
         let build = app.buttons["export.build"]
         XCTAssertTrue(build.waitForExistence(timeout: 10))
         build.tap()
-        XCTAssertTrue(app.buttons["export.share"].waitForExistence(timeout: 20), "files are ready to share")
-        XCTAssertTrue(app.anyElement(containing: ".pdf").exists)
-        XCTAssertTrue(app.anyElement(containing: ".csv").exists)
+        let failure = app.descendants(matching: .any)["export.error"]
+        XCTAssertFalse(failure.waitForExistence(timeout: 3), "export failed: \(failure.exists ? failure.label : "")")
+        // ShareLink is exposed as a link, not a button: match by identifier, any type.
+        let share = app.descendants(matching: .any)["export.share"]
+        XCTAssertTrue(app.scrollToHittable(share, loadTimeout: 20).exists, "files are ready to share")
+        XCTAssertTrue(app.anyElement(containing: ".pdf").exists, "a PDF was produced")
+        XCTAssertTrue(app.anyElement(containing: ".csv").exists, "a CSV was produced")
     }
 
     func testLargeTextDoesNotHideDecisions() {

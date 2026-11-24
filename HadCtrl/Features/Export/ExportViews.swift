@@ -217,7 +217,10 @@ struct ExportSheet: View {
                     .accessibilityIdentifier("export.build")
                 }
                 if let error {
-                    Section { Label(error, systemImage: "exclamationmark.triangle").foregroundStyle(Color.hcCritical) }
+                    Section {
+                        Label(error, systemImage: "exclamationmark.triangle").foregroundStyle(Color.hcCritical)
+                            .accessibilityIdentifier("export.error")
+                    }
                 }
                 if !files.isEmpty {
                     Section {
