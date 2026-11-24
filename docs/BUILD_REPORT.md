@@ -46,6 +46,11 @@ Update this table after each run. A signed IPA (G7) needs the Apple inputs liste
 - IPA SHA-256 `2548bb6d2b86b30289c8900c6173278cae1e77296c4b71a74fe48318a85e346a` (matches SHA256SUMS.txt). Unsigned, `CFBundleVersion` 16, production backend, publishable key only.
 - Adds goals (list, detail, new goal, director lifecycle, milestones) and the full department card.
 
+## Unsigned device build 31 (commit b9ca35f), 2026-11-24
+- IPA SHA-256 `0c68237e11bc0676a31b2cf0cf857654c6a820032e9def94f59ff5c8f90445e0` (matches SHA256SUMS.txt). Unsigned, `CFBundleVersion` 31, production backend, publishable key only, `NSFaceIDUsageDescription` present, `en.lproj` included. No push entitlement (D-36: only with a push-capable signing profile).
+- Adds: role-aware Settings and preferences, Face ID / Touch ID lock, push registration and routing, handwritten signatures on approvals (server side needs migration 001800), English interface, dashboard hero with the hospital photo and scroll motion, director dashboard customization, lifecycle tracks.
+- Screens reviewed from CI run #44 (same UI; that run's only failure was a unit-test assertion fixed in 63bf296).
+
 ## Unsigned device build 23 (commit ddc0d46), 2026-11-23
 - CI run #38 on the same commit: green (database; simulator build; unit tests incl. 2 new dashboard cache tests; all UI tests; screenshot tour in light, dark, head and accessibility-large text, 63 screens).
 - IPA SHA-256 `5ecc7fa618c3def6eeb312182b130e477c679894dcfbc4049fb6918e82e74e28` (matches SHA256SUMS.txt). Unsigned, `CFBundleVersion` 23, production backend, publishable key only.
