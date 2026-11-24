@@ -243,7 +243,7 @@ final class HadCtrlUITests: XCTestCase {
         XCTAssertTrue(build.waitForExistence(timeout: 10))
         build.tap()
         XCTAssertFalse(app.descendants(matching: .any)["export.noPeriod"].exists, "a period is selected")
-        let done = app.descendants(matching: .any)["export.done"]
+        let done = app.descendants(matching: .any)["export.done"].firstMatch
         if !done.waitForExistence(timeout: 20) {
             let failure = app.descendants(matching: .any)["export.error"]
             XCTFail(failure.exists ? "export failed: \(failure.label)" : "no files were produced and no error was shown")
