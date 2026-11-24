@@ -50,6 +50,7 @@ Update this table after each run. A signed IPA (G7) needs the Apple inputs liste
 - IPA SHA-256 `0c68237e11bc0676a31b2cf0cf857654c6a820032e9def94f59ff5c8f90445e0` (matches SHA256SUMS.txt). Unsigned, `CFBundleVersion` 31, production backend, publishable key only, `NSFaceIDUsageDescription` present, `en.lproj` included. No push entitlement (D-36: only with a push-capable signing profile).
 - Adds: role-aware Settings and preferences, Face ID / Touch ID lock, push registration and routing, handwritten signatures on approvals (server side needs migration 001800), English interface, dashboard hero with the hospital photo and scroll motion, director dashboard customization, lifecycle tracks.
 - Screens reviewed from CI run #44 (same UI; that run's only failure was a unit-test assertion fixed in 63bf296).
+- CI run #45 on 63bf296 (same app code as b9ca35f, which only adds docs): **green** — database 347 assertions, 93 unit tests, 19 UI tests, five-pass screenshot tour.
 
 ## Unsigned device build 23 (commit ddc0d46), 2026-11-23
 - CI run #38 on the same commit: green (database; simulator build; unit tests incl. 2 new dashboard cache tests; all UI tests; screenshot tour in light, dark, head and accessibility-large text, 63 screens).
